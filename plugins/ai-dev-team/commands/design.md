@@ -1,44 +1,44 @@
 ---
-description: Create technical design for current feature
+description: Tạo thiết kế kỹ thuật cho feature hiện tại
 allowed-tools: Read, Write, Glob, Grep, Bash(ls:*), Bash(tree:*)
 argument-hint: [feature-id]
 ---
 
-Trigger the technical design phase for a feature.
+Kích hoạt giai đoạn thiết kế kỹ thuật cho một feature.
 
-Read the workflow guide: `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/SKILL.md`
-Read the design template: `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/templates/design-spec-template.md`
+Đọc hướng dẫn workflow: `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/SKILL.md`
+Đọc template thiết kế: `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/templates/design-spec-template.md`
 
-1. Read `.ai-workspace/STATE.md` to identify the target feature (or use `$1` as FEAT-XXX)
+1. Đọc `.ai-workspace/STATE.md` để xác định feature mục tiêu (hoặc dùng `$1` là FEAT-XXX)
 
-2. Read `${CLAUDE_PLUGIN_ROOT}/team.config.yaml` → find `architect-agent` → get skill categories
-   Read `.ai-workspace/stack.config.yaml` → resolve categories to skill names → load each skill
+2. Đọc `${CLAUDE_PLUGIN_ROOT}/team.config.yaml` → tìm `architect-agent` → lấy danh mục skill
+   Đọc `.ai-workspace/stack.config.yaml` → ánh xạ danh mục sang tên skill cụ thể → tải từng skill
 
-3. Read the approved requirement: `.ai-workspace/features/FEAT-XXX/requirement.md`
+3. Đọc yêu cầu đã được phê duyệt: `.ai-workspace/features/FEAT-XXX/requirement.md`
 
-4. Analyze the existing codebase:
-   - Run `tree -L 3 src/` to understand structure
-   - Read 2-3 existing pattern files to follow conventions
-   - Read `.ai-workspace/CONVENTIONS.md` for coding rules
+4. Phân tích codebase hiện tại:
+   - Chạy `tree -L 3 src/` để nắm cấu trúc
+   - Đọc 2-3 file mẫu hiện có để tuân theo convention
+   - Đọc `.ai-workspace/CONVENTIONS.md` để nắm quy tắc coding
 
-5. Create `.ai-workspace/features/FEAT-XXX/design.md` with:
-   - Architecture overview (Mermaid diagram)
-   - Data models (table format)
-   - API endpoints (with request/response schemas)
-   - **File plan** (every file to create/modify — used for File Conflict Map)
-   - Implementation tasks (ordered, ≤ 3 files each, **labeled `backend` or `frontend`**)
-   - Design decisions with rationale
+5. Tạo `.ai-workspace/features/FEAT-XXX/design.md` bao gồm:
+   - Tổng quan kiến trúc (sơ đồ Mermaid)
+   - Mô hình dữ liệu (dạng bảng)
+   - API endpoints (kèm schema request/response)
+   - **Kế hoạch file** (mọi file cần tạo/sửa — dùng cho File Conflict Map)
+   - Các task triển khai (có thứ tự, mỗi task tối đa 3 file, **gắn nhãn `backend` hoặc `frontend`**)
+   - Quyết định thiết kế kèm lý do
 
-6. PM updates STATE.md:
-   - Set FEAT-XXX phase to DESIGN
-   - Update **File Conflict Map** with files from the design's file plan
-   - Check for conflicts with other parallel features
+6. PM cập nhật STATE.md:
+   - Đặt phase FEAT-XXX thành DESIGN
+   - Cập nhật **File Conflict Map** với các file từ kế hoạch file trong thiết kế
+   - Kiểm tra xung đột với các feature song song khác
 
-7. Present the design to human:
-   - Show component diagram
-   - Show file plan
-   - Show task breakdown (with backend/frontend labels)
-   - If file conflicts detected → highlight and propose resolution
-   - Ask: "Approve this design? Approve / Modify / Reject"
+7. Trình bày thiết kế cho người dùng:
+   - Hiển thị sơ đồ component
+   - Hiển thị kế hoạch file
+   - Hiển thị phân chia task (kèm nhãn backend/frontend)
+   - Nếu phát hiện xung đột file → nêu bật và đề xuất giải pháp
+   - Hỏi: "Phê duyệt thiết kế này? Phê duyệt / Chỉnh sửa / Từ chối"
 
-If approved → create task cards in `features/FEAT-XXX/tasks/` and move to IMPLEMENT phase.
+Nếu được phê duyệt → tạo task cards trong `features/FEAT-XXX/tasks/` và chuyển sang phase IMPLEMENT.

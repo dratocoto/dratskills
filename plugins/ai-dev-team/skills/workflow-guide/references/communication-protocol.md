@@ -1,186 +1,186 @@
-# Agent Communication Protocol
+# Giao thức giao tiếp giữa các Agent
 
-How agents talk to each other — simulating a real dev team.
+Cách các agent trao đổi với nhau — mô phỏng một đội phát triển thực tế.
 
-## 3 Communication Channels
+## 3 Kênh giao tiếp
 
-### Channel 1: Handoffs (One-way, structured)
+### Kênh 1: Handoff (Một chiều, có cấu trúc)
 
-**When**: Agent A finishes a phase, Agent B takes over.
-**Format**: `features/FEAT-XXX/handoffs/HANDOFF-latest.md`
-**Direction**: Always A → PM → B (PM routes, scoped to feature)
+**Khi nào**: Agent A hoàn thành một phase, Agent B tiếp quản.
+**Định dạng**: `features/FEAT-XXX/handoffs/HANDOFF-latest.md`
+**Hướng đi**: Luôn A → PM → B (PM điều phối, giới hạn trong phạm vi feature)
 
 ```
-BA finishes requirement → HANDOFF → PM reads → triggers Architect
-Architect finishes design → HANDOFF → PM reads → creates task cards (labeled backend/frontend)
-Backend Dev finishes task → HANDOFF → PM reads → triggers Reviewer
-Frontend Dev finishes task → HANDOFF → PM reads → triggers Reviewer
-Reviewer approves → HANDOFF → PM reads → triggers next task or Tester
-Tester finishes → HANDOFF → PM reads → triggers QA
+BA hoàn thành yêu cầu → HANDOFF → PM đọc → kích hoạt Architect
+Architect hoàn thành thiết kế → HANDOFF → PM đọc → tạo task card (gán nhãn backend/frontend)
+Backend Dev hoàn thành task → HANDOFF → PM đọc → kích hoạt Reviewer
+Frontend Dev hoàn thành task → HANDOFF → PM đọc → kích hoạt Reviewer
+Reviewer phê duyệt → HANDOFF → PM đọc → kích hoạt task tiếp theo hoặc Tester
+Tester hoàn thành → HANDOFF → PM đọc → kích hoạt QA
 ```
 
-This is the **pipeline flow** — sequential and structured.
+Đây là **luồng pipeline** — tuần tự và có cấu trúc.
 
-### Channel 2: Discussions (Multi-way, conversational)
+### Kênh 2: Thảo luận (Đa chiều, hội thoại)
 
-**When**: An agent has a question, concern, or needs input from another agent.
-**Format**: Within-feature → `features/FEAT-XXX/discussions/DISC-XXX.md` | Cross-feature → `discussions/DISC-CROSS-XXX.md`
-**Direction**: Any agent → Any agent (PM moderates)
+**Khi nào**: Một agent có câu hỏi, lo ngại, hoặc cần ý kiến từ agent khác.
+**Định dạng**: Trong feature → `features/FEAT-XXX/discussions/DISC-XXX.md` | Xuyên feature → `discussions/DISC-CROSS-XXX.md`
+**Hướng đi**: Bất kỳ agent → Bất kỳ agent (PM điều phối)
 
-Discussions simulate real team conversations:
-- Reviewer asks Backend Dev about a design choice
-- Reviewer asks Frontend Dev about a UI pattern
-- Backend Dev asks Architect about design feasibility
-- Frontend Dev asks Backend Dev about API contract
-- Tester asks BA to clarify acceptance criteria
-- Backend Dev flags a concern to Architect about the design
-- Frontend Dev asks Architect about component boundaries
-- QA asks everyone about a cross-cutting concern
-- Any agent requests Researcher for technical investigation
+Thảo luận mô phỏng các cuộc trao đổi thực tế trong team:
+- Reviewer hỏi Backend Dev về lựa chọn thiết kế
+- Reviewer hỏi Frontend Dev về pattern UI
+- Backend Dev hỏi Architect về tính khả thi của thiết kế
+- Frontend Dev hỏi Backend Dev về API contract
+- Tester hỏi BA để làm rõ tiêu chí chấp nhận
+- Backend Dev ghi nhận lo ngại gửi Architect về thiết kế
+- Frontend Dev hỏi Architect về ranh giới component
+- QA hỏi mọi người về vấn đề xuyên suốt
+- Bất kỳ agent nào yêu cầu Researcher điều tra kỹ thuật
 
-**Discussion Flow:**
+**Luồng thảo luận:**
 ```
-1. Agent A writes DISC-XXX.md with question + context
-2. Agent A marks it: Status: OPEN, Participants: [who needs to respond]
-3. PM sees open discussion → routes to participant
-4. Participant reads discussion → writes response entry
-5. If resolved → Status: RESOLVED + summary of decision
-6. If needs more input → another round (max 3 rounds)
-7. PM updates relevant docs with the decision
-```
-
-**Discussion Rules:**
-- Each entry has: `### [Agent Name] → [Target Agent]` header
-- Keep entries concise — problem + options + recommendation
-- Max 3 rounds per discussion — then PM escalates to human
-- Decisions from discussions go into `decisions/ADR-XXX.md`
-- Any agent can open a discussion, not just PM
-
-### Channel 3: Review Comments (Feedback on work product)
-
-**When**: Reviewer or QA finds issues in code/tests/design.
-**Format**: `features/FEAT-XXX/reviews/TASK-XXX-review.md` or `features/FEAT-XXX/reviews/qa-report.md`
-**Direction**: Reviewer → Backend Dev or Frontend Dev (via PM), QA → any agent (via PM)
-
-Review comments simulate PR review comments:
-- Tagged by severity: `[CRITICAL]`, `[WARNING]`, `[SUGGESTION]`, `[QUESTION]`
-- Include file path + line number when possible
-- Include "current code" and "suggested fix"
-- `[QUESTION]` comments automatically open a discussion thread
-
-**Review Cycle:**
-```
-1. Reviewer writes review with comments
-2. If APPROVED → next phase
-3. If CHANGES_REQUESTED:
-   a. PM sends review to the appropriate Dev (Backend Dev or Frontend Dev based on task label)
-   b. Dev reads comments, fixes code
-   c. Dev writes response: "Fixed" / "Won't fix because..." / "Need discussion"
-   d. Reviewer re-reviews ONLY changed parts
-   e. Max 3 rounds → then PM escalates to human
+1. Agent A viết DISC-XXX.md với câu hỏi + ngữ cảnh
+2. Agent A đánh dấu: Status: OPEN, Participants: [ai cần trả lời]
+3. PM thấy thảo luận mở → chuyển đến người tham gia
+4. Người tham gia đọc thảo luận → viết phản hồi
+5. Nếu đã giải quyết → Status: RESOLVED + tóm tắt quyết định
+6. Nếu cần thêm ý kiến → thêm vòng (tối đa 3 vòng)
+7. PM cập nhật tài liệu liên quan với quyết định
 ```
 
----
+**Quy tắc thảo luận:**
+- Mỗi mục có header: `### [Tên Agent] → [Agent đích]`
+- Viết ngắn gọn — vấn đề + các lựa chọn + đề xuất
+- Tối đa 3 vòng mỗi thảo luận — sau đó PM chuyển lên người dùng
+- Quyết định từ thảo luận được ghi vào `decisions/ADR-XXX.md`
+- Bất kỳ agent nào cũng có thể mở thảo luận, không chỉ PM
 
-## Common Discussion Scenarios
+### Kênh 3: Nhận xét Review (Phản hồi về sản phẩm công việc)
 
-### Scenario 1: Design Feasibility (Backend Dev ↔ Architect)
-```
-Architect creates design → Backend Dev reads it → spots a problem
-Backend Dev opens DISC: "The design says use WebSocket, but our infra doesn't support it"
-Architect responds: "Good catch. Let's use SSE instead"
-Decision → ADR-XXX: "Use SSE over WebSocket due to infra constraints"
-```
+**Khi nào**: Reviewer hoặc QA phát hiện vấn đề trong code/test/thiết kế.
+**Định dạng**: `features/FEAT-XXX/reviews/TASK-XXX-review.md` hoặc `features/FEAT-XXX/reviews/qa-report.md`
+**Hướng đi**: Reviewer → Backend Dev hoặc Frontend Dev (qua PM), QA → bất kỳ agent (qua PM)
 
-### Scenario 2: Acceptance Criteria Ambiguity (Tester ↔ BA)
-```
-Tester reads spec → unclear what "recent orders" means
-Tester opens DISC: "Does 'recent' mean last 7 days, 30 days, or configurable?"
-BA responds: "Last 30 days, not configurable for now. Added to requirement."
-Decision → requirement doc updated
-```
+Nhận xét review mô phỏng các comment trên PR:
+- Gắn nhãn theo mức độ: `[CRITICAL]`, `[WARNING]`, `[SUGGESTION]`, `[QUESTION]`
+- Kèm đường dẫn file + số dòng khi có thể
+- Kèm "code hiện tại" và "gợi ý sửa"
+- Comment `[QUESTION]` tự động mở luồng thảo luận
 
-### Scenario 3: Code Review Debate (Reviewer ↔ Backend Dev ↔ Architect)
+**Chu trình Review:**
 ```
-Reviewer comments: "This should use a generator instead of loading all into memory"
-Backend Dev responds: "Generator won't work because downstream needs random access"
-Reviewer: "Then paginate with cursor. Let's ask Architect."
-Architect: "Cursor pagination. Max 100 per page."
-Decision → implementation updated
-```
-
-### Scenario 4: Cross-cutting Concern (QA ↔ All)
-```
-QA finds: "3 services are doing auth checks differently"
-QA opens DISC with all: "We need a consistent auth pattern"
-Architect: "Create a shared middleware. Here's the pattern..."
-Decision → ADR + new task card for standardization
-```
-
-### Scenario 5: API Contract (Frontend Dev ↔ Backend Dev)
-```
-Frontend Dev reads API spec → needs a field not in the response
-Frontend Dev opens DISC: "I need `user.avatar_url` in the /me endpoint response"
-Backend Dev responds: "Can add it. Will include in the UserProfile schema."
-Decision → design.md updated, new task card if needed
-```
-
-### Scenario 6: Technical Research (Any Agent → Researcher via PM)
-```
-Architect is unsure about caching strategy → asks PM for research
-PM triggers Researcher: "Compare Redis vs in-memory caching for our session store"
-Researcher investigates → writes RESEARCH-001.md with comparison + recommendation
-PM routes findings back to Architect
-Architect incorporates recommendation into design
+1. Reviewer viết review kèm nhận xét
+2. Nếu APPROVED → phase tiếp theo
+3. Nếu CHANGES_REQUESTED:
+   a. PM gửi review cho Dev phù hợp (Backend Dev hoặc Frontend Dev dựa trên label của task)
+   b. Dev đọc nhận xét, sửa code
+   c. Dev viết phản hồi: "Đã sửa" / "Không sửa vì..." / "Cần thảo luận"
+   d. Reviewer review lại CHỈ phần đã thay đổi
+   e. Tối đa 3 vòng → sau đó PM chuyển lên người dùng
 ```
 
 ---
 
-## Discussion File Structure
+## Các tình huống thảo luận phổ biến
+
+### Tình huống 1: Tính khả thi thiết kế (Backend Dev ↔ Architect)
+```
+Architect tạo thiết kế → Backend Dev đọc → phát hiện vấn đề
+Backend Dev mở DISC: "Thiết kế yêu cầu dùng WebSocket, nhưng hạ tầng chưa hỗ trợ"
+Architect trả lời: "Đúng rồi. Dùng SSE thay thế"
+Quyết định → ADR-XXX: "Dùng SSE thay vì WebSocket do hạn chế hạ tầng"
+```
+
+### Tình huống 2: Tiêu chí chấp nhận mơ hồ (Tester ↔ BA)
+```
+Tester đọc spec → không rõ "đơn hàng gần đây" nghĩa là gì
+Tester mở DISC: "'Gần đây' có nghĩa là 7 ngày, 30 ngày, hay có thể cấu hình?"
+BA trả lời: "30 ngày gần nhất, không cấu hình được ở thời điểm hiện tại. Đã bổ sung vào yêu cầu."
+Quyết định → cập nhật tài liệu yêu cầu
+```
+
+### Tình huống 3: Tranh luận Code Review (Reviewer ↔ Backend Dev ↔ Architect)
+```
+Reviewer nhận xét: "Nên dùng generator thay vì tải tất cả vào bộ nhớ"
+Backend Dev trả lời: "Generator không hoạt động vì downstream cần random access"
+Reviewer: "Vậy phân trang bằng cursor. Hỏi Architect nhé."
+Architect: "Cursor pagination. Tối đa 100 mỗi trang."
+Quyết định → cập nhật triển khai
+```
+
+### Tình huống 4: Vấn đề xuyên suốt (QA ↔ Tất cả)
+```
+QA phát hiện: "3 service đang kiểm tra auth theo cách khác nhau"
+QA mở DISC với tất cả: "Cần một pattern auth thống nhất"
+Architect: "Tạo middleware dùng chung. Đây là pattern..."
+Quyết định → ADR + task card mới cho việc chuẩn hóa
+```
+
+### Tình huống 5: API Contract (Frontend Dev ↔ Backend Dev)
+```
+Frontend Dev đọc API spec → cần một trường không có trong response
+Frontend Dev mở DISC: "Tôi cần `user.avatar_url` trong response của endpoint /me"
+Backend Dev trả lời: "Có thể thêm. Sẽ đưa vào UserProfile schema."
+Quyết định → cập nhật design.md, tạo task card mới nếu cần
+```
+
+### Tình huống 6: Nghiên cứu kỹ thuật (Bất kỳ Agent → Researcher qua PM)
+```
+Architect không chắc về chiến lược caching → yêu cầu PM nghiên cứu
+PM kích hoạt Researcher: "So sánh Redis và in-memory caching cho session store"
+Researcher điều tra → viết RESEARCH-001.md với bảng so sánh + đề xuất
+PM chuyển kết quả về Architect
+Architect tích hợp đề xuất vào thiết kế
+```
+
+---
+
+## Cấu trúc file Thảo luận
 
 ```
 .ai-workspace/features/FEAT-XXX/discussions/
-├── DISC-001.md        ← Design feasibility discussion
-├── DISC-002.md        ← Acceptance criteria clarification
-├── DISC-003.md        ← API contract discussion
-├── RESEARCH-001.md    ← Researcher's technical report
-└── RESEARCH-002.md    ← Another research report
+├── DISC-001.md        ← Thảo luận tính khả thi thiết kế
+├── DISC-002.md        ← Làm rõ tiêu chí chấp nhận
+├── DISC-003.md        ← Thảo luận API contract
+├── RESEARCH-001.md    ← Báo cáo kỹ thuật của Researcher
+└── RESEARCH-002.md    ← Báo cáo nghiên cứu khác
 
 .ai-workspace/discussions/
-├── DISC-CROSS-001.md  ← Cross-feature file conflict resolution
-└── DISC-CROSS-002.md  ← Cross-cutting auth pattern
+├── DISC-CROSS-001.md  ← Giải quyết xung đột file xuyên feature
+└── DISC-CROSS-002.md  ← Pattern auth xuyên suốt
 ```
 
-## When to Open a Discussion vs. Just Handling It
+## Khi nào mở Thảo luận và khi nào tự xử lý
 
-**Open a discussion when:**
-- You're uncertain about the right approach
-- The issue affects more than your current task
-- You disagree with a design or implementation choice
-- You need information from another agent's domain
-- A decision could have architectural implications
-- You need Researcher to investigate something (request via PM)
+**Mở thảo luận khi:**
+- Không chắc chắn về cách tiếp cận đúng
+- Vấn đề ảnh hưởng nhiều hơn task hiện tại
+- Không đồng ý với lựa chọn thiết kế hoặc triển khai
+- Cần thông tin từ lĩnh vực của agent khác
+- Quyết định có thể ảnh hưởng đến kiến trúc
+- Cần Researcher điều tra vấn đề (yêu cầu qua PM)
 
-**Just handle it when:**
-- It's a simple bug fix with an obvious solution
-- It's a typo or naming inconsistency
-- The conventions doc already has the answer
-- It's within your domain and doesn't affect others
+**Tự xử lý khi:**
+- Lỗi đơn giản với giải pháp rõ ràng
+- Lỗi chính tả hoặc không nhất quán trong đặt tên
+- Tài liệu convention đã có câu trả lời
+- Nằm trong lĩnh vực của bạn và không ảnh hưởng người khác
 
 ---
 
-## PM's Role in Communication
+## Vai trò của PM trong giao tiếp
 
-PM is the **moderator**, not a bottleneck:
+PM là **người điều phối**, không phải nút thắt cổ chai:
 
-1. **Route**: PM reads open discussions, triggers the right agent to respond
-2. **Escalate**: If discussion exceeds 3 rounds → PM escalates to human
-3. **Record**: PM ensures decisions are captured in ADR or requirement updates
-4. **Summarize**: PM provides human with discussion summaries at checkpoints
-5. **Unblock**: If agents disagree → PM presents options to human for decision
-6. **Research**: PM triggers Researcher when any agent requests technical investigation
+1. **Điều phối**: PM đọc các thảo luận mở, kích hoạt agent phù hợp phản hồi
+2. **Chuyển cấp**: Nếu thảo luận vượt quá 3 vòng → PM chuyển lên người dùng
+3. **Ghi nhận**: PM đảm bảo quyết định được ghi lại trong ADR hoặc cập nhật yêu cầu
+4. **Tóm tắt**: PM cung cấp cho người dùng bản tóm tắt thảo luận tại các checkpoint
+5. **Giải tỏa**: Nếu các agent bất đồng → PM trình các lựa chọn cho người dùng quyết định
+6. **Nghiên cứu**: PM kích hoạt Researcher khi bất kỳ agent nào yêu cầu điều tra kỹ thuật
 
-PM does NOT:
-- Answer technical questions on behalf of agents
-- Override agent recommendations
-- Close discussions without resolution
+PM KHÔNG:
+- Trả lời câu hỏi kỹ thuật thay cho các agent
+- Ghi đè đề xuất của agent
+- Đóng thảo luận khi chưa có giải pháp

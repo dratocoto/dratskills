@@ -1,154 +1,154 @@
-# Context Management Strategy
+# Chiến lược quản lý ngữ cảnh
 
-## The Core Problem
+## Vấn đề cốt lõi
 
-AI agents have limited context windows. A typical project may have hundreds of files.
-Loading everything = diluted attention = poor code quality.
+Các AI agent có context window giới hạn. Một dự án thông thường có thể có hàng trăm file.
+Tải mọi thứ = giảm sự tập trung = chất lượng code kém.
 
-**Solution**: File-based shared memory + task-scoped context loading.
+**Giải pháp**: Bộ nhớ chia sẻ dựa trên file + tải ngữ cảnh theo phạm vi task.
 
-## Principle: "Load Only What You Need"
+## Nguyên tắc: "Chỉ tải những gì cần thiết"
 
-Each agent interaction should load the MINIMUM files needed to complete its task.
+Mỗi lần tương tác của agent chỉ nên tải SỐ LƯỢNG TỐI THIỂU file cần thiết để hoàn thành task.
 
-### Context Budget per Agent
+### Ngân sách ngữ cảnh cho mỗi Agent
 
-| Agent        | Budget   | Breakdown                                                                                        |
-| ------------ | -------- | ------------------------------------------------------------------------------------------------ |
-| PM           | ~4 files | STATE.md + stack.config.yaml + current handoff + 1 discussion (if OPEN)                          |
-| BA           | ~5 files | STATE.md + stack.config.yaml + codebase structure (ls/tree) + existing requirement (if revising) |
-| Architect    | ~5 files | requirement + tree output + 2-3 existing patterns                                                |
-| Backend Dev  | ~5 files | task card + resolved skills + conventions section + 2-3 source files                             |
-| Frontend Dev | ~5 files | task card + resolved skills + conventions section + 2-3 source files                             |
-| Reviewer     | ~5 files | task card + resolved skills + CONVENTIONS.md + source files being reviewed                       |
-| Test         | ~5 files | spec section + 2-3 source files to test + conventions                                            |
-| QA           | ~7 files | conventions + checklist + source files + test files                                              |
+| Agent        | Ngân sách | Chi tiết                                                                                         |
+| ------------ | --------- | ------------------------------------------------------------------------------------------------ |
+| PM           | ~4 file   | STATE.md + stack.config.yaml + handoff hiện tại + 1 thảo luận (nếu OPEN)                        |
+| BA           | ~5 file   | STATE.md + stack.config.yaml + cấu trúc codebase (ls/tree) + yêu cầu hiện có (nếu đang chỉnh sửa) |
+| Architect    | ~5 file   | tài liệu yêu cầu + kết quả tree + 2-3 pattern hiện có                                          |
+| Backend Dev  | ~5 file   | task card + skill đã resolve + phần convention + 2-3 file mã nguồn                               |
+| Frontend Dev | ~5 file   | task card + skill đã resolve + phần convention + 2-3 file mã nguồn                               |
+| Reviewer     | ~5 file   | task card + skill đã resolve + CONVENTIONS.md + các file mã nguồn đang review                    |
+| Test         | ~5 file   | phần spec + 2-3 file mã nguồn cần test + convention                                             |
+| QA           | ~7 file   | convention + checklist + file mã nguồn + file test                                               |
 
-### How to Stay Within Budget
+### Cách giữ trong ngân sách
 
-**1. Structured References, Not Full Reads**
+**1. Tham chiếu có cấu trúc, không đọc toàn bộ**
 
-Instead of loading an entire CONVENTIONS.md, reference specific sections:
+Thay vì tải toàn bộ CONVENTIONS.md, tham chiếu đến phần cụ thể:
 
 ```
-Read: CONVENTIONS.md#python-models   ← Just the models section
-NOT:  CONVENTIONS.md                 ← The entire file
+Đọc: CONVENTIONS.md#python-models   ← Chỉ phần model
+KHÔNG: CONVENTIONS.md               ← Toàn bộ file
 ```
 
-Use markdown headers as section anchors. Each agent reads only relevant sections.
+Sử dụng header markdown làm anchor cho phần. Mỗi agent chỉ đọc phần liên quan.
 
-**2. Task Cards as Context Containers**
+**2. Task Card là nơi chứa ngữ cảnh**
 
-The task card IS the context. It contains:
+Task card CHÍNH LÀ ngữ cảnh. Nó chứa:
 
-- What to do (instructions)
-- What to read (file references with reasons)
-- What to produce (expected outputs)
-- How to validate (acceptance criteria)
+- Việc cần làm (hướng dẫn)
+- Cần đọc gì (tham chiếu file kèm lý do)
+- Cần tạo gì (đầu ra mong đợi)
+- Cách xác thực (tiêu chí chấp nhận)
 
-The agent reads the task card → reads referenced files → works → done.
+Agent đọc task card → đọc các file được tham chiếu → làm việc → hoàn thành.
 
-**3. Compact Document Formats**
+**3. Định dạng tài liệu gọn nhẹ**
 
-CONVENTIONS.md uses checklist format, not prose:
+CONVENTIONS.md sử dụng định dạng checklist, không phải văn xuôi:
 
 ```markdown
 ## Python Models
 
-- [ ] Use SQLAlchemy declarative base
-- [ ] UUID primary keys (import from uuid)
-- [ ] created_at, updated_at as default columns
-- [ ] Type hints on all columns
-- [ ] Table name = lowercase plural (users, products)
+- [ ] Sử dụng SQLAlchemy declarative base
+- [ ] Khóa chính UUID (import từ uuid)
+- [ ] created_at, updated_at là các cột mặc định
+- [ ] Type hint trên tất cả các cột
+- [ ] Tên bảng = chữ thường số nhiều (users, products)
 - [ ] Relationship lazy loading = "selectin"
 ```
 
-This is ~6 lines vs a 2-page prose explanation. Same information, 10x less tokens.
+Chỉ ~6 dòng thay vì 2 trang giải thích dài dòng. Cùng thông tin, ít token hơn 10 lần.
 
-**4. Progressive Disclosure Through File Hierarchy**
+**4. Tiết lộ dần qua phân cấp file**
 
 ```
-Level 0: CONVENTIONS.md         ← Always loaded (~200 lines, compact)
-Level 1: features/FEAT-XXX/design.md ← Loaded for the specific feature
-Level 2: references/patterns.md ← Loaded only when agent needs deep detail
+Cấp 0: CONVENTIONS.md         ← Luôn được tải (~200 dòng, gọn nhẹ)
+Cấp 1: features/FEAT-XXX/design.md ← Tải cho feature cụ thể
+Cấp 2: references/patterns.md ← Chỉ tải khi agent cần chi tiết sâu
 ```
 
-Each agent loads Level 0 + relevant Level 1. Level 2 only on demand.
+Mỗi agent tải Cấp 0 + Cấp 1 liên quan. Cấp 2 chỉ khi cần.
 
-## STATE.md as Single Source of Truth
+## STATE.md là nguồn sự thật duy nhất
 
-STATE.md is the "kanban board" that every agent reads first:
+STATE.md là "bảng kanban" mà mọi agent đọc đầu tiên:
 
 ```markdown
-# Project State
+# Trạng thái dự án
 
-## Active Feature: FEAT-003 Product Catalog
+## Feature đang hoạt động: FEAT-003 Product Catalog
 
-## Current Phase: IMPLEMENTATION
+## Phase hiện tại: IMPLEMENTATION
 
-## Current Task: TASK-014 (3 of 4)
+## Task hiện tại: TASK-014 (3 trên 4)
 
-## Feature Progress
+## Tiến độ Feature
 
-| Feature           | Requirement | Design | Implement | Test | Review       |
-| ----------------- | ----------- | ------ | --------- | ---- | ------------ |
-| FEAT-001 Auth     | ✅          | ✅     | ✅        | ✅   | ✅ DONE      |
-| FEAT-002 Users    | ✅          | ✅     | ✅        | ✅   | 🔄 IN REVIEW |
-| FEAT-003 Products | ✅          | ✅     | 🔄 3/4    | ⏳   | ⏳           |
-| FEAT-004 Orders   | ✅          | ⏳     | ⏳        | ⏳   | ⏳           |
+| Feature           | Yêu cầu | Thiết kế | Triển khai | Test | Review       |
+| ----------------- | -------- | -------- | ---------- | ---- | ------------ |
+| FEAT-001 Auth     | ✅       | ✅       | ✅         | ✅   | ✅ DONE      |
+| FEAT-002 Users    | ✅       | ✅       | ✅         | ✅   | 🔄 IN REVIEW |
+| FEAT-003 Products | ✅       | ✅       | 🔄 3/4     | ⏳   | ⏳           |
+| FEAT-004 Orders   | ✅       | ⏳       | ⏳         | ⏳   | ⏳           |
 
-## Recent Activity
+## Hoạt động gần đây
 
-- [2025-01-15 14:30] TASK-013 completed by backend-dev-agent
-- [2025-01-15 14:00] TASK-012 completed by backend-dev-agent
-- [2025-01-15 12:00] Design approved for FEAT-003
+- [2025-01-15 14:30] TASK-013 hoàn thành bởi backend-dev-agent
+- [2025-01-15 14:00] TASK-012 hoàn thành bởi backend-dev-agent
+- [2025-01-15 12:00] Thiết kế được phê duyệt cho FEAT-003
 ```
 
-STATE.md rules:
+Quy tắc STATE.md:
 
-- Max 50 lines (summary only)
-- Updated after every task completion
-- Read by PM at start of every interaction
-- Never deleted, only appended/updated
+- Tối đa 50 dòng (chỉ tóm tắt)
+- Cập nhật sau mỗi task hoàn thành
+- PM đọc khi bắt đầu mỗi lần tương tác
+- Không bao giờ xóa, chỉ thêm/cập nhật
 
-## Avoiding Context Rot
+## Tránh Context Rot
 
-**Context rot** = performance degrades as conversation gets longer.
+**Context rot** = hiệu suất giảm khi cuộc hội thoại dài hơn.
 
-Prevention strategies:
+Chiến lược phòng ngừa:
 
-**1. One Task Per Agent Invocation**
-Don't ask the Dev to implement 5 tasks in one go. One task, one invocation.
+**1. Một Task mỗi lần gọi Agent**
+Không yêu cầu Dev triển khai 5 task cùng lúc. Một task, một lần gọi.
 
-**2. Fresh Start for Each Task**
-Each agent interaction starts fresh:
+**2. Bắt đầu mới cho mỗi Task**
+Mỗi lần tương tác agent bắt đầu từ đầu:
 
-- Read task card → Read referenced files → Do work → Write output → Done
+- Đọc task card → Đọc file tham chiếu → Làm việc → Ghi đầu ra → Hoàn thành
 
-**3. Summarize, Don't Accumulate**
-After completing a phase, write a summary (handoff) rather than carrying
-the full history forward.
+**3. Tóm tắt, không tích lũy**
+Sau khi hoàn thành một phase, viết bản tóm tắt (handoff) thay vì mang toàn bộ
+lịch sử sang phase tiếp theo.
 
-**4. Split Large Features**
-If a feature requires > 10 files, split into sub-features.
-Each sub-feature goes through the full pipeline independently.
+**4. Chia nhỏ Feature lớn**
+Nếu một feature yêu cầu > 10 file, chia thành các sub-feature.
+Mỗi sub-feature đi qua toàn bộ pipeline một cách độc lập.
 
-## File Size Limits
+## Giới hạn kích thước file
 
-| File Type       | Max Lines | If Exceeded                          |
-| --------------- | --------- | ------------------------------------ |
-| CONVENTIONS.md  | 200       | Split into sections, use references/ |
-| STATE.md        | 50        | Archive old features to history/     |
-| Task card       | 40        | Break into smaller tasks             |
-| Requirement doc | 60        | Use bullet points, not prose         |
-| Design spec     | 100       | Move details to references/          |
-| Handoff         | 30        | Be concise, reference files          |
+| Loại file       | Tối đa (dòng) | Nếu vượt quá                             |
+| --------------- | -------------- | ----------------------------------------- |
+| CONVENTIONS.md  | 200            | Chia thành các phần, dùng references/     |
+| STATE.md        | 50             | Lưu trữ feature cũ vào history/          |
+| Task card       | 40             | Chia thành task nhỏ hơn                   |
+| Tài liệu yêu cầu | 60          | Dùng bullet point, không viết văn xuôi    |
+| Tài liệu thiết kế | 100         | Chuyển chi tiết vào references/           |
+| Handoff         | 30             | Viết ngắn gọn, tham chiếu file           |
 
-## Anti-Patterns to Avoid
+## Những anti-pattern cần tránh
 
-1. **Loading the entire codebase** — Never. Use tree + targeted reads.
-2. **Prose-heavy documentation** — Use tables, checklists, bullet points.
-3. **Carrying conversation history** — Each agent starts fresh with file context.
-4. **One giant task card** — Break into 3-file-max tasks.
-5. **Duplicating information** — Reference files, don't copy content.
-6. **Skipping STATE.md updates** — The team loses coordination.
+1. **Tải toàn bộ codebase** — Không bao giờ. Dùng tree + đọc có mục tiêu.
+2. **Tài liệu nặng văn xuôi** — Dùng bảng, checklist, bullet point.
+3. **Mang theo lịch sử hội thoại** — Mỗi agent bắt đầu mới với ngữ cảnh từ file.
+4. **Một task card khổng lồ** — Chia thành các task tối đa 3 file.
+5. **Trùng lặp thông tin** — Tham chiếu file, không sao chép nội dung.
+6. **Bỏ qua cập nhật STATE.md** — Team mất khả năng phối hợp.

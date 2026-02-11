@@ -4,67 +4,67 @@ paths:
   - "plugins/ai-dev-team/team.config.yaml"
 ---
 
-# Skill Conventions
+# Quy ước Skill
 
-## Directory Structure
+## Cấu trúc thư mục
 
-Each skill is a directory under `plugins/ai-dev-team/skills/` containing at minimum a `SKILL.md`:
+Mỗi skill là một thư mục trong `plugins/ai-dev-team/skills/` chứa tối thiểu một file `SKILL.md`:
 
 ```
 skills/
 ├── skill-name/
-│   ├── SKILL.md              # Main skill document (required)
-│   ├── references/           # Supporting reference docs (optional)
+│   ├── SKILL.md              # Tài liệu skill chính (bắt buộc)
+│   ├── references/           # Tài liệu tham khảo bổ sung (tuỳ chọn)
 │   │   └── topic.md
-│   └── templates/            # File templates for agents to use (optional)
+│   └── templates/            # Template cho agent sử dụng (tuỳ chọn)
 │       └── template-name.md
 ```
 
-## SKILL.md Format
+## Định dạng SKILL.md
 
 ```yaml
 ---
 name: skill-name
 description: >
-  When this skill should be loaded. Used by Claude to decide relevance.
-  Include trigger keywords (e.g., "FastAPI", "Python 3.12", "conventions").
+  Khi nào skill này nên được tải. Claude dùng thông tin này để quyết định mức độ liên quan.
+  Bao gồm từ khoá kích hoạt (vd: "FastAPI", "Python 3.12", "conventions").
 version: 0.1.0
 ---
 ```
 
-Body content is the skill's knowledge base — loaded into agent context when the skill category matches.
+Nội dung body là cơ sở kiến thức của skill — được tải vào context agent khi danh mục skill khớp.
 
-## Two-Level Skill Resolution
+## Phân giải Skill hai cấp
 
-1. **team.config.yaml** defines which skill _categories_ each agent needs:
+1. **team.config.yaml** định nghĩa _danh mục_ skill mà mỗi agent cần:
    ```yaml
    agents:
      backend-dev-agent:
        skills: [backend-patterns, language, conventions]
    ```
 
-2. **stack.config.yaml** (per-project) maps categories to actual skill folder names:
+2. **stack.config.yaml** (theo dự án) ánh xạ danh mục sang tên thư mục skill thực tế:
    ```yaml
    skills:
      backend-patterns: fastapi-patterns
      language: python312
      conventions: conventions
-     frontend-guide: _none_    # Agent skips this category
+     frontend-guide: _none_    # Agent bỏ qua danh mục này
    ```
 
-## Adding a New Skill
+## Thêm Skill mới
 
-1. Create directory: `skills/new-skill-name/SKILL.md`
-2. Add YAML frontmatter with `name`, `description`, `version`
-3. Register the skill category in `team.config.yaml` under `skill_categories:` (if new category)
-4. Map the category in stack profile templates at `skills/workflow-guide/references/stack-profiles.md`
+1. Tạo thư mục: `skills/new-skill-name/SKILL.md`
+2. Thêm YAML frontmatter với `name`, `description`, `version`
+3. Đăng ký danh mục skill trong `team.config.yaml` dưới `skill_categories:` (nếu là danh mục mới)
+4. Ánh xạ danh mục trong template stack profile tại `skills/workflow-guide/references/stack-profiles.md`
 
-## Current Skills
+## Danh sách Skill hiện tại
 
-| Skill | Category | Purpose |
-|-------|----------|---------|
-| conventions | conventions | Coding standards for all agents |
-| fastapi-patterns | backend-patterns | FastAPI framework patterns |
-| nextjs16-guide | frontend-guide | Next.js 16 patterns |
-| python312 | language | Python 3.12 features and idioms |
-| workflow-guide | (internal) | Team workflow docs, templates, references |
+| Skill | Danh mục | Mục đích |
+|-------|----------|----------|
+| conventions | conventions | Chuẩn coding cho tất cả agent |
+| fastapi-patterns | backend-patterns | Các pattern FastAPI |
+| nextjs16-guide | frontend-guide | Các pattern Next.js 16 |
+| python312 | language | Tính năng và idiom Python 3.12 |
+| workflow-guide | (nội bộ) | Tài liệu workflow, template, tham khảo |

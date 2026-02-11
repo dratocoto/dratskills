@@ -1,10 +1,10 @@
-# FEAT-XXX Design: [Feature Name]
+# FEAT-XXX Design: [Tên tính năng]
 
-## Overview
+## Tổng quan
 
-[1-2 sentences: what this feature does technically]
+[1-2 câu: tính năng này hoạt động như thế nào về mặt kỹ thuật]
 
-## Architecture
+## Kiến trúc
 
 ```mermaid
 graph LR
@@ -16,22 +16,22 @@ graph LR
 
 ## Data Models
 
-### [ModelName]
+### [Tên Model]
 
-| Field      | Type     | Required | Default  | Description           |
-| ---------- | -------- | -------- | -------- | --------------------- |
-| id         | UUID     | auto     | uuid4()  | Primary key           |
-| field_name | str      | yes      | -        | Description           |
-| created_at | datetime | auto     | now(UTC) | Creation timestamp    |
-| updated_at | datetime | auto     | now(UTC) | Last update timestamp |
+| Trường     | Kiểu     | Bắt buộc | Mặc định | Mô tả                     |
+| ---------- | -------- | --------- | -------- | -------------------------- |
+| id         | UUID     | tự động   | uuid4()  | Khoá chính                 |
+| field_name | str      | có        | -        | Mô tả                     |
+| created_at | datetime | tự động   | now(UTC) | Thời điểm tạo             |
+| updated_at | datetime | tự động   | now(UTC) | Thời điểm cập nhật cuối   |
 
 ## API Endpoints
 
 ### POST /api/v1/[resource]
 
-| Aspect       | Detail            |
+| Khía cạnh   | Chi tiết          |
 | ------------ | ----------------- |
-| Auth         | Required (Bearer) |
+| Auth         | Bắt buộc (Bearer) |
 | Request      | CreateSchema      |
 | Response 201 | ResourceResponse  |
 | Response 400 | ValidationError   |
@@ -39,77 +39,77 @@ graph LR
 
 ### GET /api/v1/[resource]/{id}
 
-| Aspect       | Detail           |
+| Khía cạnh    | Chi tiết         |
 | ------------ | ---------------- |
-| Auth         | Required         |
+| Auth         | Bắt buộc         |
 | Response 200 | ResourceResponse |
 | Response 404 | NotFoundError    |
 
 ### GET /api/v1/[resource]?page=1&limit=20
 
-| Aspect       | Detail                                         |
-| ------------ | ---------------------------------------------- |
-| Auth         | Required                                       |
-| Query Params | page (int, default 1), limit (int, default 20) |
-| Response 200 | PaginatedResponse[ResourceResponse]            |
+| Khía cạnh    | Chi tiết                                           |
+| ------------ | -------------------------------------------------- |
+| Auth         | Bắt buộc                                           |
+| Query Params | page (int, mặc định 1), limit (int, mặc định 20)  |
+| Response 200 | PaginatedResponse[ResourceResponse]                |
 
 ### PUT /api/v1/[resource]/{id}
 
-| Aspect       | Detail           |
+| Khía cạnh    | Chi tiết         |
 | ------------ | ---------------- |
-| Auth         | Required         |
+| Auth         | Bắt buộc         |
 | Request      | UpdateSchema     |
 | Response 200 | ResourceResponse |
 | Response 404 | NotFoundError    |
 
 ### DELETE /api/v1/[resource]/{id}
 
-| Aspect       | Detail        |
+| Khía cạnh    | Chi tiết      |
 | ------------ | ------------- |
-| Auth         | Required      |
-| Response 204 | No content    |
+| Auth         | Bắt buộc      |
+| Response 204 | Không có nội dung |
 | Response 404 | NotFoundError |
 
-## File Plan
+## Kế hoạch file
 
-| #   | File                                 | Action | Description      |
-| --- | ------------------------------------ | ------ | ---------------- |
-| 1   | src/models/[resource].py             | CREATE | SQLAlchemy model |
-| 2   | src/schemas/[resource].py            | CREATE | Pydantic schemas |
-| 3   | src/repositories/[resource]\_repo.py | CREATE | Data access      |
-| 4   | src/services/[resource]\_service.py  | CREATE | Business logic   |
-| 5   | src/api/v1/routes/[resource].py      | CREATE | API endpoints    |
-| 6   | src/api/v1/router.py                 | MODIFY | Register route   |
+| #   | File                                 | Hành động | Mô tả            |
+| --- | ------------------------------------ | --------- | ----------------- |
+| 1   | src/models/[resource].py             | CREATE    | SQLAlchemy model  |
+| 2   | src/schemas/[resource].py            | CREATE    | Pydantic schemas  |
+| 3   | src/repositories/[resource]\_repo.py | CREATE    | Truy cập dữ liệu |
+| 4   | src/services/[resource]\_service.py  | CREATE    | Logic nghiệp vụ  |
+| 5   | src/api/v1/routes/[resource].py      | CREATE    | API endpoints     |
+| 6   | src/api/v1/router.py                 | MODIFY    | Đăng ký route     |
 
-## Implementation Tasks
+## Các task triển khai
 
-### TASK-XXX: Models and Schemas (files 1-2)
+### TASK-XXX: Models và Schemas (file 1-2)
 
 - **Label: backend**
-- Create model + Pydantic schemas
-- Read: CONVENTIONS.md#python-models, #pydantic
+- Tạo model + Pydantic schemas
+- Đọc: CONVENTIONS.md#python-models, #pydantic
 
 ### TASK-XXX: Repository (file 3)
 
 - **Label: backend**
-- Create async repository with CRUD operations
-- Read: src/repositories/base.py for pattern
+- Tạo async repository với các thao tác CRUD
+- Đọc: src/repositories/base.py để tham khảo pattern
 
 ### TASK-XXX: Service Layer (file 4)
 
 - **Label: backend**
-- Create service with business logic
-- Read: task 1 output files for types
+- Tạo service với logic nghiệp vụ
+- Đọc: output file của task 1 để lấy kiểu dữ liệu
 
-### TASK-XXX: API Endpoints (files 5-6)
+### TASK-XXX: API Endpoints (file 5-6)
 
 - **Label: backend**
-- Create route handlers + register in router
-- Read: src/api/v1/routes/ for existing patterns
+- Tạo route handlers + đăng ký vào router
+- Đọc: src/api/v1/routes/ để tham khảo pattern hiện có
 
-<!-- Labels: backend | frontend | full-stack — PM uses these to route tasks to the correct Dev agent -->
+<!-- Labels: backend | frontend | full-stack — PM sử dụng các label này để phân công task cho đúng agent Dev -->
 
-## Design Decisions
+## Quyết định thiết kế
 
-- [Decision 1]: [Rationale]
-- [Decision 2]: [Rationale]
+- [Quyết định 1]: [Lý do]
+- [Quyết định 2]: [Lý do]

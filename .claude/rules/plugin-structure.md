@@ -1,16 +1,22 @@
-# Plugin Structure Reference
+---
+paths:
+  - "plugins/ai-dev-team/**/*"
+  - ".claude-plugin/*"
+---
 
-## Marketplace Repository Layout
+# Tham chiếu cấu trúc Plugin
+
+## Bố cục Repository Marketplace
 
 ```
-/ (repo root)
+/ (gốc repo)
 ├── .claude-plugin/
-│   └── marketplace.json        # Marketplace catalog (name: "dratskills")
+│   └── marketplace.json        # Danh mục marketplace (name: "dratskills")
 ├── plugins/
-│   └── ai-dev-team/            # The plugin
+│   └── ai-dev-team/            # Plugin
 │       ├── .claude-plugin/
-│       │   └── plugin.json     # Plugin manifest (name, version, description, author)
-│       ├── agents/             # 9 agent definitions (.md files)
+│       │   └── plugin.json     # Manifest plugin (name, version, description, author)
+│       ├── agents/             # 9 định nghĩa agent (file .md)
 │       │   ├── pm-agent.md
 │       │   ├── ba-agent.md
 │       │   ├── architect-agent.md
@@ -20,7 +26,7 @@
 │       │   ├── test-agent.md
 │       │   ├── qa-agent.md
 │       │   └── researcher-agent.md
-│       ├── commands/           # 7 slash commands
+│       ├── commands/           # 7 slash command
 │       │   ├── start-project.md
 │       │   ├── new-feature.md
 │       │   ├── design.md
@@ -28,7 +34,7 @@
 │       │   ├── test.md
 │       │   ├── review.md
 │       │   └── status.md
-│       ├── skills/             # Skill packs
+│       ├── skills/             # Gói skill
 │       │   ├── conventions/SKILL.md
 │       │   ├── fastapi-patterns/SKILL.md
 │       │   ├── nextjs16-guide/SKILL.md
@@ -38,38 +44,38 @@
 │       │       ├── references/
 │       │       └── templates/
 │       ├── hooks/
-│       │   └── hooks.json      # SessionStart + PreToolUse hooks
-│       └── team.config.yaml    # Central config (agents, skills, workflow)
-├── CLAUDE.md                   # Developer docs for AI and contributors
-├── README.md                   # End-user installation and usage guide
-└── .claude/rules/              # Modular development rules
+│       │   └── hooks.json      # Hook SessionStart + PreToolUse
+│       └── team.config.yaml    # Cấu hình trung tâm (agent, skill, workflow)
+├── CLAUDE.md                   # Tài liệu cho AI và contributor
+├── README.md                   # Hướng dẫn cài đặt và sử dụng
+└── .claude/rules/              # Quy tắc phát triển theo module
 ```
 
-## Runtime Behavior
+## Hành vi Runtime
 
-When installed via `/plugin install`, Claude Code copies the plugin to `~/.claude/plugins/cache/`. At runtime:
-- `${CLAUDE_PLUGIN_ROOT}` resolves to the cached plugin directory
-- Commands and hooks use this variable to reference plugin files
-- Symlinks in the source are followed during copying
-- Files outside the plugin directory are NOT accessible (no `../` references)
+Khi cài đặt qua `/plugin install`, Claude Code sao chép plugin vào `~/.claude/plugins/cache/`. Khi chạy:
+- `${CLAUDE_PLUGIN_ROOT}` trỏ đến thư mục plugin đã cache
+- Command và hook sử dụng biến này để tham chiếu file plugin
+- Symlink trong source được theo dõi khi sao chép
+- File ngoài thư mục plugin KHÔNG truy cập được (không dùng `../`)
 
-## Per-Project Workspace (.ai-workspace/)
+## Workspace theo dự án (.ai-workspace/)
 
-Created by `/ai-dev-team:start-project`. Not part of the plugin — lives in the user's project:
+Được tạo bởi `/ai-dev-team:start-project`. Không thuộc plugin — nằm trong dự án của user:
 
 ```
 .ai-workspace/
-├── STATE.md              # Global dashboard for all features
-├── stack.config.yaml     # Maps skill categories → actual skill names
-├── CONVENTIONS.md        # Project coding rules (generated from conventions skill)
-├── CHECKLIST.md          # Pre-commit quality checklist
-├── features/FEAT-XXX/    # Feature-scoped workspace
-│   ├── requirement.md    # BA's structured requirement
-│   ├── design.md         # Architect's technical design
-│   ├── tasks/            # Implementation task cards
-│   ├── reviews/          # Peer reviews + QA report
-│   ├── discussions/      # Feature-scoped discussions
-│   └── handoffs/         # Phase transition documents
-├── discussions/          # Cross-feature discussions
-└── decisions/            # Architecture Decision Records
+├── STATE.md              # Dashboard tổng quan cho tất cả feature
+├── stack.config.yaml     # Ánh xạ danh mục skill → tên skill thực tế
+├── CONVENTIONS.md        # Quy tắc coding dự án (tạo từ skill conventions)
+├── CHECKLIST.md          # Checklist chất lượng trước commit
+├── features/FEAT-XXX/    # Workspace theo feature
+│   ├── requirement.md    # Requirement có cấu trúc của BA
+│   ├── design.md         # Thiết kế kỹ thuật của Architect
+│   ├── tasks/            # Thẻ task triển khai
+│   ├── reviews/          # Review đồng nghiệp + báo cáo QA
+│   ├── discussions/      # Thảo luận trong feature
+│   └── handoffs/         # Tài liệu chuyển giao giữa các phase
+├── discussions/          # Thảo luận xuyên feature
+└── decisions/            # Bản ghi quyết định kiến trúc (ADR)
 ```

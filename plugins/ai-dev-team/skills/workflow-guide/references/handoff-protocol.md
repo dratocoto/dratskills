@@ -1,48 +1,48 @@
-# Handoff Protocol
+# Giao thức Handoff
 
-## Why Handoffs Matter
+## Tại sao Handoff quan trọng
 
-AI agents have limited context windows. When one agent finishes and another takes over,
-the new agent starts with a FRESH context. The handoff file bridges this gap by telling
-the next agent exactly what happened and what to do next.
+Các AI agent có context window giới hạn. Khi một agent kết thúc và agent khác tiếp quản,
+agent mới bắt đầu với context HOÀN TOÀN MỚI. File handoff là cầu nối giúp agent tiếp theo
+biết chính xác điều gì đã xảy ra và cần làm gì tiếp theo.
 
-## Handoff Schema
+## Cấu trúc Handoff
 
-Every handoff follows this structure:
+Mọi handoff đều tuân theo cấu trúc này:
 
 ```markdown
-# Handoff: [Source Agent] → [Target Agent]
+# Handoff: [Agent nguồn] → [Agent đích]
 
 ## Timestamp: [ISO datetime]
 ## Feature: FEAT-XXX
-## Phase: [current phase]
+## Phase: [phase hiện tại]
 
-## What Was Done
-- [Bullet list of completed work]
-- Files created: [list]
-- Files modified: [list]
+## Công việc đã hoàn thành
+- [Danh sách bullet các công việc đã làm]
+- File đã tạo: [danh sách]
+- File đã sửa: [danh sách]
 
-## What's Needed Next
-- [Specific instructions for the next agent]
-- [Expected outputs]
+## Việc cần làm tiếp
+- [Hướng dẫn cụ thể cho agent tiếp theo]
+- [Đầu ra mong đợi]
 
-## Context for Next Agent (WHAT TO READ)
-- File 1: path/to/file — [why to read it]
-- File 2: path/to/file — [why to read it]
-- Convention: CONVENTIONS.md#section — [specific rules to follow]
+## Ngữ cảnh cho agent tiếp theo (CẦN ĐỌC GÌ)
+- File 1: đường/dẫn/file — [lý do cần đọc]
+- File 2: đường/dẫn/file — [lý do cần đọc]
+- Convention: CONVENTIONS.md#section — [quy tắc cụ thể cần tuân theo]
 
-## Issues / Blockers
-- [Any problems encountered]
-- [Questions that need human input, marked with QUESTION:]
+## Vấn đề / Blocker
+- [Các vấn đề gặp phải]
+- [Câu hỏi cần người dùng trả lời, đánh dấu bằng QUESTION:]
 
-## State Update
-- STATE.md updated: [yes/no]
-- Task card updated: [task ID]
+## Cập nhật trạng thái
+- STATE.md đã cập nhật: [có/không]
+- Task card đã cập nhật: [task ID]
 ```
 
-## Handoff Examples
+## Ví dụ Handoff
 
-### PM → Architect Handoff
+### Handoff PM → Architect
 
 ```markdown
 # Handoff: PM → Architect
@@ -50,139 +50,139 @@ Every handoff follows this structure:
 ## Feature: FEAT-003 Product Catalog
 ## Phase: REQUIREMENT → DESIGN
 
-## What Was Done
-- Requirement doc created and approved by human
-- Scope: L (estimated 6-8 files)
+## Công việc đã hoàn thành
+- Tài liệu yêu cầu đã tạo và được người dùng phê duyệt
+- Phạm vi: L (ước tính 6-8 file)
 
-## What's Needed Next
-- Design system architecture for product catalog
-- Define data models, API endpoints, file structure
-- Break into implementation tasks (≤ 3 files each)
+## Việc cần làm tiếp
+- Thiết kế kiến trúc hệ thống cho product catalog
+- Định nghĩa data model, API endpoint, cấu trúc file
+- Chia thành các task triển khai (≤ 3 file mỗi task)
 
-## Context for Next Agent
-- features/FEAT-003/requirement.md — the approved requirement
-- Run: tree -L 3 src/ — understand current project structure
-- src/models/ — existing model patterns
-- src/api/v1/routes/ — existing route patterns
-- CONVENTIONS.md — coding standards
+## Ngữ cảnh cho agent tiếp theo
+- features/FEAT-003/requirement.md — tài liệu yêu cầu đã được phê duyệt
+- Chạy: tree -L 3 src/ — hiểu cấu trúc dự án hiện tại
+- src/models/ — pattern model hiện có
+- src/api/v1/routes/ — pattern route hiện có
+- CONVENTIONS.md — tiêu chuẩn code
 
-## Issues / Blockers
-- None
+## Vấn đề / Blocker
+- Không có
 ```
 
-### Architect → PM → Dev Handoff
+### Handoff Architect → PM → Dev
 
 ```markdown
-# Handoff: Architect → Backend Dev (via PM)
+# Handoff: Architect → Backend Dev (qua PM)
 
 ## Feature: FEAT-003 Product Catalog
-## Phase: DESIGN → IMPLEMENT (Task 1 of 4)
+## Phase: DESIGN → IMPLEMENT (Task 1 trên 4)
 
-## What Was Done
-- Design spec completed: features/FEAT-003/design.md
-- Design approved by human
-- 4 implementation tasks created
+## Công việc đã hoàn thành
+- Tài liệu thiết kế đã hoàn thành: features/FEAT-003/design.md
+- Thiết kế đã được người dùng phê duyệt
+- 4 task triển khai đã được tạo
 
-## What's Needed Next
-- Implement TASK-012: Product model and schemas
-- Create SQLAlchemy model and Pydantic schemas
+## Việc cần làm tiếp
+- Triển khai TASK-012: Product model và schema
+- Tạo SQLAlchemy model và Pydantic schema
 
-## Context for Next Agent
-- features/FEAT-003/tasks/TASK-012.md — the task card with all instructions
-- CONVENTIONS.md#python-models — model naming rules
-- CONVENTIONS.md#pydantic — schema patterns
-- features/FEAT-003/design.md#data-models — field definitions
+## Ngữ cảnh cho agent tiếp theo
+- features/FEAT-003/tasks/TASK-012.md — task card với đầy đủ hướng dẫn
+- CONVENTIONS.md#python-models — quy tắc đặt tên model
+- CONVENTIONS.md#pydantic — pattern schema
+- features/FEAT-003/design.md#data-models — định nghĩa trường
 
-## Issues / Blockers
-- None
+## Vấn đề / Blocker
+- Không có
 ```
 
-### Dev → Test Handoff
+### Handoff Dev → Test
 
 ```markdown
 # Handoff: Backend Dev → Test Agent
 
 ## Feature: FEAT-003 Product Catalog
-## Phase: IMPLEMENT → TEST (Tasks 1-4 complete)
+## Phase: IMPLEMENT → TEST (Task 1-4 hoàn thành)
 
-## What Was Done
-- All 4 implementation tasks completed
-- Files created:
+## Công việc đã hoàn thành
+- Tất cả 4 task triển khai đã hoàn thành
+- File đã tạo:
   - src/models/product.py
   - src/schemas/product.py
   - src/repositories/product_repo.py
   - src/services/product_service.py
   - src/api/v1/routes/products.py
-- Self-check passed on all files
+- Tự kiểm tra đã pass trên tất cả file
 
-## What's Needed Next
-- Unit tests for ProductRepository (mock DB)
-- Unit tests for ProductService (mock repo)
-- Unit tests for Pydantic schemas (validation cases)
-- Integration tests for API endpoints (test client)
+## Việc cần làm tiếp
+- Unit test cho ProductRepository (mock DB)
+- Unit test cho ProductService (mock repo)
+- Unit test cho Pydantic schema (trường hợp validation)
+- Integration test cho API endpoint (test client)
 
-## Context for Next Agent
-- features/FEAT-003/design.md#api-endpoints — expected behavior
-- src/models/product.py — model definition
-- src/repositories/product_repo.py — methods to test
-- src/services/product_service.py — business logic to test
-- CONVENTIONS.md#testing — test patterns and naming
+## Ngữ cảnh cho agent tiếp theo
+- features/FEAT-003/design.md#api-endpoints — hành vi mong đợi
+- src/models/product.py — định nghĩa model
+- src/repositories/product_repo.py — các method cần test
+- src/services/product_service.py — logic nghiệp vụ cần test
+- CONVENTIONS.md#testing — pattern và quy tắc đặt tên test
 
-## Issues / Blockers
-- QUESTION: Should integration tests use real DB or in-memory?
-  → PM should ask human
+## Vấn đề / Blocker
+- QUESTION: Integration test nên dùng DB thật hay in-memory?
+  → PM nên hỏi người dùng
 ```
 
-### QA → PM Handoff
+### Handoff QA → PM
 
 ```markdown
 # Handoff: QA → PM
 
 ## Feature: FEAT-003 Product Catalog
-## Phase: REVIEW → [APPROVED or NEEDS_CHANGES]
+## Phase: REVIEW → [APPROVED hoặc NEEDS_CHANGES]
 
-## What Was Done
-- Full code review completed
-- Review report: features/FEAT-003/reviews/qa-report.md
+## Công việc đã hoàn thành
+- Review code toàn bộ đã hoàn thành
+- Báo cáo review: features/FEAT-003/reviews/qa-report.md
 
-## Summary
-- Verdict: NEEDS_CHANGES
-- Critical: 1 (missing input validation on update endpoint)
-- Warnings: 2 (missing structured logging in service layer)
-- Suggestions: 3
+## Tóm tắt
+- Kết luận: NEEDS_CHANGES
+- Nghiêm trọng: 1 (thiếu input validation trên endpoint update)
+- Cảnh báo: 2 (thiếu structured logging trong tầng service)
+- Đề xuất: 3
 
-## What's Needed Next
-- Fix critical issue in src/api/v1/routes/products.py:45
-- Fix warnings in src/services/product_service.py
-- Re-run QA after fixes
+## Việc cần làm tiếp
+- Sửa vấn đề nghiêm trọng trong src/api/v1/routes/products.py:45
+- Sửa cảnh báo trong src/services/product_service.py
+- Chạy lại QA sau khi sửa
 
-## Context for PM
-- features/FEAT-003/reviews/qa-report.md — full review details
-- Present to human for final decision
+## Ngữ cảnh cho PM
+- features/FEAT-003/reviews/qa-report.md — chi tiết review đầy đủ
+- Trình cho người dùng để quyết định cuối cùng
 ```
 
-## Handoff File Naming
+## Quy tắc đặt tên file Handoff
 
-The active handoff is always `HANDOFF-latest.md`. When a new handoff is written, the previous one is archived:
+File handoff hiện tại luôn là `HANDOFF-latest.md`. Khi viết handoff mới, file trước đó được lưu trữ:
 
 ```
 features/FEAT-XXX/handoffs/
-├── HANDOFF-latest.md              ← Current (PM reads this)
-├── HANDOFF-001-ba-to-architect.md ← Archived: Phase 0→2
-├── HANDOFF-002-arch-to-dev.md     ← Archived: Phase 2→3
-└── HANDOFF-003-dev-to-test.md     ← Archived: Phase 3→5
+├── HANDOFF-latest.md              ← Hiện tại (PM đọc file này)
+├── HANDOFF-001-ba-to-architect.md ← Lưu trữ: Phase 0→2
+├── HANDOFF-002-arch-to-dev.md     ← Lưu trữ: Phase 2→3
+└── HANDOFF-003-dev-to-test.md     ← Lưu trữ: Phase 3→5
 ```
 
-**Naming convention for archives**: `HANDOFF-{seq}-{source}-to-{target}.md`
+**Quy tắc đặt tên lưu trữ**: `HANDOFF-{số thứ tự}-{nguồn}-to-{đích}.md`
 
-PM should rename `HANDOFF-latest.md` to the archive name BEFORE writing the new one. This preserves history while keeping the "latest" pointer stable for agents that always read `HANDOFF-latest.md`.
+PM nên đổi tên `HANDOFF-latest.md` thành tên lưu trữ TRƯỚC KHI viết file mới. Điều này giữ lại lịch sử đồng thời giữ con trỏ "latest" ổn định cho các agent luôn đọc `HANDOFF-latest.md`.
 
-## Handoff Rules
+## Quy tắc Handoff
 
-1. **Always update STATE.md** before writing handoff
-2. **Be explicit about files** — list exact paths, never "the relevant files"
-3. **Limit context references** — max 5-7 files for the next agent
-4. **Mark questions clearly** — prefix with `QUESTION:` for PM to escalate
-5. **Include self-check results** — did the agent validate its own output?
-6. **Never assume** — if something is unclear, flag it rather than guess
-7. **Archive before overwrite** — rename HANDOFF-latest.md before writing a new one
+1. **Luôn cập nhật STATE.md** trước khi viết handoff
+2. **Chỉ rõ các file** — liệt kê đường dẫn chính xác, không bao giờ viết "các file liên quan"
+3. **Giới hạn tham chiếu ngữ cảnh** — tối đa 5-7 file cho agent tiếp theo
+4. **Đánh dấu câu hỏi rõ ràng** — thêm tiền tố `QUESTION:` để PM chuyển lên người dùng
+5. **Kèm kết quả tự kiểm tra** — agent đã xác thực đầu ra của mình chưa?
+6. **Không bao giờ suy đoán** — nếu có điều gì không rõ, hãy ghi lại thay vì đoán
+7. **Lưu trữ trước khi ghi đè** — đổi tên HANDOFF-latest.md trước khi viết file mới

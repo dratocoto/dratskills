@@ -1,285 +1,285 @@
 ---
 name: workflow-guide
 description: >
-  This skill should be used when the user asks about "how the AI team works",
-  "workflow", "agent roles", "handoff process", "task management",
-  "project setup", "start working on a feature", or needs to understand
-  the multi-agent development process and human-AI collaboration model.
+  Skill này được sử dụng khi người dùng hỏi về "đội AI làm việc thế nào",
+  "quy trình làm việc", "vai trò agent", "quy trình bàn giao", "quản lý task",
+  "thiết lập dự án", "bắt đầu làm feature", hoặc cần hiểu về quy trình
+  phát triển đa agent và mô hình cộng tác người-AI.
 version: 0.5.1
 ---
 
-# AI Dev Team Workflow
+# Quy trình làm việc của AI Dev Team
 
-A multi-agent development workflow where AI agents function as a specialized team,
-and the human serves dual roles: **End User** (giving requirements) and **Tech Lead** (overseeing quality).
+Quy trình phát triển đa agent trong đó các AI agent hoạt động như một đội chuyên biệt,
+và con người đóng vai trò kép: **Người dùng cuối** (đưa yêu cầu) và **Tech Lead** (giám sát chất lượng).
 
-## Team Structure (9 Agents)
+## Cấu trúc đội ngũ (9 Agent)
 
 ```
-Human (End User + Tech Lead)
+Human (Người dùng cuối + Tech Lead)
         ↕
-   PM Agent ← Coordinator + Discussion Moderator
+   PM Agent ← Điều phối + Quản lý thảo luận
         ↓
   ┌───┬─┼────────┬───────┬────┬─────┐
   ↓   ↓ ↓        ↓       ↓    ↓     ↓
  BA Arch BackDev FrontDev Rev Test   QA
           ↕   ↕    ↕       ↕        ↕
-        (discussions between agents)
+        (thảo luận giữa các agent)
 
-  Researcher ← On-demand (any agent can request via PM)
+  Researcher ← Theo yêu cầu (agent nào cũng có thể yêu cầu qua PM)
 ```
 
-| Agent            | Role                                                                 | Reads                                                      | Writes                                         |
-| ---------------- | -------------------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------- |
-| **PM**           | Coordinate, delegate, moderate discussions, manage parallel features | STATE.md, stack.config.yaml, handoffs, discussions         | STATE.md, task cards, handoffs                 |
-| **BA**           | Clarify ideas (QA questions), write requirements                     | STATE.md, stack.config.yaml, codebase structure            | features/FEAT-XXX/requirement.md, discussions/ |
-| **Architect**    | Design system, define interfaces, create specs                       | requirement.md, stack.config.yaml, codebase structure      | features/FEAT-XXX/design.md, discussions/      |
-| **Backend Dev**  | Implement backend code following specs and conventions               | task card, stack.config.yaml, CONVENTIONS.md, reviews/     | src/ backend code, discussions/                |
-| **Frontend Dev** | Implement frontend code following specs and conventions              | task card, stack.config.yaml, CONVENTIONS.md, reviews/     | src/ frontend code, discussions/               |
-| **Reviewer**     | Peer code review (quality, patterns, bugs)                           | task card, stack.config.yaml, CONVENTIONS.md, src/         | features/FEAT-XXX/reviews/, discussions/       |
-| **Tester**       | Write tests, verify coverage                                         | design.md, stack.config.yaml, src/ code, CONVENTIONS.md    | tests/, discussions/                           |
-| **QA**           | Acceptance testing, security, production readiness                   | requirement.md, design.md, stack.config.yaml, src/, tests/ | features/FEAT-XXX/reviews/, discussions/       |
-| **Researcher**   | Technical research, best practices, comparisons                      | stack.config.yaml, codebase structure, web sources         | features/FEAT-XXX/discussions/RESEARCH-XXX.md  |
+| Agent            | Vai trò                                                                      | Đọc                                                       | Ghi                                            |
+| ---------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------- |
+| **PM**           | Điều phối, phân công, quản lý thảo luận, quản lý feature song song          | STATE.md, stack.config.yaml, handoffs, discussions         | STATE.md, task card, handoffs                  |
+| **BA**           | Làm rõ ý tưởng (hỏi đáp), viết requirement                                 | STATE.md, stack.config.yaml, cấu trúc codebase            | features/FEAT-XXX/requirement.md, discussions/ |
+| **Architect**    | Thiết kế hệ thống, định nghĩa interface, tạo spec                           | requirement.md, stack.config.yaml, cấu trúc codebase      | features/FEAT-XXX/design.md, discussions/      |
+| **Backend Dev**  | Triển khai code backend theo spec và quy ước                                 | task card, stack.config.yaml, CONVENTIONS.md, reviews/     | src/ code backend, discussions/                |
+| **Frontend Dev** | Triển khai code frontend theo spec và quy ước                                | task card, stack.config.yaml, CONVENTIONS.md, reviews/     | src/ code frontend, discussions/               |
+| **Reviewer**     | Review code đồng nghiệp (chất lượng, pattern, bug)                          | task card, stack.config.yaml, CONVENTIONS.md, src/         | features/FEAT-XXX/reviews/, discussions/       |
+| **Tester**       | Viết test, kiểm tra coverage                                                | design.md, stack.config.yaml, src/ code, CONVENTIONS.md    | tests/, discussions/                           |
+| **QA**           | Kiểm thử nghiệm thu, bảo mật, sẵn sàng production                          | requirement.md, design.md, stack.config.yaml, src/, tests/ | features/FEAT-XXX/reviews/, discussions/       |
+| **Researcher**   | Nghiên cứu kỹ thuật, best practice, so sánh giải pháp                       | stack.config.yaml, cấu trúc codebase, nguồn web           | features/FEAT-XXX/discussions/RESEARCH-XXX.md  |
 
-## Dynamic Skill System
+## Hệ thống Skill động
 
-Agent skill configuration uses a two-level config:
+Cấu hình skill của agent sử dụng hệ thống config hai tầng:
 
-1. **`team.config.yaml`** (plugin-level, static) — defines which skill _categories_ each agent needs
-2. **`.ai-workspace/stack.config.yaml`** (per-project, generated by `/start-project`) — resolves categories to actual skill folder names
+1. **`team.config.yaml`** (cấp plugin, tĩnh) — định nghĩa các _danh mục_ skill mà mỗi agent cần
+2. **`.ai-workspace/stack.config.yaml`** (theo dự án, được tạo bởi `/start-project`) — ánh xạ danh mục sang tên thư mục skill thực tế
 
 ```
-team.config.yaml defines:
+team.config.yaml định nghĩa:
   backend-dev-agent.skills: [backend-patterns, language, conventions]
 
-stack.config.yaml resolves:
+stack.config.yaml ánh xạ:
   backend-patterns → "fastapi-patterns"
-  frontend-guide   → "nextjs16-guide" (or "_none_")
+  frontend-guide   → "nextjs16-guide" (hoặc "_none_")
   language         → "python312"
   conventions      → "conventions"
 
-Agent reads team.config.yaml → gets categories → reads stack.config.yaml → resolves skill name
-  → loads ${CLAUDE_PLUGIN_ROOT}/skills/{skill_name}/SKILL.md
+Agent đọc team.config.yaml → lấy danh mục → đọc stack.config.yaml → ánh xạ tên skill
+  → tải ${CLAUDE_PLUGIN_ROOT}/skills/{skill_name}/SKILL.md
 ```
 
-This means the same agents work with any tech stack — just change `stack.config.yaml`.
+Điều này nghĩa là cùng một bộ agent có thể làm việc với bất kỳ tech stack nào — chỉ cần thay đổi `stack.config.yaml`.
 
-## Shared Workspace: `.ai-workspace/`
+## Workspace chung: `.ai-workspace/`
 
-All agents communicate through files in `.ai-workspace/`. Each feature gets its own isolated directory for parallel execution:
+Tất cả agent giao tiếp qua các file trong `.ai-workspace/`. Mỗi feature có thư mục riêng biệt để thực thi song song:
 
 ```
 .ai-workspace/
-├── STATE.md                 ← Global dashboard: ALL features, conflict map
-├── stack.config.yaml        ← Tech stack config: resolves skill categories to skills
-├── CONVENTIONS.md           ← Shared coding rules (all features follow)
-├── CHECKLIST.md             ← Pre-commit quality checklist
-├── features/                ← Feature-scoped workspaces
-│   ├── FEAT-001/            ← Auth feature (own pipeline)
-│   │   ├── requirement.md   ← BA's requirement doc
-│   │   ├── design.md        ← Architect's design spec
-│   │   ├── tasks/           ← Implementation task cards (labeled backend/frontend)
+├── STATE.md                 ← Dashboard tổng quan: TẤT CẢ feature, bản đồ xung đột file
+├── stack.config.yaml        ← Cấu hình tech stack: ánh xạ danh mục skill sang skill thực tế
+├── CONVENTIONS.md           ← Quy tắc viết code chung (tất cả feature tuân theo)
+├── CHECKLIST.md             ← Checklist kiểm tra trước khi commit
+├── features/                ← Workspace theo feature
+│   ├── FEAT-001/            ← Feature Auth (pipeline riêng)
+│   │   ├── requirement.md   ← Tài liệu requirement của BA
+│   │   ├── design.md        ← Spec thiết kế của Architect
+│   │   ├── tasks/           ← Task card triển khai (gắn nhãn backend/frontend)
 │   │   │   ├── TASK-001.md
 │   │   │   └── TASK-002.md
-│   │   ├── reviews/         ← Peer reviews + QA report
+│   │   ├── reviews/         ← Review đồng nghiệp + báo cáo QA
 │   │   │   ├── TASK-001-review.md
 │   │   │   └── qa-report.md
-│   │   ├── discussions/     ← Within-feature discussions + research reports
+│   │   ├── discussions/     ← Thảo luận trong feature + báo cáo nghiên cứu
 │   │   │   ├── DISC-001.md
 │   │   │   └── RESEARCH-001.md
-│   │   └── handoffs/        ← Phase transition handoffs
+│   │   └── handoffs/        ← Tài liệu chuyển giao giữa các phase
 │   │       └── HANDOFF-latest.md
-│   └── FEAT-002/            ← Catalog feature (parallel pipeline)
+│   └── FEAT-002/            ← Feature Catalog (pipeline song song)
 │       ├── requirement.md
 │       ├── design.md
 │       ├── tasks/
 │       ├── reviews/
 │       ├── discussions/
 │       └── handoffs/
-├── discussions/             ← Cross-feature discussions
+├── discussions/             ← Thảo luận liên feature
 │   └── DISC-CROSS-001.md
-└── decisions/               ← Shared Architecture Decision Records
+└── decisions/               ← Architecture Decision Record chung
     └── ADR-001.md
 ```
 
-### Parallel Feature Rules
+### Quy tắc xử lý feature song song
 
-1. **Agent isolation**: When working on FEAT-001, ALL file refs point to `features/FEAT-001/`
-2. **No cross-reading**: Backend Dev on FEAT-001 does NOT read FEAT-002 files
-3. **Shared conventions**: CONVENTIONS.md and stack.config.yaml are shared — read from root
-4. **Conflict detection**: Before IMPL phase, PM checks File Conflict Map in STATE.md
-5. **Cross-feature discussions**: If features touch same files → open in root `discussions/`
+1. **Cách ly agent**: Khi làm việc trên FEAT-001, TẤT CẢ tham chiếu file trỏ đến `features/FEAT-001/`
+2. **Không đọc chéo**: Backend Dev trên FEAT-001 KHÔNG đọc file của FEAT-002
+3. **Quy ước chung**: CONVENTIONS.md và stack.config.yaml được chia sẻ — đọc từ thư mục gốc
+4. **Phát hiện xung đột**: Trước phase IMPL, PM kiểm tra Bản đồ xung đột file trong STATE.md
+5. **Thảo luận liên feature**: Nếu các feature chạm cùng file → mở thảo luận tại `discussions/` gốc
 
-## The 7-Phase Workflow
+## Quy trình 7 Phase
 
-### Phase 0: CLARIFY → BA Agent (Idea Clarification)
+### Phase 0: CLARIFY → BA Agent (Làm rõ ý tưởng)
 
-1. Human describes the feature in natural language (can be vague)
-2. PM delegates to **BA Agent**
-3. BA analyzes what is CLEAR vs VAGUE vs MISSING
-4. BA asks **3-7 targeted QA questions** to clarify the idea
-5. Human answers → BA has clear understanding
+1. Con người mô tả feature bằng ngôn ngữ tự nhiên (có thể mơ hồ)
+2. PM phân công cho **BA Agent**
+3. BA phân tích những gì RÕ RÀNG vs MƠ HỒ vs THIẾU
+4. BA đặt **3-7 câu hỏi hướng đích** để làm rõ ý tưởng
+5. Con người trả lời → BA hiểu rõ yêu cầu
 
 ### Phase 1: REQUIREMENT → BA Agent
 
-1. BA creates structured requirement doc from the clarified idea
-2. BA writes `features/FEAT-XXX/requirement.md` using the template
-3. Requirement includes a **Clarification Log** — full Q&A for traceability
-4. BA hands back to PM → PM presents to human for **approval** → CHECKPOINT
+1. BA tạo tài liệu requirement có cấu trúc từ ý tưởng đã làm rõ
+2. BA viết `features/FEAT-XXX/requirement.md` theo template
+3. Requirement bao gồm **Nhật ký làm rõ** — toàn bộ hỏi đáp để truy vết
+4. BA bàn giao cho PM → PM trình con người **phê duyệt** → CHECKPOINT
 
 ### Phase 2: DESIGN → Architect Agent
 
-1. PM triggers Architect scoped to `features/FEAT-XXX/`
-2. Architect reads `features/FEAT-XXX/requirement.md` + scans existing codebase
-3. Architect loads skills via team.config.yaml + stack.config.yaml for framework-specific patterns
-4. Architect produces `features/FEAT-XXX/design.md` with:
-   - Component diagram, data models, API contracts
-   - File list with responsibilities (used for File Conflict Map)
-   - Breaking into implementation tasks **labeled `backend` or `frontend`**
-5. PM checks File Conflict Map → if overlap with other features, opens cross-feature discussion
-6. PM presents design to human → **CHECKPOINT**
+1. PM kích hoạt Architect với phạm vi `features/FEAT-XXX/`
+2. Architect đọc `features/FEAT-XXX/requirement.md` + quét codebase hiện tại
+3. Architect tải skill qua team.config.yaml + stack.config.yaml cho pattern theo framework
+4. Architect tạo `features/FEAT-XXX/design.md` với:
+   - Sơ đồ component, data model, API contract
+   - Danh sách file với trách nhiệm (dùng cho Bản đồ xung đột file)
+   - Chia nhỏ thành task triển khai **gắn nhãn `backend` hoặc `frontend`**
+5. PM kiểm tra Bản đồ xung đột file → nếu trùng lặp với feature khác, mở thảo luận liên feature
+6. PM trình thiết kế cho con người → **CHECKPOINT**
 
-### Phase 3: IMPLEMENT → Backend Dev / Frontend Dev (task by task)
+### Phase 3: IMPLEMENT → Backend Dev / Frontend Dev (từng task)
 
-1. PM creates task cards in `features/FEAT-XXX/tasks/`, each labeled `backend`, `frontend`, or `full-stack`
-2. PM routes each task to the appropriate dev agent:
+1. PM tạo task card trong `features/FEAT-XXX/tasks/`, mỗi card gắn nhãn `backend`, `frontend`, hoặc `full-stack`
+2. PM chuyển mỗi task cho dev agent phù hợp:
    - `backend` → **Backend Dev**
    - `frontend` → **Frontend Dev**
-   - `full-stack` → **Backend Dev** first, then **Frontend Dev**
-3. Dev agent receives ONLY:
-   - The task card (what to do, which files to read/write)
-   - Reference to relevant design section
-   - Skills loaded via team.config.yaml + stack.config.yaml
-4. Dev agent implements and self-validates against checklist
-5. After each task → Reviewer does peer review
+   - `full-stack` → **Backend Dev** trước, sau đó **Frontend Dev**
+3. Dev agent CHỈ nhận:
+   - Task card (việc cần làm, file nào cần đọc/ghi)
+   - Tham chiếu đến phần thiết kế liên quan
+   - Skill được tải qua team.config.yaml + stack.config.yaml
+4. Dev agent triển khai và tự kiểm tra theo checklist
+5. Sau mỗi task → Reviewer review code
 
-### Phase 4: REVIEW → Reviewer Agent (per task)
+### Phase 4: REVIEW → Reviewer Agent (theo từng task)
 
-1. Reviewer reads task card + code output
-2. Loads relevant skills via config (backend or frontend depending on task label)
-3. Checks patterns, bugs, quality, conventions
-4. Writes `features/FEAT-XXX/reviews/TASK-XXX-review.md` with verdict
-5. If CHANGES_REQUESTED → Dev fixes → Reviewer re-reviews (max 3 rounds)
-6. If APPROVED → proceed to next task or testing
+1. Reviewer đọc task card + code đầu ra
+2. Tải skill liên quan qua config (backend hoặc frontend tuỳ nhãn task)
+3. Kiểm tra pattern, bug, chất lượng, quy ước
+4. Viết `features/FEAT-XXX/reviews/TASK-XXX-review.md` với kết luận
+5. Nếu CHANGES_REQUESTED → Dev sửa → Reviewer review lại (tối đa 3 vòng)
+6. Nếu APPROVED → chuyển sang task tiếp theo hoặc testing
 
 ### Phase 5: TEST → Tester Agent
 
-1. PM triggers Tester scoped to `features/FEAT-XXX/`
-2. Tester reads design (expected behavior) + code (actual implementation)
-3. Loads test framework via stack.config.yaml (pytest for Python, vitest for TypeScript)
-4. Generates unit tests, integration tests per testing conventions
-5. Runs tests, reports coverage
-6. If tests fail → loop back to appropriate Dev with failure details
+1. PM kích hoạt Tester với phạm vi `features/FEAT-XXX/`
+2. Tester đọc thiết kế (hành vi mong đợi) + code (triển khai thực tế)
+3. Tải test framework qua stack.config.yaml (pytest cho Python, vitest cho TypeScript)
+4. Tạo unit test, integration test theo quy ước testing
+5. Chạy test, báo cáo coverage
+6. Nếu test fail → chuyển lại cho Dev phù hợp kèm chi tiết lỗi
 
-### Phase 6: QA → QA Agent → Human
+### Phase 6: QA → QA Agent → Con người
 
-1. QA validates feature against **acceptance criteria** from requirement
-2. Loads skills via config for stack-specific checks
-3. Runs security + production readiness checks
-4. Produces `features/FEAT-XXX/reviews/qa-report.md`
-5. PM presents QA report to human → **FINAL CHECKPOINT**
-6. Human approves → Done, or requests changes → loop back
+1. QA đối chiếu feature với **tiêu chí nghiệm thu** từ requirement
+2. Tải skill qua config để kiểm tra theo stack cụ thể
+3. Chạy kiểm tra bảo mật + sẵn sàng production
+4. Tạo `features/FEAT-XXX/reviews/qa-report.md`
+5. PM trình báo cáo QA cho con người → **CHECKPOINT CUỐI CÙNG**
+6. Con người phê duyệt → Hoàn thành, hoặc yêu cầu chỉnh sửa → quay lại vòng lặp
 
-### On-Demand: RESEARCH → Researcher Agent
+### Theo yêu cầu: RESEARCH → Researcher Agent
 
-- Any agent can request research through PM at any point
-- Researcher investigates technical questions, best practices, library comparisons
-- Writes `RESEARCH-XXX.md` report in the feature's discussions directory
-- PM routes the findings back to the requesting agent
+- Bất kỳ agent nào cũng có thể yêu cầu nghiên cứu thông qua PM tại bất kỳ thời điểm nào
+- Researcher điều tra câu hỏi kỹ thuật, best practice, so sánh thư viện
+- Viết báo cáo `RESEARCH-XXX.md` trong thư mục discussions của feature
+- PM chuyển kết quả nghiên cứu đến agent yêu cầu
 
-## Agent Communication
+## Giao tiếp giữa các Agent
 
-Agents communicate through **3 channels** (see `references/communication-protocol.md`):
+Các agent giao tiếp qua **3 kênh** (xem `references/communication-protocol.md`):
 
-### 1. Handoffs (pipeline flow)
-
-```
-BA → PM → Architect → PM → Backend Dev/Frontend Dev → Reviewer → PM → Tester → PM → QA → PM → Human
-```
-
-### 2. Discussions (any agent ↔ any agent)
-
-Within-feature discussions → `features/FEAT-XXX/discussions/DISC-XXX.md`
-Cross-feature discussions → root `discussions/DISC-CROSS-XXX.md`
-
-Examples:
-
-- Backend Dev asks Architect about design feasibility (within-feature)
-- Frontend Dev asks Backend Dev about API contract (within-feature)
-- Tester asks BA to clarify acceptance criteria (within-feature)
-- Reviewer opens debate with Backend Dev about approach (within-feature)
-- QA raises cross-cutting concern with everyone (cross-feature)
-- PM detects file conflict between FEAT-001 and FEAT-002 (cross-feature)
-- Any agent requests Researcher to investigate a technical question (within-feature)
-
-PM moderates: routes, facilitates, escalates (max 3 rounds → human decides).
-
-### 3. Review Comments (feedback loops)
-
-- Reviewer → Backend Dev or Frontend Dev: peer review with fix/discuss/accept cycle
-- QA → any agent: final quality findings
-
-## Context Management Rules
-
-**Problem**: AI has limited context. Loading everything = poor quality.
-
-**Solution**: Each agent loads ONLY what it needs.
-
-| Agent        | Max Files to Load | What to Load                                                                                  |
-| ------------ | ----------------- | --------------------------------------------------------------------------------------------- |
-| PM           | 4                 | STATE.md, stack.config.yaml, current handoff, discussions (if OPEN)                           |
-| BA           | 5                 | STATE.md, stack.config.yaml, codebase structure (ls/tree), existing requirement (if revising) |
-| Architect    | 5                 | requirement doc, stack.config.yaml, existing structure (ls/tree), key interfaces              |
-| Backend Dev  | 5                 | task card, resolved skills, CONVENTIONS.md, files to modify                                   |
-| Frontend Dev | 5                 | task card, resolved skills, CONVENTIONS.md, files to modify                                   |
-| Reviewer     | 5                 | task card, resolved skills, CONVENTIONS.md, source files being reviewed                       |
-| Tester       | 5                 | spec section, resolved skills, source files to test                                           |
-| QA           | 7                 | requirement doc, spec, resolved skills, CONVENTIONS.md, source files, test files              |
-| Researcher   | 7                 | stack.config.yaml, codebase structure, relevant source files, web sources                     |
-
-**Rules for keeping context small**:
-
-1. CONVENTIONS.md uses checklist format, not prose (< 200 lines)
-2. Each task card contains exactly what the agent needs + file refs
-3. Specs use tables and bullet points, not paragraphs
-4. Large features are broken into tasks of ≤ 3 files each
-5. Handoff files provide explicit "what to read" instructions
-6. Discussions are concise: problem + options + recommendation
-
-## Handoff Protocol
-
-When Agent A finishes and Agent B takes over (within a feature):
+### 1. Bàn giao (luồng pipeline)
 
 ```
-Agent A completes work (scoped to FEAT-XXX)
-    → writes output files in features/FEAT-XXX/
-    → writes features/FEAT-XXX/handoffs/HANDOFF-latest.md
-
-PM reads HANDOFF-latest.md
-    → updates STATE.md (global dashboard)
-    → checks for open discussions (feature + cross-feature)
-    → determines next step
-    → triggers Agent B scoped to features/FEAT-XXX/
+BA → PM → Architect → PM → Backend Dev/Frontend Dev → Reviewer → PM → Tester → PM → QA → PM → Con người
 ```
 
-See `references/handoff-protocol.md` for the full handoff schema.
+### 2. Thảo luận (agent bất kỳ ↔ agent bất kỳ)
 
-## Human Intervention Points
+Thảo luận trong feature → `features/FEAT-XXX/discussions/DISC-XXX.md`
+Thảo luận liên feature → `discussions/DISC-CROSS-XXX.md` tại gốc
 
-The human can intervene at any time, but MUST approve at these checkpoints:
+Ví dụ:
 
-| Checkpoint        | After Phase   | Human Reviews                       | Can Reject?               |
-| ----------------- | ------------- | ----------------------------------- | ------------------------- |
-| CLARIFY           | Clarification | BA asks QA questions, human answers | N/A — conversational      |
-| REQ-APPROVE       | Requirement   | Is this what I want?                | Yes → rewrite             |
-| DESIGN-APPROVE    | Design        | Is the architecture right?          | Yes → redesign            |
-| REVIEW-SPOT-CHECK | Every 3 tasks | Reviewer's comments + code          | Yes → fix specific issues |
-| QA-APPROVE        | QA Report     | Is it production-ready?             | Yes → loop back           |
+- Backend Dev hỏi Architect về tính khả thi của thiết kế (trong feature)
+- Frontend Dev hỏi Backend Dev về API contract (trong feature)
+- Tester hỏi BA để làm rõ tiêu chí nghiệm thu (trong feature)
+- Reviewer mở thảo luận với Backend Dev về cách tiếp cận (trong feature)
+- QA nêu vấn đề xuyên suốt với mọi người (liên feature)
+- PM phát hiện xung đột file giữa FEAT-001 và FEAT-002 (liên feature)
+- Bất kỳ agent nào yêu cầu Researcher điều tra câu hỏi kỹ thuật (trong feature)
 
-## Additional Resources
+PM điều phối: chuyển tiếp, hỗ trợ, leo thang (tối đa 3 vòng → con người quyết định).
 
-- **`references/workflow-phases.md`** — detailed phase descriptions with examples
-- **`references/handoff-protocol.md`** — handoff schema and templates
-- **`references/communication-protocol.md`** — discussion threads, review comments, agent interaction
-- **`references/context-management.md`** — strategies for managing AI context limits
-- **`templates/`** — file templates for requirements, specs, tasks, reviews, discussions
+### 3. Nhận xét review (vòng lặp phản hồi)
+
+- Reviewer → Backend Dev hoặc Frontend Dev: review đồng nghiệp với chu trình sửa/thảo luận/chấp nhận
+- QA → agent bất kỳ: phát hiện chất lượng cuối cùng
+
+## Quy tắc quản lý Context
+
+**Vấn đề**: AI có context giới hạn. Tải tất cả = chất lượng kém.
+
+**Giải pháp**: Mỗi agent CHỈ tải những gì cần thiết.
+
+| Agent        | Số file tối đa | Nội dung cần tải                                                                              |
+| ------------ | --------------- | --------------------------------------------------------------------------------------------- |
+| PM           | 4               | STATE.md, stack.config.yaml, handoff hiện tại, discussions (nếu OPEN)                         |
+| BA           | 5               | STATE.md, stack.config.yaml, cấu trúc codebase (ls/tree), requirement hiện có (nếu sửa lại)  |
+| Architect    | 5               | tài liệu requirement, stack.config.yaml, cấu trúc hiện tại (ls/tree), interface chính        |
+| Backend Dev  | 5               | task card, skill đã ánh xạ, CONVENTIONS.md, file cần sửa                                      |
+| Frontend Dev | 5               | task card, skill đã ánh xạ, CONVENTIONS.md, file cần sửa                                      |
+| Reviewer     | 5               | task card, skill đã ánh xạ, CONVENTIONS.md, file source đang review                           |
+| Tester       | 5               | phần spec, skill đã ánh xạ, file source cần test                                              |
+| QA           | 7               | tài liệu requirement, spec, skill đã ánh xạ, CONVENTIONS.md, file source, file test           |
+| Researcher   | 7               | stack.config.yaml, cấu trúc codebase, file source liên quan, nguồn web                        |
+
+**Quy tắc giữ context nhỏ gọn**:
+
+1. CONVENTIONS.md sử dụng định dạng checklist, không phải văn xuôi (< 200 dòng)
+2. Mỗi task card chứa đúng những gì agent cần + tham chiếu file
+3. Spec sử dụng bảng và bullet point, không phải đoạn văn
+4. Feature lớn được chia thành task tối đa 3 file mỗi task
+5. File bàn giao cung cấp hướng dẫn rõ ràng "cần đọc gì"
+6. Thảo luận ngắn gọn: vấn đề + lựa chọn + đề xuất
+
+## Giao thức bàn giao
+
+Khi Agent A hoàn thành và Agent B tiếp nhận (trong một feature):
+
+```
+Agent A hoàn thành công việc (trong phạm vi FEAT-XXX)
+    → ghi file đầu ra vào features/FEAT-XXX/
+    → ghi features/FEAT-XXX/handoffs/HANDOFF-latest.md
+
+PM đọc HANDOFF-latest.md
+    → cập nhật STATE.md (dashboard tổng quan)
+    → kiểm tra thảo luận đang mở (trong feature + liên feature)
+    → xác định bước tiếp theo
+    → kích hoạt Agent B trong phạm vi features/FEAT-XXX/
+```
+
+Xem `references/handoff-protocol.md` để biết schema bàn giao đầy đủ.
+
+## Các điểm can thiệp của con người
+
+Con người có thể can thiệp bất cứ lúc nào, nhưng BẮT BUỘC phê duyệt tại các checkpoint:
+
+| Checkpoint        | Sau Phase          | Con người xem xét                      | Có thể từ chối?               |
+| ----------------- | ------------------ | -------------------------------------- | ----------------------------- |
+| CLARIFY           | Làm rõ             | BA đặt câu hỏi, con người trả lời     | N/A — dạng hội thoại          |
+| REQ-APPROVE       | Requirement        | Đây có phải điều tôi muốn?            | Có → viết lại                 |
+| DESIGN-APPROVE    | Thiết kế           | Kiến trúc có đúng không?              | Có → thiết kế lại             |
+| REVIEW-SPOT-CHECK | Mỗi 3 task        | Nhận xét của Reviewer + code           | Có → sửa vấn đề cụ thể       |
+| QA-APPROVE        | Báo cáo QA         | Đã sẵn sàng production chưa?          | Có → quay lại vòng lặp        |
+
+## Tài liệu bổ sung
+
+- **`references/workflow-phases.md`** — mô tả chi tiết từng phase kèm ví dụ
+- **`references/handoff-protocol.md`** — schema và template bàn giao
+- **`references/communication-protocol.md`** — luồng thảo luận, nhận xét review, tương tác giữa agent
+- **`references/context-management.md`** — chiến lược quản lý giới hạn context AI
+- **`templates/`** — template file cho requirement, spec, task, review, thảo luận

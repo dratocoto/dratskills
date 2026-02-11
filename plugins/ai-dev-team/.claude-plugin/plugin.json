@@ -1,7 +1,7 @@
 {
   "name": "ai-dev-team",
   "version": "0.5.0",
-  "description": "Multi-agent AI dev team (PM, BA, Architect, Backend Dev, Frontend Dev, Reviewer, Tester, QA, Researcher) with dynamic tech stack detection, parallel features, inter-agent discussions, peer code review, file conflict detection, and human oversight",
+  "description": "Đội phát triển AI đa agent (PM, BA, Architect, Backend Dev, Frontend Dev, Reviewer, Tester, QA, Researcher) với tự động nhận diện tech stack, phát triển song song nhiều feature, thảo luận liên agent, peer code review, phát hiện xung đột file, và giám sát bởi con người | Multi-agent AI dev team with dynamic tech stack detection, parallel features, inter-agent discussions, peer code review, file conflict detection, and human oversight",
   "author": {
     "name": "Drato"
   },

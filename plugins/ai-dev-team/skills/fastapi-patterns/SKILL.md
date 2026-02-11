@@ -1,18 +1,18 @@
 ---
 name: fastapi-patterns
 description: >
-  This skill should be used when the user asks about "FastAPI", "API design",
+  Skill này được sử dụng khi người dùng hỏi về "FastAPI", "thiết kế API",
   "repository pattern", "service layer", "dependency injection",
-  "async patterns", "FastAPI project structure", or needs guidance on
-  building production FastAPI applications with clean architecture.
+  "async pattern", "cấu trúc dự án FastAPI", hoặc cần hướng dẫn xây dựng
+  ứng dụng FastAPI production với kiến trúc sạch.
 version: 0.1.0
 ---
 
 # FastAPI Patterns
 
-Production patterns for FastAPI applications using clean architecture with Python 3.12.
+Các pattern production cho ứng dụng FastAPI sử dụng kiến trúc sạch với Python 3.12.
 
-## Architecture: 3-Tier + Repository Pattern
+## Kiến trúc: 3 tầng + Repository Pattern
 
 ```
 Route (Controller) → Service → Repository → Database
@@ -21,19 +21,19 @@ Route (Controller) → Service → Repository → Database
   Schemas            Logic        Models
 ```
 
-### Layer Responsibilities
+### Trách nhiệm từng tầng
 
-| Layer | Does | Does NOT |
-|-------|------|----------|
-| **Route** | Parse request, validate input, call service, format response | Business logic, DB queries |
-| **Service** | Business rules, orchestrate repositories, error handling | HTTP concerns, raw SQL |
-| **Repository** | CRUD operations, query building, data mapping | Business rules, HTTP |
-| **Schema** | Input validation, serialization, API contracts | Business logic |
-| **Model** | Database table mapping, relationships | Validation, business rules |
+| Tầng | Làm | KHÔNG làm |
+|------|-----|-----------|
+| **Route** | Parse request, validate đầu vào, gọi service, format response | Business logic, truy vấn DB |
+| **Service** | Business rule, điều phối repository, xử lý lỗi | Logic HTTP, raw SQL |
+| **Repository** | Thao tác CRUD, xây dựng query, ánh xạ dữ liệu | Business rule, HTTP |
+| **Schema** | Validate đầu vào, serialize, API contract | Business logic |
+| **Model** | Ánh xạ bảng DB, relationship | Validate, business rule |
 
-## Dependency Injection Pattern
+## Pattern Dependency Injection
 
-FastAPI's `Depends()` is the core DI mechanism:
+`Depends()` của FastAPI là cơ chế DI chính:
 
 ```python
 # dependencies.py
@@ -59,11 +59,11 @@ async def create_user(
     return await service.create(data)
 ```
 
-### DI Chain
+### Chuỗi DI
 ```
-Route depends on Service
-  Service depends on Repository
-    Repository depends on DB Session
+Route phụ thuộc vào Service
+  Service phụ thuộc vào Repository
+    Repository phụ thuộc vào DB Session
 ```
 
 ## Repository Pattern
@@ -106,7 +106,7 @@ class BaseRepository(Generic[ModelT]):
         await self.session.flush()
 ```
 
-## Service Layer Pattern
+## Pattern Service Layer
 
 ```python
 # services/user_service.py
@@ -135,7 +135,7 @@ class UserService:
         return user
 ```
 
-## Error Handling
+## Xử lý lỗi
 
 ```python
 # errors.py
@@ -167,18 +167,18 @@ async def app_error_handler(request: Request, exc: AppError) -> JSONResponse:
     )
 ```
 
-## Async Best Practices
+## Best Practice cho Async
 
-### Rules
-1. Use `async def` for ALL I/O operations (DB, HTTP, file)
-2. Use async DB driver: `asyncpg` for PostgreSQL
-3. Use `httpx.AsyncClient` for external API calls (not `requests`)
-4. Use `aiofiles` for file operations
-5. NEVER call blocking functions inside `async def`
-6. Use `BackgroundTasks` for lightweight async work
-7. Use Celery/Dramatiq for heavy background processing
+### Quy tắc
+1. Sử dụng `async def` cho TẤT CẢ thao tác I/O (DB, HTTP, file)
+2. Sử dụng async DB driver: `asyncpg` cho PostgreSQL
+3. Sử dụng `httpx.AsyncClient` cho gọi API bên ngoài (không dùng `requests`)
+4. Sử dụng `aiofiles` cho thao tác file
+5. KHÔNG BAO GIỜ gọi hàm blocking bên trong `async def`
+6. Sử dụng `BackgroundTasks` cho công việc async nhẹ
+7. Sử dụng Celery/Dramatiq cho xử lý nền nặng
 
-### Database Session Management
+### Quản lý Database Session
 ```python
 # database/session.py
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
@@ -194,7 +194,7 @@ engine = create_async_engine(
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 ```
 
-## Project Structure
+## Cấu trúc dự án
 
 ```
 src/
@@ -203,19 +203,19 @@ src/
 │   ├── main.py              # App factory
 │   ├── config.py            # Pydantic Settings
 │   ├── database.py          # Engine + session
-│   ├── errors.py            # Error hierarchy
-│   ├── dependencies.py      # Shared DI providers
-│   ├── models/              # SQLAlchemy models
+│   ├── errors.py            # Hệ thống exception
+│   ├── dependencies.py      # Provider DI dùng chung
+│   ├── models/              # SQLAlchemy model
 │   │   ├── __init__.py
-│   │   ├── base.py          # Declarative base + mixins
+│   │   ├── base.py          # Declarative base + mixin
 │   │   └── user.py
-│   ├── schemas/             # Pydantic schemas
+│   ├── schemas/             # Pydantic schema
 │   │   ├── __init__.py
-│   │   ├── common.py        # Shared schemas (pagination, etc.)
+│   │   ├── common.py        # Schema dùng chung (phân trang, v.v.)
 │   │   └── user.py
-│   ├── repositories/        # Data access
+│   ├── repositories/        # Truy cập dữ liệu
 │   │   ├── __init__.py
-│   │   ├── base.py          # Generic base repository
+│   │   ├── base.py          # Repository base generic
 │   │   └── user_repo.py
 │   ├── services/            # Business logic
 │   │   ├── __init__.py
@@ -223,7 +223,7 @@ src/
 │   ├── api/
 │   │   └── v1/
 │   │       ├── __init__.py
-│   │       ├── router.py    # Aggregate all routes
+│   │       ├── router.py    # Tổng hợp tất cả route
 │   │       └── routes/
 │   │           ├── __init__.py
 │   │           ├── health.py
@@ -235,8 +235,8 @@ src/
 │       └── logging.py
 ```
 
-## Additional Resources
+## Tài liệu bổ sung
 
-- **`references/design-patterns.md`** — detailed pattern implementations
-- **`references/async-patterns.md`** — async/await deep dive
-- **`examples/`** — example module implementations
+- **`references/design-patterns.md`** — triển khai chi tiết các pattern
+- **`references/async-patterns.md`** — đào sâu async/await
+- **`examples/`** — ví dụ triển khai module

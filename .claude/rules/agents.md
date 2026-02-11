@@ -4,56 +4,56 @@ paths:
   - "plugins/ai-dev-team/team.config.yaml"
 ---
 
-# Agent Conventions
+# Quy ước Agent
 
-## File Format
+## Định dạng file
 
-Each agent is a `.md` file in `plugins/ai-dev-team/agents/` with YAML frontmatter:
+Mỗi agent là một file `.md` trong `plugins/ai-dev-team/agents/` với YAML frontmatter:
 
 ```yaml
 ---
 name: agent-name
 description: >
-  When and how to use this agent. Include 2-3 <example> blocks
-  showing user messages and expected agent behavior.
+  Khi nào và cách sử dụng agent này. Bao gồm 2-3 block <example>
+  minh hoạ message từ user và hành vi mong đợi của agent.
 ---
 ```
 
-## Required Frontmatter Fields
+## Các trường frontmatter bắt buộc
 
-- `name` — must match the key in `team.config.yaml` under `agents:`
-- `description` — explains when Claude should invoke this agent. Include `<example>` blocks.
+- `name` — phải khớp với key trong `team.config.yaml` dưới mục `agents:`
+- `description` — giải thích khi nào Claude nên gọi agent này. Bao gồm các block `<example>`.
 
-## Sync with team.config.yaml
+## Đồng bộ với team.config.yaml
 
-team.config.yaml is the **single source of truth** for:
-- `role` — human-readable role name
-- `model` — which model to use (typically `inherit`)
-- `color` — terminal output color
-- `tools` — allowed tool list (e.g., `Read`, `Write`, `Bash(python3:*)`)
-- `skills` — skill categories this agent loads
-- `context.max_files` — max files to load into context
+team.config.yaml là **nguồn duy nhất** cho:
+- `role` — tên vai trò dễ đọc
+- `model` — model sử dụng (thường là `inherit`)
+- `color` — màu hiển thị trên terminal
+- `tools` — danh sách tool được phép (vd: `Read`, `Write`, `Bash(python3:*)`)
+- `skills` — danh mục skill mà agent tải
+- `context.max_files` — số file tối đa tải vào context
 
-When modifying an agent, update BOTH the agent `.md` file AND `team.config.yaml`.
+Khi chỉnh sửa agent, phải cập nhật CẢ file `.md` của agent VÀ `team.config.yaml`.
 
-## Agent Body Content
+## Nội dung body Agent
 
-After frontmatter, the `.md` body is the agent's system prompt. It should:
-- Reference `team.config.yaml` for skills and context limits
-- Use `${CLAUDE_PLUGIN_ROOT}` for file paths to plugin resources
-- Include step-by-step instructions for the agent's workflow
-- Reference `.ai-workspace/` paths for workspace files
+Sau frontmatter, phần body `.md` là system prompt của agent. Nội dung nên:
+- Tham chiếu `team.config.yaml` cho skill và giới hạn context
+- Sử dụng `${CLAUDE_PLUGIN_ROOT}` cho đường dẫn đến tài nguyên plugin
+- Bao gồm hướng dẫn từng bước cho quy trình làm việc của agent
+- Tham chiếu đường dẫn `.ai-workspace/` cho các file workspace
 
-## Current Agents (9)
+## Danh sách Agent hiện tại (9)
 
-| Agent | File | Role |
-|-------|------|------|
-| PM | pm-agent.md | Coordinator, delegates, manages STATE.md |
-| BA | ba-agent.md | Clarifies ideas, writes requirements |
-| Architect | architect-agent.md | Designs system, creates specs |
-| Backend Dev | backend-dev-agent.md | Implements backend code |
-| Frontend Dev | frontend-dev-agent.md | Implements frontend code |
-| Reviewer | reviewer-agent.md | Peer code review |
-| Tester | test-agent.md | Writes and runs tests |
-| QA | qa-agent.md | Acceptance testing, security checks |
-| Researcher | researcher-agent.md | Technical research, best practices |
+| Agent | File | Vai trò |
+|-------|------|---------|
+| PM | pm-agent.md | Điều phối, phân công, quản lý STATE.md |
+| BA | ba-agent.md | Làm rõ ý tưởng, viết requirement |
+| Architect | architect-agent.md | Thiết kế hệ thống, tạo spec |
+| Backend Dev | backend-dev-agent.md | Triển khai code backend |
+| Frontend Dev | frontend-dev-agent.md | Triển khai code frontend |
+| Reviewer | reviewer-agent.md | Review code |
+| Tester | test-agent.md | Viết và chạy test |
+| QA | qa-agent.md | Kiểm thử nghiệm thu, kiểm tra bảo mật |
+| Researcher | researcher-agent.md | Nghiên cứu kỹ thuật, best practices |

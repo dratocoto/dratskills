@@ -1,26 +1,26 @@
 ---
 name: python312
 description: >
-  This skill should be used when the user asks about "Python 3.12",
-  "Python type hints", "Python async", "Python best practices",
-  "Python project setup", or needs guidance on Python 3.12 features
-  and idioms for production applications.
+  Skill này được sử dụng khi người dùng hỏi về "Python 3.12",
+  "Python type hint", "Python async", "Python best practice",
+  "thiết lập dự án Python", hoặc cần hướng dẫn về các tính năng
+  và idiom của Python 3.12 cho ứng dụng production.
 version: 0.1.0
 ---
 
-# Python 3.12 Guide
+# Hướng dẫn Python 3.12
 
-Production Python 3.12 features and best practices for FastAPI applications.
+Các tính năng production của Python 3.12 và best practice cho ứng dụng FastAPI.
 
-## Key Python 3.12 Features
+## Tính năng chính của Python 3.12
 
-### Type Parameter Syntax (PEP 695)
+### Cú pháp Type Parameter (PEP 695)
 ```python
-# New syntax — cleaner generics
+# Cú pháp mới — generic gọn hơn
 type Point = tuple[float, float]
 type Matrix[T] = list[list[T]]
 
-# Generic class with new syntax
+# Generic class với cú pháp mới
 class Stack[T]:
     def __init__(self) -> None:
         self._items: list[T] = []
@@ -44,44 +44,44 @@ class UserService(BaseService):
         return "email" in data and "name" in data
 ```
 
-### Improved F-Strings (PEP 701)
+### F-String cải tiến (PEP 701)
 ```python
-# Nested quotes now work
+# Ngoặc kép lồng nhau giờ hoạt động
 print(f"User {user["name"]} logged in")
 
-# Multi-line expressions
+# Biểu thức nhiều dòng
 message = f"Total: {
     sum(item.price for item in cart)
 :.2f}"
 ```
 
-### asyncio Performance
-- 75% speed improvement in certain benchmarks
-- Eager task execution for better concurrency
-- Better socket writing performance
+### Hiệu năng asyncio
+- Cải thiện tốc độ 75% trong một số benchmark
+- Thực thi task eager cho concurrency tốt hơn
+- Hiệu suất ghi socket tốt hơn
 
-## Type Hints Best Practices
+## Best Practice cho Type Hint
 
 ```python
-# Function signatures: always annotate
+# Chữ ký hàm: luôn annotate
 async def get_user(user_id: UUID) -> User | None: ...
 
-# Use | instead of Optional (Python 3.10+)
+# Sử dụng | thay vì Optional (Python 3.10+)
 def process(data: str | None = None) -> dict[str, Any]: ...
 
-# Use TypedDict for structured dicts
+# Sử dụng TypedDict cho dict có cấu trúc
 class UserData(TypedDict):
     name: str
     email: str
     age: int | None
 
-# Use Protocol for structural typing
+# Sử dụng Protocol cho structural typing
 class Repository(Protocol):
     async def get_by_id(self, id: UUID) -> Any | None: ...
     async def create(self, **kwargs: Any) -> Any: ...
 ```
 
-## Project Configuration
+## Cấu hình dự án
 
 ### pyproject.toml
 ```toml
@@ -129,7 +129,7 @@ testpaths = ["tests"]
 addopts = "-v --tb=short --strict-markers"
 ```
 
-## Async Patterns
+## Pattern Async
 
 ### Async Context Manager
 ```python
@@ -146,12 +146,12 @@ async def get_db_session():
             raise
 ```
 
-### Concurrent Async Calls
+### Gọi Async đồng thời
 ```python
 import asyncio
 
 async def fetch_dashboard_data(user_id: UUID) -> DashboardData:
-    # Run independent queries concurrently
+    # Chạy các query độc lập đồng thời
     user, orders, notifications = await asyncio.gather(
         user_repo.get_by_id(user_id),
         order_repo.get_by_user(user_id),
@@ -166,22 +166,22 @@ import structlog
 
 logger = structlog.get_logger()
 
-# Configure once at startup
+# Cấu hình một lần khi khởi động
 structlog.configure(
     processors=[
         structlog.contextvars.merge_contextvars,
         structlog.processors.add_log_level,
         structlog.processors.TimeStamper(fmt="iso"),
-        structlog.dev.ConsoleRenderer()  # JSON in production
+        structlog.dev.ConsoleRenderer()  # JSON trong production
     ],
 )
 
-# Usage
+# Cách sử dụng
 logger.info("user.created", user_id=str(user.id), email=user.email)
 logger.error("payment.failed", order_id=str(order.id), error=str(e))
 ```
 
-## Pydantic V2 Patterns
+## Pattern Pydantic V2
 
 ```python
 from pydantic import BaseModel, Field, ConfigDict
@@ -213,6 +213,6 @@ class PaginatedResponse(BaseModel, Generic[T]):
     has_next: bool
 ```
 
-## Additional Resources
+## Tài liệu bổ sung
 
-- **`references/python312-features.md`** — full feature reference
+- **`references/python312-features.md`** — tài liệu tham khảo đầy đủ về tính năng

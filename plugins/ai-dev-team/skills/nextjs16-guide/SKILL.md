@@ -1,49 +1,49 @@
 ---
 name: nextjs16-guide
 description: >
-  This skill should be used when the user asks about "Next.js",
+  Skill này được sử dụng khi người dùng hỏi về "Next.js",
   "Next.js 16", "React Server Components", "App Router",
-  "frontend", "Turbopack", "use cache", "proxy.ts", or needs
-  guidance on building production Next.js 16 applications.
+  "frontend", "Turbopack", "use cache", "proxy.ts", hoặc cần
+  hướng dẫn xây dựng ứng dụng Next.js 16 production.
 version: 0.1.0
 ---
 
-# Next.js 16 Guide
+# Hướng dẫn Next.js 16
 
-Production patterns for Next.js 16 (released Oct 2025) with Turbopack, Cache Components, and React 19.2.
+Các pattern production cho Next.js 16 (phát hành tháng 10/2025) với Turbopack, Cache Components, và React 19.2.
 
-## Key Features in Next.js 16
+## Tính năng chính trong Next.js 16
 
-| Feature | Description |
-|---------|-------------|
-| **Turbopack (stable)** | Default bundler, 5-10x faster refresh |
-| **Cache Components** | `"use cache"` directive for explicit caching |
-| **Partial Pre-Rendering** | Instant navigation with new caching model |
-| **React 19.2** | Latest React with Server Components, Actions |
-| **proxy.ts** | Replaces middleware for network boundary concerns |
-| **DevTools MCP** | Model Context Protocol for debugging |
+| Tính năng | Mô tả |
+|-----------|-------|
+| **Turbopack (ổn định)** | Bundler mặc định, refresh nhanh hơn 5-10 lần |
+| **Cache Components** | Directive `"use cache"` cho caching tường minh |
+| **Partial Pre-Rendering** | Điều hướng tức thì với mô hình caching mới |
+| **React 19.2** | React mới nhất với Server Components, Actions |
+| **proxy.ts** | Thay thế middleware cho các vấn đề ranh giới mạng |
+| **DevTools MCP** | Model Context Protocol để debug |
 
-## App Router Patterns
+## Pattern App Router
 
-### Route Structure
+### Cấu trúc Route
 ```
 src/app/
-├── layout.tsx          # Root layout (required)
-├── page.tsx            # Home page
+├── layout.tsx          # Root layout (bắt buộc)
+├── page.tsx            # Trang chủ
 ├── error.tsx           # Error boundary
-├── loading.tsx         # Loading UI
-├── not-found.tsx       # 404 page
-├── api/                # API routes
+├── loading.tsx         # Giao diện loading
+├── not-found.tsx       # Trang 404
+├── api/                # API route
 │   └── v1/
 │       └── [resource]/
 │           └── route.ts
-├── (auth)/             # Route group (no URL segment)
+├── (auth)/             # Route group (không tạo URL segment)
 │   ├── login/
 │   │   └── page.tsx
 │   └── register/
 │       └── page.tsx
 ├── dashboard/
-│   ├── layout.tsx      # Dashboard layout
+│   ├── layout.tsx      # Layout cho dashboard
 │   ├── page.tsx
 │   └── [id]/
 │       └── page.tsx
@@ -52,44 +52,44 @@ src/app/
     └── pricing/
 ```
 
-### Server vs Client Components
+### Server Components vs Client Components
 
 ```
-Server Component (default)     Client Component ("use client")
-─────────────────────────      ────────────────────────────────
-✅ Direct DB/API access        ✅ useState, useEffect
-✅ Async/await in component    ✅ Event handlers (onClick)
-✅ Access backend resources    ✅ Browser APIs
-✅ Reduce client JS bundle     ✅ Interactive UI elements
-❌ No state, no effects        ❌ No direct DB access
-❌ No browser APIs             ❌ Adds to client bundle
+Server Component (mặc định)       Client Component ("use client")
+─────────────────────────────      ────────────────────────────────
+✅ Truy cập DB/API trực tiếp      ✅ useState, useEffect
+✅ Async/await trong component     ✅ Event handler (onClick)
+✅ Truy cập tài nguyên backend     ✅ Browser API
+✅ Giảm client JS bundle           ✅ UI element tương tác
+❌ Không có state, effect           ❌ Không truy cập DB trực tiếp
+❌ Không có browser API             ❌ Tăng kích thước client bundle
 ```
 
-**Rule**: Default to Server Components. Use `"use client"` only when you need interactivity.
+**Quy tắc**: Mặc định sử dụng Server Components. Chỉ dùng `"use client"` khi cần tương tác.
 
 ### Cache Components (`"use cache"`)
 
 ```tsx
-// Explicit caching with the new "use cache" directive
+// Caching tường minh với directive "use cache" mới
 async function ProductList() {
   "use cache"
   const products = await db.product.findMany()
   return <div>{products.map(p => <ProductCard key={p.id} product={p} />)}</div>
 }
 
-// Cache with revalidation
+// Cache với revalidation
 async function DashboardStats() {
   "use cache"
-  // cacheLife("hours") — revalidates every hour
+  // cacheLife("hours") — revalidate mỗi giờ
   const stats = await fetchStats()
   return <StatsDisplay stats={stats} />
 }
 ```
 
-### proxy.ts (Replaces Middleware)
+### proxy.ts (Thay thế Middleware)
 
 ```typescript
-// proxy.ts — runs at the network boundary
+// proxy.ts — chạy tại ranh giới mạng
 import { proxy } from 'next/server'
 
 export default proxy({
@@ -104,13 +104,13 @@ export default proxy({
 })
 ```
 
-## Data Fetching Patterns
+## Pattern lấy dữ liệu
 
-### Server Component Data Fetching
+### Lấy dữ liệu trong Server Component
 ```tsx
 // app/dashboard/page.tsx — Server Component
 export default async function DashboardPage() {
-  const data = await fetchDashboardData()  // Direct async
+  const data = await fetchDashboardData()  // Async trực tiếp
   return <Dashboard data={data} />
 }
 ```
@@ -128,7 +128,7 @@ export async function createUser(formData: FormData) {
 }
 ```
 
-### Client-Side Data (SWR/React Query)
+### Dữ liệu phía Client (SWR/React Query)
 ```tsx
 "use client"
 import useSWR from "swr"
@@ -141,31 +141,31 @@ export function UserProfile({ userId }: { userId: string }) {
 }
 ```
 
-## Project Structure
+## Cấu trúc dự án
 
 ```
 src/
-├── app/                    # App Router pages
+├── app/                    # Trang App Router
 ├── components/
-│   ├── ui/                 # Reusable UI primitives
+│   ├── ui/                 # UI primitive tái sử dụng
 │   │   ├── button.tsx
 │   │   ├── input.tsx
 │   │   └── card.tsx
-│   ├── features/           # Feature-specific components
+│   ├── features/           # Component theo tính năng
 │   │   ├── auth/
 │   │   └── dashboard/
-│   └── layouts/            # Layout components
+│   └── layouts/            # Component layout
 ├── lib/
 │   ├── api.ts              # API client
-│   ├── auth.ts             # Auth utilities
-│   └── utils.ts            # Shared utilities
-├── hooks/                  # Custom React hooks
-├── types/                  # TypeScript types
-├── styles/                 # Global styles
-└── config/                 # App configuration
+│   ├── auth.ts             # Tiện ích xác thực
+│   └── utils.ts            # Tiện ích dùng chung
+├── hooks/                  # Custom React hook
+├── types/                  # TypeScript type
+├── styles/                 # Style toàn cục
+└── config/                 # Cấu hình ứng dụng
 ```
 
-## TypeScript Configuration
+## Cấu hình TypeScript
 
 ```json
 {
@@ -182,6 +182,6 @@ src/
 }
 ```
 
-## Additional Resources
+## Tài liệu bổ sung
 
-- **`references/nextjs16-patterns.md`** — advanced patterns and migration guide
+- **`references/nextjs16-patterns.md`** — pattern nâng cao và hướng dẫn migration

@@ -1,33 +1,33 @@
-# TASK-XXX: [Task Title]
+# TASK-XXX: [Tiêu đề task]
 
 ## Feature: FEAT-XXX
 ## Agent: backend-dev-agent / frontend-dev-agent / test-agent
 ## Label: backend / frontend / full-stack
 ## Status: TODO / IN_PROGRESS / DONE / BLOCKED
-## Estimated files: N
+## Số file dự kiến: N
 
-## What to Do
-[Clear, actionable, 2-3 sentence description]
+## Việc cần làm
+[Mô tả rõ ràng, có thể hành động, 2-3 câu]
 
-## Files to Read (Context)
-1. `CONVENTIONS.md#[section]` — [why: what rules to follow]
-2. `features/FEAT-XXX/design.md#[section]` — [why: field definitions / API contracts]
-3. `src/path/to/existing-pattern.py` — [why: follow this pattern]
+## File cần đọc (Ngữ cảnh)
+1. `CONVENTIONS.md#[section]` — [lý do: quy tắc nào cần tuân thủ]
+2. `features/FEAT-XXX/design.md#[section]` — [lý do: định nghĩa field / API contracts]
+3. `src/path/to/existing-pattern.py` — [lý do: tuân theo pattern này]
 
-## Files to Create or Modify
+## File cần tạo hoặc sửa
 - CREATE: `src/path/to/new_file.py`
-- MODIFY: `src/path/to/existing_file.py` — [what to change]
+- MODIFY: `src/path/to/existing_file.py` — [nội dung cần thay đổi]
 
-## Acceptance Criteria
-1. [specific criterion]
-2. [specific criterion]
-3. [specific criterion]
+## Tiêu chí chấp nhận
+1. [tiêu chí cụ thể]
+2. [tiêu chí cụ thể]
+3. [tiêu chí cụ thể]
 
-## Self-Check Before Marking Done
-- [ ] Type hints on all function signatures
-- [ ] Async def for I/O operations
-- [ ] Error handling with domain-specific exceptions
-- [ ] Structured logging (not print)
-- [ ] No hardcoded values or secrets
-- [ ] Follows naming conventions from CONVENTIONS.md
-- [ ] No TODO/FIXME left in code
+## Tự kiểm tra trước khi đánh dấu Done
+- [ ] Type hints trên tất cả function signatures
+- [ ] Async def cho các thao tác I/O
+- [ ] Xử lý lỗi với domain-specific exceptions
+- [ ] Structured logging (không dùng print)
+- [ ] Không có giá trị hardcode hoặc secrets
+- [ ] Tuân thủ quy ước đặt tên từ CONVENTIONS.md
+- [ ] Không còn TODO/FIXME trong code

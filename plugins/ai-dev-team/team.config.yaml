@@ -1,34 +1,34 @@
 # ============================================================================
-# AI Dev Team — Central Configuration
+# AI Dev Team — Cấu hình trung tâm
 # ============================================================================
-# Single source of truth for all agent configurations.
-# Agent .md files reference this file instead of embedding config in prose.
+# Nguồn duy nhất cho toàn bộ cấu hình agent.
+# Các file agent .md tham chiếu đến file này thay vì nhúng config trong nội dung.
 #
-# Two-level config:
-#   1. team.config.yaml (this file) → agent definitions, skill categories, workflow
-#   2. .ai-workspace/stack.config.yaml (per-project) → resolves categories to skills
+# Hệ thống cấu hình hai cấp:
+#   1. team.config.yaml (file này) → định nghĩa agent, danh mục skill, workflow
+#   2. .ai-workspace/stack.config.yaml (theo dự án) → ánh xạ danh mục sang skill cụ thể
 #
-# To change which skills an agent loads: edit the `skills` list below.
-# To change which actual skill is used for a category: edit stack.config.yaml.
+# Để thay đổi skill mà agent tải: sửa danh sách `skills` bên dưới.
+# Để thay đổi skill thực tế cho một danh mục: sửa stack.config.yaml.
 # ============================================================================
 
 version: "0.5.1"
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Skill Categories
+# Danh mục Skill
 # ─────────────────────────────────────────────────────────────────────────────
-# Defines the available skill categories.
-# Actual skill names are resolved per-project in .ai-workspace/stack.config.yaml
-# Special value in stack config: _none_ → agent skips that category.
+# Định nghĩa các danh mục skill khả dụng.
+# Tên skill thực tế được ánh xạ theo dự án trong .ai-workspace/stack.config.yaml
+# Giá trị đặc biệt trong stack config: _none_ → agent bỏ qua danh mục đó.
 
 skill_categories:
-  backend-patterns: "Framework-specific backend patterns (FastAPI, Django, Express)"
-  frontend-guide: "Framework-specific frontend patterns (Next.js, React, Vue)"
-  language: "Language-specific features (Python 3.12, TypeScript)"
-  conventions: "Coding standards and rules for all agents"
+  backend-patterns: "Các mẫu thiết kế backend theo framework (FastAPI, Django, Express)"
+  frontend-guide: "Các mẫu thiết kế frontend theo framework (Next.js, React, Vue)"
+  language: "Tính năng đặc thù của ngôn ngữ (Python 3.12, TypeScript)"
+  conventions: "Quy chuẩn và quy tắc coding cho tất cả agent"
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Workflow Settings
+# Cài đặt Workflow
 # ─────────────────────────────────────────────────────────────────────────────
 
 workflow:
@@ -42,11 +42,11 @@ workflow:
     research: "RESEARCH"
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Agent Definitions
+# Định nghĩa Agent
 # ─────────────────────────────────────────────────────────────────────────────
-# Each agent's full configuration. Agent .md files should mirror the
-# name/description/model/color/tools in their YAML frontmatter (required by
-# the plugin system), but all other config (skills, context) lives here only.
+# Cấu hình đầy đủ của từng agent. File agent .md cần đồng bộ các trường
+# name/description/model/color/tools trong YAML frontmatter (yêu cầu bởi
+# hệ thống plugin), còn các config khác (skills, context) chỉ nằm ở đây.
 
 agents:
   # ── PM ─────────────────────────────────────────────────────────────────────
@@ -64,7 +64,7 @@ agents:
       - "Bash(tree:*)"
       - "Bash(mkdir:*)"
       - "Bash(git:*)"
-    skills: [] # PM doesn't load technical skills
+    skills: [] # PM không tải skill kỹ thuật
     context:
       max_files: 4
       always_read:
@@ -85,7 +85,7 @@ agents:
       - "Bash(ls:*)"
       - "Bash(tree:*)"
     skills:
-      - conventions # For context — helps ask better technical questions
+      - conventions # Để nắm bối cảnh — giúp đặt câu hỏi kỹ thuật chính xác hơn
     context:
       max_files: 5
       always_read:
@@ -183,7 +183,7 @@ agents:
       - conventions
     context:
       max_files: 5
-      note: "Only load skills relevant to the code being reviewed"
+      note: "Chỉ tải skill liên quan đến phần code đang review"
 
   # ── Tester ─────────────────────────────────────────────────────────────────
   test-agent:
@@ -209,7 +209,7 @@ agents:
       - conventions
     context:
       max_files: 5
-      note: "Focus on the relevant stack only"
+      note: "Chỉ tập trung vào stack liên quan"
 
   # ── QA ─────────────────────────────────────────────────────────────────────
   qa-agent:
@@ -248,8 +248,8 @@ agents:
       - WebSearch
       - WebFetch
     skills:
-      - backend-patterns # For context — know what stack is in use
-      - frontend-guide # For context
-      - language # For context
+      - backend-patterns # Để nắm bối cảnh — biết stack đang sử dụng
+      - frontend-guide # Để nắm bối cảnh
+      - language # Để nắm bối cảnh
     context:
       max_files: 7

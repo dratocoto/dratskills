@@ -3,48 +3,48 @@ paths:
   - "plugins/ai-dev-team/commands/*.md"
 ---
 
-# Command Conventions
+# Quy ước Command
 
-## File Format
+## Định dạng file
 
-Each command is a `.md` file in `plugins/ai-dev-team/commands/`:
+Mỗi command là một file `.md` trong `plugins/ai-dev-team/commands/`:
 
 ```yaml
 ---
-description: Short description of what the command does
+description: Mô tả ngắn về chức năng của command
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(ls:*), Bash(tree:*)
-argument-hint: <argument-description>
+argument-hint: <mô-tả-tham-số>
 ---
 ```
 
-## Required Frontmatter Fields
+## Các trường frontmatter bắt buộc
 
-- `description` — shown in command list when user types `/ai-dev-team:`
-- `allowed-tools` — tools the command is allowed to use (security boundary)
-- `argument-hint` — (optional) hint for command arguments
+- `description` — hiển thị trong danh sách command khi user gõ `/ai-dev-team:`
+- `allowed-tools` — danh sách tool command được phép dùng (ranh giới bảo mật)
+- `argument-hint` — (tuỳ chọn) gợi ý về tham số command
 
-## Command Body
+## Nội dung body Command
 
-After frontmatter, the body is the command's execution instructions. It should:
-- Use `${CLAUDE_PLUGIN_ROOT}` to reference plugin files (skills, templates, configs)
-- Reference `.ai-workspace/` for workspace files
-- Include clear step-by-step instructions
-- Specify which agent roles are involved
+Sau frontmatter, body là hướng dẫn thực thi của command. Nội dung nên:
+- Sử dụng `${CLAUDE_PLUGIN_ROOT}` để tham chiếu file plugin (skill, template, config)
+- Tham chiếu `.ai-workspace/` cho các file workspace
+- Bao gồm hướng dẫn từng bước rõ ràng
+- Chỉ rõ vai trò agent nào tham gia
 
-## Naming Convention
+## Quy ước đặt tên
 
-- File name becomes the command name: `new-feature.md` → `/ai-dev-team:new-feature`
-- Use kebab-case for file names
-- Keep names short and action-oriented
+- Tên file trở thành tên command: `new-feature.md` → `/ai-dev-team:new-feature`
+- Dùng kebab-case cho tên file
+- Giữ tên ngắn gọn và hướng hành động
 
-## Current Commands (7)
+## Danh sách Command hiện tại (7)
 
-| Command | File | Description |
-|---------|------|-------------|
-| start-project | start-project.md | Initialize workspace, detect stack |
-| new-feature | new-feature.md | Start feature (BA clarification → PM coordination) |
-| design | design.md | Create technical design |
-| implement | implement.md | Implement next task card |
-| test | test.md | Generate tests |
-| review | review.md | Run QA review |
-| status | status.md | Show project state |
+| Command | File | Mô tả |
+|---------|------|-------|
+| start-project | start-project.md | Khởi tạo workspace, phát hiện stack |
+| new-feature | new-feature.md | Bắt đầu feature (BA làm rõ → PM điều phối) |
+| design | design.md | Tạo thiết kế kỹ thuật |
+| implement | implement.md | Triển khai task card tiếp theo |
+| test | test.md | Tạo test |
+| review | review.md | Chạy review QA |
+| status | status.md | Hiển thị trạng thái dự án |

@@ -1,37 +1,37 @@
-# DISC-XXX: [Topic Title]
+# DISC-XXX: [Tiêu đề chủ đề]
 
 ## Status: OPEN / IN_PROGRESS / RESOLVED / ESCALATED
-## Opened by: [Agent Name]
+## Opened by: [Tên Agent]
 ## Participants: [Agent1, Agent2, ...]
 ## Related: FEAT-XXX / TASK-XXX
-## Date: [date]
+## Date: [ngày tạo]
 
 ---
 
-### [Agent Name] → [Target Agent(s)]
-**Context**: [Brief context — what were you doing when this came up?]
+### [Tên Agent] → [Agent đích]
+**Bối cảnh**: [Mô tả ngắn — bạn đang làm gì khi vấn đề này phát sinh?]
 
-**Issue/Question**:
-[Clear description of the problem, question, or concern]
+**Vấn đề/Câu hỏi**:
+[Mô tả rõ ràng vấn đề, câu hỏi, hoặc mối quan ngại]
 
-**Options I see**:
-1. [Option A] — [pros/cons]
-2. [Option B] — [pros/cons]
-3. [Option C] — [pros/cons]
+**Các phương án tôi thấy**:
+1. [Phương án A] — [ưu/nhược điểm]
+2. [Phương án B] — [ưu/nhược điểm]
+3. [Phương án C] — [ưu/nhược điểm]
 
-**My recommendation**: [Option X because...]
-
----
-
-### [Responding Agent] → [Original Agent]
-[Response with reasoning]
+**Đề xuất của tôi**: [Phương án X vì...]
 
 ---
 
-### Resolution
-**Decision**: [What was decided]
-**Rationale**: [Why]
-**Action items**:
-- [ ] [Agent]: [What to do]
-- [ ] [Agent]: [What to do]
-**Recorded in**: ADR-XXX / FEAT-XXX update / TASK-XXX update
+### [Agent phản hồi] → [Agent ban đầu]
+[Phản hồi kèm lý do]
+
+---
+
+### Kết luận
+**Quyết định**: [Điều đã được quyết định]
+**Lý do**: [Tại sao]
+**Hạng mục hành động**:
+- [ ] [Agent]: [Việc cần làm]
+- [ ] [Agent]: [Việc cần làm]
+**Ghi nhận tại**: ADR-XXX / FEAT-XXX update / TASK-XXX update

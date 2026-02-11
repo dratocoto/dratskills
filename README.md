@@ -1,124 +1,124 @@
 # AI Dev Team — Claude Code Plugin
 
-A multi-agent AI development team for [Claude Code](https://claude.com/claude-code). Nine specialized agents collaborate through a structured workflow to build software — from requirements to QA — with human oversight at every checkpoint.
+Plugin đội phát triển AI đa agent cho [Claude Code](https://claude.com/claude-code). Chín agent chuyên biệt phối hợp theo quy trình có cấu trúc để xây dựng phần mềm — từ phân tích yêu cầu đến kiểm thử QA — với sự giám sát của người dùng tại mọi điểm kiểm tra.
 
-**Agents:** PM, Business Analyst, Architect, Backend Dev, Frontend Dev, Reviewer, Tester, QA, Researcher
+**Các agent:** PM, Business Analyst, Architect, Backend Dev, Frontend Dev, Reviewer, Tester, QA, Researcher
 
-**Key features:**
-- Dynamic tech stack detection (FastAPI, Next.js, Django, etc.)
-- Parallel feature development with file conflict detection
-- Inter-agent discussions and peer code review
-- Human-in-the-loop checkpoints at every phase
+**Tính năng chính:**
+- Tự động phát hiện tech stack (FastAPI, Next.js, Django, v.v.)
+- Phát triển song song nhiều feature với phát hiện xung đột file
+- Thảo luận liên agent và đánh giá code ngang hàng
+- Điểm kiểm tra có sự tham gia của người dùng tại mỗi giai đoạn
 
-## Prerequisites
+## Yêu cầu hệ thống
 
-- [Claude Code](https://claude.com/claude-code) version **1.0.33** or later
-- Run `claude --version` to check
+- [Claude Code](https://claude.com/claude-code) phiên bản **1.0.33** trở lên
+- Chạy `claude --version` để kiểm tra
 
-## Installation
+## Cài đặt
 
-### Option A: Interactive UI
+### Cách A: Giao diện tương tác
 
-1. Open Claude Code in your terminal
-2. Type `/plugin` to open the plugin manager
-3. Go to the **Marketplaces** tab (press Tab to cycle)
-4. Add this marketplace: `dratocoto/ai-dev-team`
-5. Go to the **Discover** tab
-6. Find **ai-dev-team** and press Enter to install
-7. Choose your installation scope (User / Project / Local)
+1. Mở Claude Code trong terminal
+2. Gõ `/plugin` để mở trình quản lý plugin
+3. Chuyển sang tab **Marketplaces** (nhấn Tab để chuyển)
+4. Thêm marketplace: `dratocoto/ai-dev-team`
+5. Chuyển sang tab **Discover**
+6. Tìm **ai-dev-team** và nhấn Enter để cài đặt
+7. Chọn phạm vi cài đặt (User / Project / Local)
 
-### Option B: CLI Commands
+### Cách B: Lệnh CLI
 
 ```bash
-# Step 1: Add the marketplace
+# Bước 1: Thêm marketplace
 /plugin marketplace add dratocoto/ai-dev-team
 
-# Step 2: Install the plugin
+# Bước 2: Cài đặt plugin
 /plugin install ai-dev-team@dratskills
 ```
 
-To install at project scope (shared with collaborators):
+Cài đặt ở phạm vi project (chia sẻ với cộng tác viên):
 
 ```bash
 /plugin install ai-dev-team@dratskills --scope project
 ```
 
-### Verify Installation
+### Xác nhận cài đặt
 
-After installation, you should see the plugin commands available:
+Sau khi cài đặt, các lệnh của plugin sẽ khả dụng:
 
 ```bash
 /ai-dev-team:status
 ```
 
-### Local Development
+### Phát triển local
 
-To test the plugin without installing via marketplace:
+Để test plugin mà không cần cài qua marketplace:
 
 ```bash
 claude --plugin-dir ./plugins/ai-dev-team
 ```
 
-## Quick Start
+## Bắt đầu nhanh
 
 ```bash
-# 1. Initialize the AI workspace in your project
+# 1. Khởi tạo AI workspace trong dự án
 /ai-dev-team:start-project my-app
 
-# 2. Start a new feature
+# 2. Bắt đầu một feature mới
 /ai-dev-team:new-feature Add user authentication with JWT
 
-# 3. Follow the workflow: BA clarifies → you approve → Architect designs → you approve → Dev implements
+# 3. Theo quy trình: BA làm rõ → bạn duyệt → Architect thiết kế → bạn duyệt → Dev triển khai
 ```
 
-The team follows a 7-phase workflow: **Clarify → Requirement → Design → Implement → Review → Test → QA**. You approve at each checkpoint.
+Đội làm việc theo quy trình 7 giai đoạn: **Clarify → Requirement → Design → Implement → Review → Test → QA**. Bạn duyệt tại mỗi điểm kiểm tra.
 
-## Commands
+## Các lệnh
 
-| Command | Description |
-|---------|-------------|
-| `/ai-dev-team:start-project` | Initialize AI workspace, detect tech stack, configure skills |
-| `/ai-dev-team:new-feature` | Start a new feature (BA asks clarifying questions first) |
-| `/ai-dev-team:design` | Create technical design for the current feature |
-| `/ai-dev-team:implement` | Implement the next task card |
-| `/ai-dev-team:test` | Generate tests for implemented code |
-| `/ai-dev-team:review` | Run QA review on a feature |
-| `/ai-dev-team:status` | Show project state and all parallel features |
+| Lệnh | Mô tả |
+|-------|-------|
+| `/ai-dev-team:start-project` | Khởi tạo AI workspace, phát hiện tech stack, cấu hình skills |
+| `/ai-dev-team:new-feature` | Bắt đầu feature mới (BA đặt câu hỏi làm rõ trước) |
+| `/ai-dev-team:design` | Tạo thiết kế kỹ thuật cho feature hiện tại |
+| `/ai-dev-team:implement` | Triển khai task card tiếp theo |
+| `/ai-dev-team:test` | Sinh test cho code đã triển khai |
+| `/ai-dev-team:review` | Chạy đánh giá QA cho feature |
+| `/ai-dev-team:status` | Hiển thị trạng thái dự án và tất cả feature song song |
 
-## Plugin Structure
+## Cấu trúc plugin
 
 ```
 plugins/ai-dev-team/
 ├── .claude-plugin/plugin.json   # Plugin manifest
-├── agents/                      # 9 agent definitions (.md)
+├── agents/                      # 9 định nghĩa agent (.md)
 ├── commands/                    # 7 slash commands
-├── skills/                      # Skill packs (workflow-guide, conventions, etc.)
-├── hooks/                       # Session event handlers (hooks.json)
-└── team.config.yaml             # Central agent configuration
+├── skills/                      # Skill packs (workflow-guide, conventions, v.v.)
+├── hooks/                       # Trình xử lý sự kiện session (hooks.json)
+└── team.config.yaml             # Cấu hình agent tập trung
 ```
 
-## Marketplace Info
+## Thông tin marketplace
 
-- **Marketplace name:** `dratskills`
-- **Plugin name:** `ai-dev-team`
-- **Version:** 0.5.0
+- **Tên marketplace:** `dratskills`
+- **Tên plugin:** `ai-dev-team`
+- **Phiên bản:** 0.5.0
 
-## Managing the Plugin
+## Quản lý plugin
 
 ```bash
-# Update to latest version
+# Cập nhật lên phiên bản mới nhất
 /plugin update ai-dev-team@dratskills
 
-# Disable temporarily
+# Tắt tạm thời
 /plugin disable ai-dev-team@dratskills
 
-# Re-enable
+# Bật lại
 /plugin enable ai-dev-team@dratskills
 
-# Uninstall
+# Gỡ cài đặt
 /plugin uninstall ai-dev-team@dratskills
 ```
 
-## License
+## Giấy phép
 
 MIT

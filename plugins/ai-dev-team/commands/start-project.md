@@ -1,102 +1,102 @@
 ---
-description: Initialize AI workspace for a project
+description: Khởi tạo workspace AI cho dự án
 allowed-tools: Read, Write, Bash(mkdir:*), Bash(tree:*), Bash(ls:*), Bash(cat:*), Bash(grep:*)
 argument-hint: [project-name]
 ---
 
-Initialize the AI Dev Team workspace for the current project.
+Khởi tạo workspace AI Dev Team cho dự án hiện tại.
 
-Read the workflow guide at `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/SKILL.md`.
-Read the team config at `${CLAUDE_PLUGIN_ROOT}/team.config.yaml`.
+Đọc hướng dẫn workflow tại `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/SKILL.md`.
+Đọc cấu hình team tại `${CLAUDE_PLUGIN_ROOT}/team.config.yaml`.
 
-## Step 1: Create workspace directory structure
+## Bước 1: Tạo cấu trúc thư mục workspace
 
 ```
 .ai-workspace/
 ├── STATE.md
-├── stack.config.yaml     ← Skill resolution (auto-detected, overridable)
+├── stack.config.yaml     ← Ánh xạ skill (tự phát hiện, có thể ghi đè)
 ├── CONVENTIONS.md
 ├── CHECKLIST.md
-├── features/             ← Each feature gets its own subdirectory
-├── discussions/          ← Cross-feature discussions
-└── decisions/            ← Shared Architecture Decision Records
+├── features/             ← Mỗi feature có thư mục riêng
+├── discussions/          ← Thảo luận xuyên feature
+└── decisions/            ← Architecture Decision Records dùng chung
 ```
 
-Note: Feature-specific directories (`features/FEAT-XXX/`) are created by the `/new-feature` command.
+Lưu ý: Thư mục riêng cho từng feature (`features/FEAT-XXX/`) được tạo bởi lệnh `/new-feature`.
 
-## Step 2: Auto-detect tech stack
+## Bước 2: Tự động phát hiện tech stack
 
-Read `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/references/stack-profiles.md` for profile definitions.
+Đọc `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/references/stack-profiles.md` để tham khảo định nghĩa profile.
 
-Run these detection checks (in order):
+Thực hiện các bước kiểm tra sau (theo thứ tự):
 
-1. **Check Python backend**:
-   - If `pyproject.toml` exists → read it, look for `fastapi`, `django`, `flask` in dependencies
-   - Elif `requirements.txt` exists → grep for framework names
-   - Record: backend framework + `python312` as language
+1. **Kiểm tra Python backend**:
+   - Nếu `pyproject.toml` tồn tại → đọc file, tìm `fastapi`, `django`, `flask` trong dependencies
+   - Hoặc nếu `requirements.txt` tồn tại → grep tên framework
+   - Ghi nhận: backend framework + `python312` làm ngôn ngữ
 
-2. **Check Node.js frontend/backend**:
-   - If `package.json` exists → read it, look for `next`, `react`, `vue`, `angular`, `express`, `nestjs` in dependencies
-   - Record: frontend/backend framework
+2. **Kiểm tra Node.js frontend/backend**:
+   - Nếu `package.json` tồn tại → đọc file, tìm `next`, `react`, `vue`, `angular`, `express`, `nestjs` trong dependencies
+   - Ghi nhận: frontend/backend framework
 
-3. **Match to profile**:
+3. **Khớp với profile**:
    - `fastapi` + `next` → profile `fastapi-nextjs`
    - `fastapi` only → profile `fastapi-only`
    - `next` only → profile `nextjs-only`
    - `django` + `react` → profile `django-react`
-   - No match → ask human to choose
+   - Không khớp → hỏi người dùng chọn
 
-4. **Create `.ai-workspace/stack.config.yaml`** from the matched profile:
-   - Read template: `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/templates/stack-config-template.yaml`
-   - Fill in: detected stack info, skill mappings from profile
-   - Show the human: "Detected stack: [backend] + [frontend]. Skills configured."
+4. **Tạo `.ai-workspace/stack.config.yaml`** từ profile đã khớp:
+   - Đọc template: `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/templates/stack-config-template.yaml`
+   - Điền thông tin: stack đã phát hiện, ánh xạ skill từ profile
+   - Hiển thị cho người dùng: "Đã phát hiện stack: [backend] + [frontend]. Skill đã được cấu hình."
 
-## Step 3: Initialize project files
+## Bước 3: Khởi tạo các file dự án
 
-1. Initialize STATE.md from template at `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/templates/state-template.md`
-   - Set project name to `$1` or detect from package.json/pyproject.toml
-   - Set stack based on detected language
+1. Khởi tạo STATE.md từ template tại `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/templates/state-template.md`
+   - Đặt tên dự án là `$1` hoặc lấy từ package.json/pyproject.toml
+   - Đặt stack dựa trên ngôn ngữ đã phát hiện
 
-2. Initialize CONVENTIONS.md:
-   - Read stack.config.yaml to find the `conventions` skill
-   - Read `${CLAUDE_PLUGIN_ROOT}/skills/{conventions_skill}/SKILL.md`
-   - Copy the relevant convention sections based on detected stack
+2. Khởi tạo CONVENTIONS.md:
+   - Đọc stack.config.yaml để tìm skill `conventions`
+   - Đọc `${CLAUDE_PLUGIN_ROOT}/skills/{conventions_skill}/SKILL.md`
+   - Sao chép các phần convention phù hợp dựa trên stack đã phát hiện
 
-3. Create CHECKLIST.md from template at `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/templates/checklist-template.md`
+3. Tạo CHECKLIST.md từ template tại `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/templates/checklist-template.md`
 
-## Step 4: Report and welcome
+## Bước 4: Báo cáo và chào mừng
 
-1. Scan existing project structure with `tree -L 3 src/` (or `app/`, `pages/`) and report:
-   - Detected stack
-   - Existing modules
-   - Current file count
+1. Quét cấu trúc dự án hiện tại với `tree -L 3 src/` (hoặc `app/`, `pages/`) và báo cáo:
+   - Stack đã phát hiện
+   - Các module hiện có
+   - Số lượng file hiện tại
 
-2. Show stack.config.yaml skill mappings:
+2. Hiển thị ánh xạ skill trong stack.config.yaml:
    ```
-   Stack configured (stack.config.yaml):
+   Stack đã cấu hình (stack.config.yaml):
      backend-patterns → fastapi-patterns
      frontend-guide   → nextjs16-guide
      language          → python312
      conventions       → conventions
 
-   Agent skill assignments (team.config.yaml):
+   Skill được gán cho agent (team.config.yaml):
      Architect      → [backend-patterns, frontend-guide, conventions]
      Backend Dev    → [backend-patterns, language, conventions]
      Frontend Dev   → [frontend-guide, conventions]
      Reviewer       → [backend-patterns, frontend-guide, language, conventions]
 
-   To change: edit .ai-workspace/stack.config.yaml (skill resolution)
-              edit team.config.yaml (agent assignments)
+   Để thay đổi: sửa .ai-workspace/stack.config.yaml (ánh xạ skill)
+                 sửa team.config.yaml (gán skill cho agent)
    ```
 
-3. Display welcome message with available commands and workflow overview.
+3. Hiển thị thông điệp chào mừng kèm danh sách lệnh có sẵn và tổng quan workflow.
 
-If the project doesn't exist yet, ask the human which stack to use and offer to scaffold it.
+Nếu dự án chưa tồn tại, hỏi người dùng muốn sử dụng stack nào và đề xuất tạo khung dự án.
 
-## Re-detecting Stack
+## Phát hiện lại Stack
 
-If the project's dependencies change (e.g., migrated from React to Next.js), the human can re-run `/start-project` on an existing workspace. The command will:
-1. Re-detect the stack from current dependency files
-2. Update `.ai-workspace/stack.config.yaml` with new skill mappings
-3. Preserve existing STATE.md, features/, and all other workspace files
-4. Show a diff of what changed in the skill configuration
+Nếu dependencies của dự án thay đổi (ví dụ: chuyển từ React sang Next.js), người dùng có thể chạy lại `/start-project` trên workspace đã có. Lệnh sẽ:
+1. Phát hiện lại stack từ các file dependency hiện tại
+2. Cập nhật `.ai-workspace/stack.config.yaml` với ánh xạ skill mới
+3. Giữ nguyên STATE.md, features/, và tất cả file workspace khác
+4. Hiển thị diff của những thay đổi trong cấu hình skill

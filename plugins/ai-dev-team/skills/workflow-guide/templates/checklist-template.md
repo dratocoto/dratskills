@@ -1,37 +1,37 @@
-# Pre-Commit Quality Checklist
+# Checklist chất lượng trước khi commit
 
-Use this checklist before marking any task as DONE. Dev agents self-check; Reviewer verifies.
+Sử dụng checklist này trước khi đánh dấu bất kỳ task nào là DONE. Agent Dev tự kiểm tra; Reviewer xác minh lại.
 
-## Code Quality
-- [ ] All functions have type hints (params + return)
-- [ ] No `# TODO` or `# FIXME` left in production code
-- [ ] No hardcoded secrets, URLs, or magic numbers
-- [ ] Error handling: domain exceptions, not bare `except`
-- [ ] Follows naming conventions (snake_case Python, camelCase TS)
+## Chất lượng code
+- [ ] Tất cả functions đều có type hints (params + return)
+- [ ] Không còn `# TODO` hoặc `# FIXME` trong production code
+- [ ] Không có secrets, URLs, hoặc magic numbers bị hardcode
+- [ ] Xử lý lỗi: domain exceptions, không dùng bare `except`
+- [ ] Tuân thủ quy ước đặt tên (snake_case Python, camelCase TS)
 
-## Async & I/O (if applicable)
-- [ ] All DB operations use `async def`
-- [ ] No blocking I/O in async functions
-- [ ] Connection/session cleanup handled (context managers)
+## Async & I/O (nếu áp dụng)
+- [ ] Tất cả thao tác DB sử dụng `async def`
+- [ ] Không có blocking I/O trong async functions
+- [ ] Dọn dẹp connection/session đúng cách (context managers)
 
 ## Validation & Security
-- [ ] All API inputs validated via Pydantic schemas (or equivalent)
-- [ ] No SQL injection vectors (parameterized queries only)
-- [ ] No sensitive data in logs or error messages
-- [ ] Authentication/authorization checks where required
+- [ ] Tất cả API inputs được validate qua Pydantic schemas (hoặc tương đương)
+- [ ] Không có nguy cơ SQL injection (chỉ dùng parameterized queries)
+- [ ] Không có dữ liệu nhạy cảm trong logs hoặc thông báo lỗi
+- [ ] Kiểm tra authentication/authorization ở những nơi cần thiết
 
 ## Logging & Observability
-- [ ] Structured logging used (structlog / pino / etc.)
-- [ ] No `print()` statements for logging
-- [ ] Key operations logged (create, update, delete, errors)
+- [ ] Sử dụng structured logging (structlog / pino / v.v.)
+- [ ] Không dùng `print()` để logging
+- [ ] Các thao tác quan trọng được log (create, update, delete, errors)
 
 ## Patterns & Conventions
-- [ ] Follows existing project patterns (check CONVENTIONS.md)
-- [ ] Follows framework-specific patterns (check resolved skill)
-- [ ] File naming matches project convention
-- [ ] Import ordering follows convention
+- [ ] Tuân thủ các pattern hiện có trong dự án (kiểm tra CONVENTIONS.md)
+- [ ] Tuân thủ các pattern đặc thù framework (kiểm tra resolved skill)
+- [ ] Đặt tên file theo quy ước dự án
+- [ ] Thứ tự import theo quy ước
 
-## Testing Readiness
-- [ ] Code is testable (dependencies injectable)
-- [ ] No global state that prevents isolated testing
-- [ ] Edge cases considered (empty, null, boundary values)
+## Sẵn sàng kiểm thử
+- [ ] Code có thể kiểm thử được (dependencies injectable)
+- [ ] Không có global state gây cản trở isolated testing
+- [ ] Các edge cases đã được xem xét (empty, null, boundary values)

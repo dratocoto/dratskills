@@ -1,52 +1,52 @@
-# FEAT-XXX: [Feature Name]
+# FEAT-XXX: [Tên tính năng]
 
 ## Status: DRAFT
 ## Scope: S / M / L / XL
 ## Priority: HIGH / MEDIUM / LOW
-## Requested by: [human]
-## Date: [date]
+## Requested by: [người yêu cầu]
+## Date: [ngày tạo]
 
-## Problem Statement
-[1-2 sentences: what problem does this solve for the user?]
+## Mô tả vấn đề
+[1-2 câu: tính năng này giải quyết vấn đề gì cho người dùng?]
 
 ## User Stories
-1. As a [role], I want to [action] so that [benefit]
-2. As a [role], I want to [action] so that [benefit]
+1. Là một [vai trò], tôi muốn [hành động] để [lợi ích]
+2. Là một [vai trò], tôi muốn [hành động] để [lợi ích]
 
-## Acceptance Criteria
-- [ ] AC-1: [specific, testable, measurable]
-- [ ] AC-2: [specific, testable, measurable]
-- [ ] AC-3: [specific, testable, measurable]
+## Tiêu chí chấp nhận
+- [ ] AC-1: [cụ thể, kiểm thử được, đo lường được]
+- [ ] AC-2: [cụ thể, kiểm thử được, đo lường được]
+- [ ] AC-3: [cụ thể, kiểm thử được, đo lường được]
 
-## Technical Constraints
-- [constraint 1]
-- [constraint 2]
+## Ràng buộc kỹ thuật
+- [ràng buộc 1]
+- [ràng buộc 2]
 
-## Assumptions
-- [Assumption 1: what we're assuming to be true without explicit confirmation]
-- [Assumption 2: e.g., "Users already have verified email accounts"]
+## Giả định
+- [Giả định 1: điều chúng ta mặc định là đúng mà chưa có xác nhận rõ ràng]
+- [Giả định 2: ví dụ, "Người dùng đã có tài khoản email đã xác minh"]
 
-## Out of Scope
-- [what this does NOT include]
+## Ngoài phạm vi
+- [những gì KHÔNG nằm trong tính năng này]
 
-## Dependencies
-- Depends on: [features/modules that must exist]
-- Blocks: [features waiting on this]
+## Phụ thuộc
+- Phụ thuộc vào: [các tính năng/module cần có trước]
+- Chặn: [các tính năng đang chờ tính năng này]
 
-## Clarification Log
+## Nhật ký làm rõ
 
-Questions asked and answers received during Phase 0 (Idea Clarification):
+Các câu hỏi đã đặt và câu trả lời nhận được trong Phase 0 (Idea Clarification):
 
-| # | Category | Question | Human's Answer |
-|---|----------|----------|---------------|
-| 1 | WHO | [question] | [answer] |
-| 2 | WHAT | [question] | [answer] |
-| 3 | BOUNDARIES | [question] | [answer] |
-| 4 | INTEGRATION | [question] | [answer] |
+| # | Danh mục | Câu hỏi | Trả lời của người dùng |
+|---|----------|----------|------------------------|
+| 1 | WHO | [câu hỏi] | [câu trả lời] |
+| 2 | WHAT | [câu hỏi] | [câu trả lời] |
+| 3 | BOUNDARIES | [câu hỏi] | [câu trả lời] |
+| 4 | INTEGRATION | [câu hỏi] | [câu trả lời] |
 
-## Key Decisions
-- [Decision 1 made during clarification + reasoning]
-- [Decision 2 made during clarification + reasoning]
+## Quyết định chính
+- [Quyết định 1 được đưa ra trong quá trình làm rõ + lý do]
+- [Quyết định 2 được đưa ra trong quá trình làm rõ + lý do]
 
-## Notes from Human
-[Any additional context from the human]
+## Ghi chú từ người dùng
+[Bất kỳ bối cảnh bổ sung nào từ người dùng]

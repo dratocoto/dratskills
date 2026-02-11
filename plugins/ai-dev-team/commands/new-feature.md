@@ -1,18 +1,18 @@
 ---
-description: Start a new feature (triggers BA for clarification → PM for coordination)
+description: Bắt đầu feature mới (kích hoạt BA làm rõ yêu cầu → PM điều phối)
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(ls:*), Bash(tree:*), Bash(mkdir:*)
 argument-hint: <feature-description>
 ---
 
-Start the idea clarification and requirement analysis phase for a new feature.
+Bắt đầu giai đoạn làm rõ ý tưởng và phân tích yêu cầu cho một feature mới.
 
-Read the workflow guide: `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/SKILL.md`
-Read the requirement template: `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/templates/requirement-template.md`
+Đọc hướng dẫn workflow: `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/SKILL.md`
+Đọc template yêu cầu: `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/templates/requirement-template.md`
 
-## Step 1: PM initializes
+## Bước 1: PM khởi tạo
 
-1. Read `.ai-workspace/STATE.md` to get the next FEAT-XXX number
-2. Create the feature-scoped directory structure:
+1. Đọc `.ai-workspace/STATE.md` để lấy số FEAT-XXX tiếp theo
+2. Tạo cấu trúc thư mục cho feature:
    ```
    .ai-workspace/features/FEAT-XXX/
    ├── tasks/
@@ -20,63 +20,63 @@ Read the requirement template: `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/temp
    ├── discussions/
    └── handoffs/
    ```
-3. Log the feature request in STATE.md Parallel Features table as status: CLARIFY
-4. Delegate to BA Agent scoped to `features/FEAT-XXX/`
+3. Ghi nhận feature request vào bảng Parallel Features trong STATE.md với trạng thái: CLARIFY
+4. Ủy quyền cho BA Agent trong phạm vi `features/FEAT-XXX/`
 
-## Step 2: BA runs Phase 0 — Idea Clarification (MANDATORY)
+## Bước 2: BA thực hiện Phase 0 — Làm rõ ý tưởng (BẮT BUỘC)
 
-1. Scan existing codebase structure: `tree -L 2 src/` (if exists) to understand current state
+1. Quét cấu trúc codebase hiện tại: `tree -L 2 src/` (nếu có) để nắm trạng thái hiện tại
 
-2. Analyze the human's feature description: `$ARGUMENTS`
-   - Identify what is CLEAR from the description
-   - Identify what is VAGUE or AMBIGUOUS
-   - Identify what is MISSING (not mentioned at all)
+2. Phân tích mô tả feature từ người dùng: `$ARGUMENTS`
+   - Xác định những gì ĐÃ RÕ RÀNG trong mô tả
+   - Xác định những gì MƠ HỒ hoặc KHÔNG RÕ RÀNG
+   - Xác định những gì THIẾU (chưa được đề cập)
 
-3. Generate **3-7 clarifying questions** using BA's QA Question Framework:
-   - WHO: Who uses this? What roles/permissions?
-   - WHAT: Core behavior, data involved, success/error paths?
-   - BOUNDARIES: What's out of scope? Limits? Edge cases?
-   - INTEGRATION: Connects to existing features? External APIs?
-   - UX/BUSINESS: UI preferences? Sorting? Analytics?
+3. Tạo **3-7 câu hỏi làm rõ** sử dụng QA Question Framework của BA:
+   - ĐỐI TƯỢNG: Ai sử dụng tính năng này? Vai trò/quyền hạn gì?
+   - HÀNH VI: Hành vi chính, dữ liệu liên quan, luồng thành công/lỗi?
+   - PHẠM VI: Giới hạn? Ranh giới? Trường hợp biên?
+   - TÍCH HỢP: Kết nối với feature hiện có? API bên ngoài?
+   - UX/NGHIỆP VỤ: Giao diện mong muốn? Sắp xếp? Phân tích dữ liệu?
 
-   Rules:
-   - Lead with the most impactful questions
-   - Provide suggested options when possible (e.g., "Auth: JWT or session-based?")
-   - Mark optional questions as "Nice to know (optional):"
-   - If the feature is very clear → only ask 2-3 essential questions
-   - Do NOT overwhelm with 10+ questions
+   Quy tắc:
+   - Ưu tiên câu hỏi có tác động lớn nhất lên đầu
+   - Cung cấp gợi ý lựa chọn khi có thể (ví dụ: "Xác thực: JWT hay session-based?")
+   - Đánh dấu câu hỏi không bắt buộc: "Bổ sung thêm (không bắt buộc):"
+   - Nếu feature đã rất rõ ràng → chỉ hỏi 2-3 câu thiết yếu
+   - KHÔNG hỏi quá nhiều (10+ câu hỏi)
 
-4. Present questions to the human:
-   - "Before I write the requirement, I have a few questions to make sure I capture your idea correctly:"
-   - [Numbered question list]
-   - Wait for human answers
+4. Trình bày câu hỏi cho người dùng:
+   - "Trước khi viết yêu cầu, tôi có một vài câu hỏi để đảm bảo nắm đúng ý tưởng của bạn:"
+   - [Danh sách câu hỏi đánh số]
+   - Chờ người dùng trả lời
 
-5. If answers reveal NEW ambiguities → ask 1 round of follow-up (max 3 questions)
+5. Nếu câu trả lời phát sinh thêm điểm chưa rõ → hỏi thêm 1 vòng bổ sung (tối đa 3 câu hỏi)
 
-## Step 3: BA runs Phase 1 — Write Requirement
+## Bước 3: BA thực hiện Phase 1 — Viết yêu cầu
 
-6. After clarification, create `.ai-workspace/features/FEAT-XXX/requirement.md` with:
-   - Problem statement (informed by clarification)
-   - User stories derived from the description AND clarification answers
-   - Acceptance criteria (specific, testable — incorporating edge cases discussed)
-   - Scope estimate (S/M/L/XL based on complexity)
-   - Technical constraints (based on existing codebase)
-   - Dependencies on existing features
-   - **Clarification Log** — full Q&A table for traceability
-   - **Key Decisions** — decisions made during clarification
-   - **Assumptions** — anything still unclear
+6. Sau khi làm rõ, tạo `.ai-workspace/features/FEAT-XXX/requirement.md` bao gồm:
+   - Mô tả vấn đề (dựa trên kết quả làm rõ)
+   - User stories được rút ra từ mô tả VÀ câu trả lời khi làm rõ
+   - Tiêu chí chấp nhận (cụ thể, kiểm tra được — bao gồm các trường hợp biên đã thảo luận)
+   - Ước lượng phạm vi (S/M/L/XL dựa trên độ phức tạp)
+   - Ràng buộc kỹ thuật (dựa trên codebase hiện tại)
+   - Phụ thuộc vào các feature hiện có
+   - **Nhật ký làm rõ** — bảng Q&A đầy đủ để truy vết
+   - **Quyết định chính** — các quyết định được đưa ra trong quá trình làm rõ
+   - **Giả định** — những điểm vẫn chưa rõ
 
-## Step 4: PM presents for approval
+## Bước 4: PM trình duyệt
 
-7. PM updates `.ai-workspace/STATE.md`:
-   - Set feature status to REQ (requirement phase)
-   - Set current feature
+7. PM cập nhật `.ai-workspace/STATE.md`:
+   - Đặt trạng thái feature thành REQ (giai đoạn yêu cầu)
+   - Đặt feature hiện tại
 
-8. PM presents the requirement to the human:
-   - Show the structured requirement
-   - Highlight key decisions from clarification
-   - Ask: "Does this capture what you want? Approve / Modify / Reject"
-   - Wait for human response
+8. PM trình bày yêu cầu cho người dùng:
+   - Hiển thị yêu cầu có cấu trúc
+   - Nêu bật các quyết định chính từ quá trình làm rõ
+   - Hỏi: "Yêu cầu này đã nắm đúng ý bạn chưa? Phê duyệt / Chỉnh sửa / Từ chối"
+   - Chờ người dùng phản hồi
 
-If approved → PM writes handoff to `features/FEAT-XXX/handoffs/` for architect, updates STATE.md to DESIGN phase.
-If rejected → PM sends back to BA with feedback to revise (BA rewrites `features/FEAT-XXX/requirement.md`).
+Nếu được phê duyệt → PM viết handoff vào `features/FEAT-XXX/handoffs/` cho architect, cập nhật STATE.md sang phase DESIGN.
+Nếu bị từ chối → PM gửi lại cho BA kèm phản hồi để chỉnh sửa (BA viết lại `features/FEAT-XXX/requirement.md`).

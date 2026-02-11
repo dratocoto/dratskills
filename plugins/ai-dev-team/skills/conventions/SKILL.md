@@ -1,127 +1,127 @@
 ---
 name: conventions
 description: >
-  This skill should be used when the user asks about "coding conventions",
-  "code standards", "naming rules", "project rules", or any agent needs
-  to check the coding standards before writing code. This is the compact
-  ruleset that all agents reference.
+  Skill này được sử dụng khi người dùng hỏi về "quy ước viết code",
+  "chuẩn code", "quy tắc đặt tên", "quy tắc dự án", hoặc khi bất kỳ
+  agent nào cần kiểm tra các chuẩn viết code trước khi code. Đây là bộ
+  quy tắc gọn nhẹ mà tất cả agent tham chiếu.
 version: 0.1.0
 ---
 
-# Project Conventions
+# Quy ước dự án
 
-Compact, scannable rules for all AI agents. Use checklist format for minimal context usage.
+Bộ quy tắc gọn nhẹ, dễ tra cứu cho tất cả AI agent. Sử dụng định dạng checklist để tối ưu context.
 
-## Python / FastAPI Conventions
+## Quy ước Python / FastAPI
 
-### Naming
-- [ ] `snake_case` — functions, variables, modules, files
-- [ ] `PascalCase` — classes, Pydantic models, exceptions
-- [ ] `SCREAMING_SNAKE` — constants
-- [ ] `_prefixed` — private/internal
+### Đặt tên
+- [ ] `snake_case` — hàm, biến, module, file
+- [ ] `PascalCase` — class, Pydantic model, exception
+- [ ] `SCREAMING_SNAKE` — hằng số
+- [ ] `_prefixed` — private/nội bộ
 
-### Models (SQLAlchemy)
-- [ ] Inherit from `Base` (declarative base)
-- [ ] `UUID` primary key (`id = Column(UUID, primary_key=True, default=uuid4)`)
-- [ ] Include `created_at`, `updated_at` columns
-- [ ] Table name = lowercase plural (`__tablename__ = "users"`)
-- [ ] Type hints on all columns
-- [ ] Relationships use `selectin` lazy loading
+### Model (SQLAlchemy)
+- [ ] Kế thừa từ `Base` (declarative base)
+- [ ] Khoá chính `UUID` (`id = Column(UUID, primary_key=True, default=uuid4)`)
+- [ ] Bao gồm cột `created_at`, `updated_at`
+- [ ] Tên bảng = số nhiều viết thường (`__tablename__ = "users"`)
+- [ ] Type hint cho tất cả cột
+- [ ] Relationship sử dụng `selectin` lazy loading
 
-### Schemas (Pydantic)
-- [ ] Inherit from `BaseModel` with `model_config = ConfigDict(from_attributes=True)`
-- [ ] Separate: `Create*`, `Update*`, `*Response` schemas
-- [ ] `Update*` schema: all fields `Optional` (partial update)
-- [ ] Field validation with `Field()` constraints
-- [ ] Use `UUID` not `str` for ID fields
+### Schema (Pydantic)
+- [ ] Kế thừa từ `BaseModel` với `model_config = ConfigDict(from_attributes=True)`
+- [ ] Tách riêng: schema `Create*`, `Update*`, `*Response`
+- [ ] Schema `Update*`: tất cả field là `Optional` (cập nhật một phần)
+- [ ] Validate field với ràng buộc `Field()`
+- [ ] Sử dụng `UUID` thay vì `str` cho trường ID
 
 ### Repository
-- [ ] Inherit from `BaseRepository[ModelT]`
-- [ ] ALL methods `async def`
-- [ ] Accept `AsyncSession` via DI
-- [ ] Return domain models, not dicts
-- [ ] Use `select()` builder, never raw SQL strings
-- [ ] Include pagination: `offset` + `limit` params
+- [ ] Kế thừa từ `BaseRepository[ModelT]`
+- [ ] TẤT CẢ method là `async def`
+- [ ] Nhận `AsyncSession` qua DI
+- [ ] Trả về domain model, không trả dict
+- [ ] Sử dụng `select()` builder, không dùng raw SQL string
+- [ ] Bao gồm phân trang: tham số `offset` + `limit`
 
 ### Service
-- [ ] Accept repository via `__init__`
-- [ ] ALL methods `async def`
-- [ ] Raise domain exceptions (`NotFoundError`, `ConflictError`)
-- [ ] No HTTP/request concerns (no `Request`, no `Response`)
-- [ ] Validate business rules before persistence
-- [ ] Log significant actions with `structlog`
+- [ ] Nhận repository qua `__init__`
+- [ ] TẤT CẢ method là `async def`
+- [ ] Raise domain exception (`NotFoundError`, `ConflictError`)
+- [ ] Không chứa logic HTTP/request (không dùng `Request`, `Response`)
+- [ ] Validate business rule trước khi lưu dữ liệu
+- [ ] Log các hành động quan trọng với `structlog`
 
-### Routes
-- [ ] Use `APIRouter` with `prefix` and `tags`
-- [ ] Accept service via `Depends()`
-- [ ] Use Pydantic schemas for request/response types
-- [ ] Return Pydantic models (auto-serialized)
-- [ ] Define `response_model` on every endpoint
-- [ ] Include `status_code` on create (201), delete (204)
+### Route
+- [ ] Sử dụng `APIRouter` với `prefix` và `tags`
+- [ ] Nhận service qua `Depends()`
+- [ ] Sử dụng Pydantic schema cho kiểu request/response
+- [ ] Trả về Pydantic model (tự động serialize)
+- [ ] Khai báo `response_model` cho mọi endpoint
+- [ ] Bao gồm `status_code` cho create (201), delete (204)
 
-### Error Handling
-- [ ] Custom exception hierarchy from `AppError`
-- [ ] Register `exception_handler` for `AppError` in main.py
-- [ ] Never expose stack traces in API responses
-- [ ] Log full error context with `logger.error()`
-- [ ] Wrap external errors in domain exceptions
+### Xử lý lỗi
+- [ ] Hệ thống exception tuỳ chỉnh kế thừa từ `AppError`
+- [ ] Đăng ký `exception_handler` cho `AppError` trong main.py
+- [ ] Không bao giờ trả stack trace trong API response
+- [ ] Log đầy đủ context lỗi với `logger.error()`
+- [ ] Bọc lỗi từ bên ngoài trong domain exception
 
 ### Async
-- [ ] `async def` for ALL I/O operations
-- [ ] Use `asyncpg` driver (not `psycopg2`)
-- [ ] Use `httpx.AsyncClient` (not `requests`)
-- [ ] Use `aiofiles` for file I/O
-- [ ] Use `asyncio.gather()` for concurrent operations
-- [ ] NEVER block the event loop with sync calls
+- [ ] `async def` cho TẤT CẢ thao tác I/O
+- [ ] Sử dụng driver `asyncpg` (không dùng `psycopg2`)
+- [ ] Sử dụng `httpx.AsyncClient` (không dùng `requests`)
+- [ ] Sử dụng `aiofiles` cho file I/O
+- [ ] Sử dụng `asyncio.gather()` cho các thao tác đồng thời
+- [ ] KHÔNG BAO GIỜ block event loop bằng lệnh gọi đồng bộ
 
 ### Logging
-- [ ] Use `structlog` (not `logging` or `print`)
-- [ ] Structured key-value format
-- [ ] Levels: ERROR (broken), WARN (degraded), INFO (events), DEBUG (dev)
-- [ ] NEVER log passwords, tokens, PII
-- [ ] Include correlation/request ID
+- [ ] Sử dụng `structlog` (không dùng `logging` hay `print`)
+- [ ] Định dạng key-value có cấu trúc
+- [ ] Cấp độ: ERROR (hỏng), WARN (suy giảm), INFO (sự kiện), DEBUG (phát triển)
+- [ ] KHÔNG BAO GIỜ log mật khẩu, token, PII
+- [ ] Bao gồm correlation/request ID
 
-## TypeScript / Next.js Conventions
+## Quy ước TypeScript / Next.js
 
-### Naming
-- [ ] `camelCase` — variables, functions
-- [ ] `PascalCase` — components, types, interfaces
-- [ ] `SCREAMING_SNAKE` — constants
-- [ ] `kebab-case` — file names
+### Đặt tên
+- [ ] `camelCase` — biến, hàm
+- [ ] `PascalCase` — component, type, interface
+- [ ] `SCREAMING_SNAKE` — hằng số
+- [ ] `kebab-case` — tên file
 
-### Components
-- [ ] Default to Server Components (no directive)
-- [ ] Add `"use client"` ONLY for interactivity
-- [ ] Props interface defined above component
-- [ ] Use `"use cache"` for data-heavy server components
+### Component
+- [ ] Mặc định là Server Components (không cần directive)
+- [ ] Thêm `"use client"` CHỈ KHI cần tương tác
+- [ ] Khai báo Props interface phía trên component
+- [ ] Sử dụng `"use cache"` cho server component nặng dữ liệu
 
-### Types
-- [ ] `strict: true` in tsconfig
-- [ ] Explicit return types on exported functions
-- [ ] `interface` for object shapes, `type` for unions/intersections
-- [ ] `unknown` over `any`; narrow with type guards
+### Type
+- [ ] `strict: true` trong tsconfig
+- [ ] Khai báo kiểu trả về rõ ràng cho hàm exported
+- [ ] `interface` cho object shape, `type` cho union/intersection
+- [ ] `unknown` thay vì `any`; thu hẹp kiểu với type guard
 
-### State & Data
-- [ ] Server Components: direct async data fetching
-- [ ] Client Components: SWR or React Query
-- [ ] Forms: Server Actions with `"use server"`
-- [ ] URL state: `useSearchParams` for filterable views
+### State & Dữ liệu
+- [ ] Server Components: fetch dữ liệu async trực tiếp
+- [ ] Client Components: SWR hoặc React Query
+- [ ] Form: Server Actions với `"use server"`
+- [ ] State trên URL: `useSearchParams` cho view có bộ lọc
 
-## Testing Conventions
+## Quy ước Testing
 
-### All Languages
-- [ ] Test file naming: `test_<module>.py` / `*.test.ts`
-- [ ] Arrange-Act-Assert pattern
-- [ ] Descriptive names: `test_<unit>_<scenario>_<expected>`
-- [ ] Mock external dependencies only
-- [ ] Both positive AND negative test cases
-- [ ] Test error messages and types
-- [ ] ≥80% coverage on business logic
-- [ ] Tests are independent and idempotent
+### Tất cả ngôn ngữ
+- [ ] Đặt tên file test: `test_<module>.py` / `*.test.ts`
+- [ ] Pattern Arrange-Act-Assert
+- [ ] Tên mô tả rõ ràng: `test_<unit>_<scenario>_<expected>`
+- [ ] Chỉ mock dependency bên ngoài
+- [ ] Cả test case positive VÀ negative
+- [ ] Test thông báo lỗi và kiểu lỗi
+- [ ] Coverage >= 80% cho business logic
+- [ ] Các test độc lập và idempotent
 
-## Git Conventions
+## Quy ước Git
 
 - [ ] Branch: `feature/FEAT-XXX-description`, `fix/BUG-XXX-description`
 - [ ] Commit: Conventional Commits (`feat:`, `fix:`, `refactor:`, `test:`, `docs:`)
-- [ ] PR: link to feature requirement doc
-- [ ] Never commit `.env`, secrets, or large binaries
+- [ ] PR: link tới tài liệu requirement của feature
+- [ ] Không bao giờ commit `.env`, secret, hoặc file binary lớn

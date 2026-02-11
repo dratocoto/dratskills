@@ -6,7 +6,7 @@
       "hooks": [
         {
           "type": "command",
-          "command": "if [ -f .ai-workspace/STATE.md ]; then cat .ai-workspace/STATE.md; else echo '## AI Dev Team Ready\n\nNo workspace initialized. Run /start-project to begin.\n\nCommands: /start-project, /new-feature, /design, /implement, /test, /review, /status'; fi",
+          "command": "if [ -f .ai-workspace/STATE.md ]; then cat .ai-workspace/STATE.md; else echo '## AI Dev Team Sẵn Sàng\n\nChưa khởi tạo workspace. Chạy /start-project để bắt đầu.\n\nCác lệnh: /start-project, /new-feature, /design, /implement, /test, /review, /status'; fi",
           "timeout": 5
         }
       ]
@@ -18,7 +18,7 @@
       "hooks": [
         {
           "type": "prompt",
-          "prompt": "CHECK THE FILE PATH FIRST:\n- If the file path contains '.ai-workspace/' → SKIP all checks, ALLOW immediately.\n- If the file is a .md, .yaml, .yml, or .json config file → SKIP, ALLOW immediately.\n- ONLY check source code files (.py, .ts, .tsx, .js, .jsx, etc.)\n\nFor source code files (.py), verify these production standards:\n1. TYPE HINTS: All function signatures must have type annotations (params + return)\n2. ASYNC: All I/O operations (DB, HTTP, file) use async def\n3. ERRORS: Domain exceptions used (not bare except/Exception)\n4. LOGGING: structlog used (not print/logging)\n5. VALIDATION: Pydantic schemas for all API input\n6. SECRETS: No hardcoded credentials, tokens, or connection strings\n7. NAMING: snake_case for functions/variables, PascalCase for classes\n\nFor source code files (.ts, .tsx, .js, .jsx), verify:\n1. TYPE SAFETY: No 'any' type; use 'unknown' and narrow with type guards\n2. COMPONENTS: Server Components by default; 'use client' only for interactivity\n3. NAMING: camelCase for functions/variables, PascalCase for components/types\n4. SECRETS: No hardcoded credentials or API keys\n\nIf any standard is violated, SUGGEST the corrected version.\nOnly BLOCK if there's a critical security issue (hardcoded secret, SQL injection, XSS).",
+          "prompt": "KIỂM TRA ĐƯỜNG DẪN FILE TRƯỚC:\n- Nếu đường dẫn chứa '.ai-workspace/' → BỎ QUA mọi kiểm tra, CHO PHÉP ngay.\n- Nếu file là .md, .yaml, .yml, hoặc .json config → BỎ QUA, CHO PHÉP ngay.\n- CHỈ kiểm tra các file source code (.py, .ts, .tsx, .js, .jsx, v.v.)\n\nVới file source code (.py), xác minh các tiêu chuẩn production:\n1. TYPE HINTS: Tất cả function signature phải có type annotation (tham số + giá trị trả về)\n2. ASYNC: Mọi thao tác I/O (DB, HTTP, file) sử dụng async def\n3. XỬ LÝ LỖI: Sử dụng domain exception (không dùng bare except/Exception)\n4. LOGGING: Sử dụng structlog (không dùng print/logging)\n5. VALIDATION: Dùng Pydantic schema cho mọi API input\n6. BẢO MẬT: Không hardcode credentials, tokens, hoặc connection strings\n7. QUY TẮC ĐẶT TÊN: snake_case cho functions/variables, PascalCase cho classes\n\nVới file source code (.ts, .tsx, .js, .jsx), xác minh:\n1. AN TOÀN KIỂU DỮ LIỆU: Không dùng kiểu 'any'; sử dụng 'unknown' và thu hẹp bằng type guards\n2. COMPONENTS: Mặc định dùng Server Components; chỉ thêm 'use client' khi cần tương tác\n3. QUY TẮC ĐẶT TÊN: camelCase cho functions/variables, PascalCase cho components/types\n4. BẢO MẬT: Không hardcode credentials hoặc API keys\n\nNếu vi phạm bất kỳ tiêu chuẩn nào, GỢI Ý phiên bản đã sửa.\nChỉ CHẶN khi có vấn đề bảo mật nghiêm trọng (hardcoded secret, SQL injection, XSS).",
           "timeout": 15
         }
       ]

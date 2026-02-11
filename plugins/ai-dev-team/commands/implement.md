@@ -1,38 +1,38 @@
 ---
-description: Implement the next task card
+description: Triển khai task card tiếp theo
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash(python3:*), Bash(ruff:*), Bash(mypy:*), Bash(npm:*), Bash(npx:*), Bash(uv:*), Bash(node:*), Bash(ls:*), Bash(tree:*)
 argument-hint: [task-id]
 ---
 
-Implement a specific task from the current feature.
+Triển khai một task cụ thể từ feature hiện tại.
 
-Read the workflow guide: `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/SKILL.md`
+Đọc hướng dẫn workflow: `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/SKILL.md`
 
-1. Read `.ai-workspace/STATE.md` to find the target feature and current task (or use `$1` as FEAT-XXX/TASK-XXX)
+1. Đọc `.ai-workspace/STATE.md` để tìm feature mục tiêu và task hiện tại (hoặc dùng `$1` là FEAT-XXX/TASK-XXX)
 
-2. Read `${CLAUDE_PLUGIN_ROOT}/team.config.yaml` and `.ai-workspace/stack.config.yaml` to determine tech stack
+2. Đọc `${CLAUDE_PLUGIN_ROOT}/team.config.yaml` và `.ai-workspace/stack.config.yaml` để xác định tech stack
 
-3. Read the task card: `.ai-workspace/features/FEAT-XXX/tasks/TASK-XXX.md`
+3. Đọc task card: `.ai-workspace/features/FEAT-XXX/tasks/TASK-XXX.md`
 
-4. Check the task label:
-   - `backend` → route to **Backend Dev** agent
-   - `frontend` → route to **Frontend Dev** agent
-   - `full-stack` → Backend Dev first, then Frontend Dev
+4. Kiểm tra nhãn task:
+   - `backend` → chuyển cho **Backend Dev** agent
+   - `frontend` → chuyển cho **Frontend Dev** agent
+   - `full-stack` → Backend Dev trước, sau đó Frontend Dev
 
-5. The Dev agent will:
-   a. Load skills from team.config.yaml + stack.config.yaml
-   b. Read ONLY the files listed in the task card's "Files to Read" section
-   c. Write code following conventions and framework patterns
-   d. Self-validate (linter, type-check)
-   e. Update task card status to DONE
-   f. Write `.ai-workspace/features/FEAT-XXX/handoffs/HANDOFF-latest.md`
+5. Dev agent sẽ:
+   a. Tải skill từ team.config.yaml + stack.config.yaml
+   b. CHỈ đọc các file được liệt kê trong phần "Files to Read" của task card
+   c. Viết code tuân theo convention và pattern của framework
+   d. Tự kiểm tra (linter, type-check)
+   e. Cập nhật trạng thái task card thành DONE
+   f. Viết `.ai-workspace/features/FEAT-XXX/handoffs/HANDOFF-latest.md`
 
-6. PM updates `.ai-workspace/STATE.md` with progress for FEAT-XXX
+6. PM cập nhật `.ai-workspace/STATE.md` với tiến độ của FEAT-XXX
 
-7. Trigger **Reviewer** agent for **peer code review** (Phase 4 — per-task review, not QA)
-   - Reviewer writes `features/FEAT-XXX/reviews/TASK-XXX-review.md`
-   - If CHANGES_REQUESTED → Dev fixes → Reviewer re-reviews (max 3 rounds)
+7. Kích hoạt **Reviewer** agent để **review code ngang hàng** (Phase 4 — review từng task, không phải QA)
+   - Reviewer viết `features/FEAT-XXX/reviews/TASK-XXX-review.md`
+   - Nếu CHANGES_REQUESTED → Dev sửa → Reviewer review lại (tối đa 3 vòng)
 
-8. If Reviewer approves and more tasks remain → show progress and ask human if they want to continue
-   If all tasks done → suggest moving to test phase (`/test`)
-   Note: Full QA acceptance review is a separate phase — use `/review` after tests pass
+8. Nếu Reviewer phê duyệt và còn task tiếp theo → hiển thị tiến độ và hỏi người dùng có muốn tiếp tục không
+   Nếu tất cả task hoàn thành → đề xuất chuyển sang giai đoạn test (`/test`)
+   Lưu ý: Review QA toàn diện là giai đoạn riêng — sử dụng `/review` sau khi test pass

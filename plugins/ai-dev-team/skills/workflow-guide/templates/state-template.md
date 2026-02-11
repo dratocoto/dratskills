@@ -1,41 +1,41 @@
-# Project State
+# Trạng thái dự án
 
-## Project: [Project Name]
-## Stack: See stack.config.yaml
-## Last Updated: [date]
+## Project: [Tên dự án]
+## Stack: Xem stack.config.yaml
+## Cập nhật lần cuối: [ngày]
 
-## Parallel Features
+## Các tính năng song song
 
-| ID | Feature | Phase | Assignee | Progress | Status | Blocked By |
-|----|---------|-------|----------|----------|--------|------------|
+| ID | Tính năng | Phase | Phân công | Tiến độ | Trạng thái | Bị chặn bởi |
+|----|-----------|-------|-----------|---------|------------|--------------|
 | - | - | - | - | - | - | - |
 
-## Phase Legend
-- `CLARIFY` → BA asking questions
-- `REQ` → BA writing requirement
-- `DESIGN` → Architect designing
-- `IMPL [2/5]` → Dev implementing (task 2 of 5)
-- `REVIEW [2/5]` → Reviewer reviewing (task 2 of 5)
-- `TEST` → Tester writing tests
-- `QA` → QA final gate
-- `DONE` → Human approved
+## Chú giải Phase
+- `CLARIFY` → BA đang đặt câu hỏi
+- `REQ` → BA đang viết requirement
+- `DESIGN` → Architect đang thiết kế
+- `IMPL [2/5]` → Dev đang triển khai (task 2 trên 5)
+- `REVIEW [2/5]` → Reviewer đang review (task 2 trên 5)
+- `TEST` → Tester đang viết tests
+- `QA` → QA kiểm tra cuối cùng
+- `DONE` → Người dùng đã duyệt
 
-## Status Legend
-- IN_PROGRESS → actively being worked on
-- WAITING_HUMAN → needs human approval/input
-- WAITING_AGENT → waiting for another agent
-- BLOCKED → blocked by another feature or external dependency
-- DONE → completed and approved
+## Chú giải trạng thái
+- IN_PROGRESS → đang được thực hiện
+- WAITING_HUMAN → cần người dùng duyệt/cung cấp thông tin
+- WAITING_AGENT → đang chờ agent khác
+- BLOCKED → bị chặn bởi tính năng khác hoặc phụ thuộc bên ngoài
+- DONE → hoàn thành và đã được duyệt
 
-## File Conflict Map
+## Bản đồ xung đột file
 
-Tracks which source files each feature touches to detect conflicts:
+Theo dõi các source file mà mỗi tính năng thay đổi để phát hiện xung đột:
 
-| Source File | FEAT-001 | FEAT-002 | FEAT-003 | Conflict? |
+| Source File | FEAT-001 | FEAT-002 | FEAT-003 | Xung đột? |
 |------------|----------|----------|----------|-----------|
 | - | - | - | - | - |
 
-When conflict detected → open cross-feature discussion in `discussions/`
+Khi phát hiện xung đột → mở cross-feature discussion trong `discussions/`
 
-## Recent Activity
-- [timestamp] Project initialized
+## Hoạt động gần đây
+- [thời gian] Dự án được khởi tạo

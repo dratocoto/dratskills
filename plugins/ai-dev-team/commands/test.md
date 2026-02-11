@@ -1,49 +1,49 @@
 ---
-description: Generate tests for implemented code
+description: Tạo test cho code đã triển khai
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash(pytest:*), Bash(python3:*), Bash(npm:*), Bash(npx:*), Bash(ls:*), Bash(tree:*)
 argument-hint: [feature-id]
 ---
 
-Generate comprehensive tests for a feature's implementation.
+Tạo bộ test toàn diện cho phần triển khai của một feature.
 
-Read the workflow guide: `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/SKILL.md`
+Đọc hướng dẫn workflow: `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/SKILL.md`
 
-1. Read `.ai-workspace/STATE.md` to identify the target feature (or use `$1` as FEAT-XXX)
+1. Đọc `.ai-workspace/STATE.md` để xác định feature mục tiêu (hoặc dùng `$1` là FEAT-XXX)
 
-2. Read `${CLAUDE_PLUGIN_ROOT}/team.config.yaml` → find `test-agent` → get skill categories
-   Read `.ai-workspace/stack.config.yaml` → resolve categories to skill names → load each skill
+2. Đọc `${CLAUDE_PLUGIN_ROOT}/team.config.yaml` → tìm `test-agent` → lấy danh mục skill
+   Đọc `.ai-workspace/stack.config.yaml` → ánh xạ danh mục sang tên skill cụ thể → tải từng skill
 
-3. Read `.ai-workspace/features/FEAT-XXX/handoffs/HANDOFF-latest.md` for list of implemented files
+3. Đọc `.ai-workspace/features/FEAT-XXX/handoffs/HANDOFF-latest.md` để lấy danh sách file đã triển khai
 
-4. Read the design for expected behavior: `.ai-workspace/features/FEAT-XXX/design.md`
+4. Đọc thiết kế để nắm hành vi mong đợi: `.ai-workspace/features/FEAT-XXX/design.md`
 
-5. For each implemented source file:
-   a. Read the source file to understand methods, types, error cases
-   b. Generate test file with:
-   - Happy path tests (valid input → expected output)
-   - Edge case tests (boundary values, empty input)
-   - Error case tests (invalid input → expected error)
-   - Schema validation tests
-     c. Follow Arrange-Act-Assert pattern
-     d. Use descriptive test names: `test_<unit>_<scenario>_<expected>`
+5. Với mỗi file source đã triển khai:
+   a. Đọc file source để hiểu methods, types, trường hợp lỗi
+   b. Tạo file test bao gồm:
+   - Test luồng chính (đầu vào hợp lệ → kết quả mong đợi)
+   - Test trường hợp biên (giá trị biên, đầu vào rỗng)
+   - Test trường hợp lỗi (đầu vào không hợp lệ → lỗi mong đợi)
+   - Test kiểm tra schema
+     c. Tuân theo pattern Arrange-Act-Assert
+     d. Đặt tên test mô tả rõ ràng: `test_<unit>_<scenario>_<expected>`
 
-6. Create shared fixtures if not exists
+6. Tạo shared fixtures nếu chưa có
 
-7. Run tests using the appropriate runner from stack.config.yaml:
+7. Chạy test bằng runner phù hợp từ stack.config.yaml:
    - Python: `pytest tests/ -v --tb=short`
    - TypeScript: `npx vitest --run`
 
-8. Run coverage:
+8. Chạy coverage:
    - Python: `pytest tests/ --cov=src --cov-report=term-missing -q`
    - TypeScript: `npx vitest --coverage`
 
-9. Write handoff to `.ai-workspace/features/FEAT-XXX/handoffs/HANDOFF-latest.md`:
-   - Test results (passed/failed)
-   - Coverage per module
-   - Any failing tests with details
-   - Recommendation: proceed to QA or fix issues first
+9. Viết handoff vào `.ai-workspace/features/FEAT-XXX/handoffs/HANDOFF-latest.md`:
+   - Kết quả test (pass/fail)
+   - Coverage theo từng module
+   - Test thất bại kèm chi tiết (nếu có)
+   - Đề xuất: tiến hành QA hay sửa lỗi trước
 
-10. PM updates `.ai-workspace/STATE.md` for FEAT-XXX to TEST phase
+10. PM cập nhật `.ai-workspace/STATE.md` cho FEAT-XXX sang phase TEST
 
-If all tests pass and coverage ≥ 80% → suggest moving to QA phase.
-If tests fail → report failures and suggest fixes.
+Nếu tất cả test pass và coverage >= 80% → đề xuất chuyển sang giai đoạn QA.
+Nếu test thất bại → báo cáo lỗi và đề xuất cách sửa.
