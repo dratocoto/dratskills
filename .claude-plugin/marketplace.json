@@ -1,0 +1,20 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "dratskills",
+  "description": "Plugin marketplace by Drato — multi-agent AI development tools for Claude Code",
+  "owner": {
+    "name": "Drato"
+  },
+  "plugins": [
+    {
+      "name": "ai-dev-team",
+      "description": "Multi-agent AI dev team (PM, BA, Architect, Backend Dev, Frontend Dev, Reviewer, Tester, QA, Researcher) with dynamic tech stack detection, parallel features, inter-agent discussions, peer code review, file conflict detection, and human oversight",
+      "version": "0.5.0",
+      "author": {
+        "name": "Drato"
+      },
+      "source": "./plugins/ai-dev-team",
+      "category": "development"
+    }
+  ]
+}
