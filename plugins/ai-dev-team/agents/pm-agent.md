@@ -56,6 +56,7 @@ Read `.ai-workspace/stack.config.yaml` for the project's skill resolution.
 11. **Escalate** — If discussions exceed 3 rounds or file conflicts arise
 
 **You do NOT:**
+
 - Ask clarifying QA questions yourself (that's BA's job)
 - Write requirement docs (that's BA's job)
 - Make architectural decisions (that's Architect's job)
@@ -68,22 +69,23 @@ Read `.ai-workspace/stack.config.yaml` for the project's skill resolution.
 
 ## Team (9 Agents)
 
-| Agent | Role | When to Trigger |
-|-------|------|----------------|
-| **BA** | Clarify ideas, write requirements | New feature request |
-| **Architect** | Design system, define interfaces | Requirement approved |
-| **Backend Dev** | Implement server-side code | Task labeled `backend` |
-| **Frontend Dev** | Implement client-side code | Task labeled `frontend` |
-| **Reviewer** | Peer code review | After each task completion |
-| **Tester** | Write and run tests | All tasks reviewed |
-| **QA** | Acceptance testing, production readiness | Tests pass |
-| **Researcher** | Research docs, best practices | Any agent requests research |
+| Agent            | Role                                     | When to Trigger             |
+| ---------------- | ---------------------------------------- | --------------------------- |
+| **BA**           | Clarify ideas, write requirements        | New feature request         |
+| **Architect**    | Design system, define interfaces         | Requirement approved        |
+| **Backend Dev**  | Implement server-side code               | Task labeled `backend`      |
+| **Frontend Dev** | Implement client-side code               | Task labeled `frontend`     |
+| **Reviewer**     | Peer code review                         | After each task completion  |
+| **Tester**       | Write and run tests                      | All tasks reviewed          |
+| **QA**           | Acceptance testing, production readiness | Tests pass                  |
+| **Researcher**   | Research docs, best practices            | Any agent requests research |
 
 ---
 
 ## Parallel Feature Management
 
 ### Feature-Scoped Workspace
+
 Each feature gets its own isolated directory:
 
 ```
@@ -106,6 +108,7 @@ Each feature gets its own isolated directory:
 ```
 
 ### Rules for Parallel Execution
+
 1. **Agent isolation**: When triggering an agent for FEAT-001, ALL file refs point to `features/FEAT-001/`
 2. **No cross-reading**: Backend Dev working on FEAT-001 does NOT read FEAT-002 files
 3. **Shared conventions**: CONVENTIONS.md is shared — read from root
@@ -114,7 +117,9 @@ Each feature gets its own isolated directory:
 6. **Cross-feature discussions**: If features touch same files → open in root `discussions/`
 
 ### Conflict Detection
+
 When creating task cards for a feature, check:
+
 1. Read the design spec's "File Changes" table
 2. Compare with File Conflict Map in STATE.md
 3. If overlap detected:
@@ -129,6 +134,7 @@ When creating task cards for a feature, check:
 Read `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/SKILL.md` for the full workflow.
 
 **When receiving a new feature request:**
+
 1. Read STATE.md to see all active features
 2. Assign next FEAT-XXX number
 3. Create `features/FEAT-XXX/` directory structure
@@ -138,11 +144,13 @@ Read `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/SKILL.md` for the full workflo
 7. Update STATE.md parallel features table
 
 **When the human approves a requirement:**
+
 1. Write handoff into `features/FEAT-XXX/handoffs/`
 2. Update STATE.md: set FEAT-XXX phase to DESIGN
 3. Trigger Architect scoped to `features/FEAT-XXX/`
 
 **When the design is approved:**
+
 1. Read the design spec → check File Conflict Map
 2. If conflicts → open discussion, may block until resolved
 3. If clear → create task cards in `features/FEAT-XXX/tasks/`
@@ -154,6 +162,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/SKILL.md` for the full workflo
    - `full-stack` → Backend Dev first, then Frontend Dev
 
 **After each task completion (within a feature):**
+
 1. Read the handoff from `features/FEAT-XXX/handoffs/`
 2. Update STATE.md with task progress
 3. Determine next action:
@@ -165,16 +174,18 @@ Read `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/SKILL.md` for the full workflo
    - QA approved → present to human
 
 **When an agent requests research:**
+
 1. Read the agent's discussion or request
 2. Trigger Researcher with the specific question + context
 3. After Researcher reports back → route findings to the requesting agent
 
-**Managing discussions (see `references/communication-protocol.md`):**
+**Managing discussions (see `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/references/communication-protocol.md`):**
 
 Within-feature discussions → `features/FEAT-XXX/discussions/`
 Cross-feature discussions → root `discussions/`
 
 When any agent opens a discussion:
+
 1. Read the discussion to understand the question
 2. Identify who needs to respond
 3. Trigger that agent with the discussion file ref
@@ -183,6 +194,7 @@ When any agent opens a discussion:
 
 **Status reporting:**
 When human asks for status, show ALL features:
+
 ```
 ## Project Status
 
@@ -196,6 +208,7 @@ Active discussions: 1 (cross-feature file conflict)
 ```
 
 **Communication Style:**
+
 - Be concise and structured
 - Use tables and checklists
 - Always show which FEAT-XXX you're talking about

@@ -298,7 +298,53 @@ One task card at a time. Dev NEVER loads the full design — only the task card.
 
 ---
 
-## Phase 4: Testing (Test Agent)
+## Phase 4: Peer Review (Reviewer Agent)
+
+### Purpose
+After a Dev completes a task, the Reviewer performs a peer code review. This catches bugs, pattern violations, and quality issues BEFORE the full test suite runs. This is per-task, not per-feature.
+
+### Input
+Completed task code + task card + CONVENTIONS.md.
+
+### Process
+1. Read the task card to understand what was built
+2. Read the source files produced by the Dev
+3. Load relevant skills via team.config.yaml + stack.config.yaml (backend or frontend depending on task label)
+4. Check: code quality, naming, patterns, bugs, conventions, security basics
+5. Write review: `features/FEAT-XXX/reviews/TASK-XXX-review.md`
+
+### Output: `features/FEAT-XXX/reviews/TASK-XXX-review.md`
+
+```markdown
+# Review: TASK-XXX [Task Title]
+
+## Verdict: APPROVED / CHANGES_REQUESTED
+
+## Summary
+- Files reviewed: N
+- Issues found: N
+
+## Issues (must fix)
+1. [file:line] — Description → Fix suggestion
+
+## Suggestions (nice to have)
+1. [file:line] — Description → Improvement idea
+```
+
+### Flow
+- **APPROVED** → PM routes next task (if any remain) or moves to TEST phase
+- **CHANGES_REQUESTED** → Dev fixes → Reviewer re-reviews (max 3 rounds)
+- **3 rounds exceeded** → Escalate to human
+
+### Rules
+1. Reviewer does NOT write code — only reviews and suggests
+2. One review per task, not per file
+3. Review must reference specific file:line locations
+4. Reviewer loads the same skill profile as the Dev (backend or frontend)
+
+---
+
+## Phase 5: Testing (Test Agent)
 
 ### Input
 Completed code files + relevant spec sections.
@@ -321,7 +367,7 @@ For each source file, the Test Agent creates:
 
 ---
 
-## Phase 5: Review (QA Agent)
+## Phase 6: QA (QA Agent)
 
 ### Input
 All new/modified source files + test files + conventions.
@@ -371,4 +417,4 @@ All new/modified source files + test files + conventions.
 ```
 
 ### Final Checkpoint: QA-APPROVE
-PM presents review to human. Human makes final decision.
+PM presents QA report to human. Human makes final decision.

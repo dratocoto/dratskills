@@ -1,6 +1,6 @@
 ---
 description: Generate tests for implemented code
-allowed-tools: Read, Write, Edit, Grep, Glob, Bash(pytest:*), Bash(python3:*), Bash(npm:*), Bash(npx:*)
+allowed-tools: Read, Write, Edit, Grep, Glob, Bash(pytest:*), Bash(python3:*), Bash(npm:*), Bash(npx:*), Bash(ls:*), Bash(tree:*)
 argument-hint: [feature-id]
 ---
 
@@ -20,12 +20,12 @@ Read the workflow guide: `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/SKILL.md`
 5. For each implemented source file:
    a. Read the source file to understand methods, types, error cases
    b. Generate test file with:
-      - Happy path tests (valid input → expected output)
-      - Edge case tests (boundary values, empty input)
-      - Error case tests (invalid input → expected error)
-      - Schema validation tests
-   c. Follow Arrange-Act-Assert pattern
-   d. Use descriptive test names: `test_<unit>_<scenario>_<expected>`
+   - Happy path tests (valid input → expected output)
+   - Edge case tests (boundary values, empty input)
+   - Error case tests (invalid input → expected error)
+   - Schema validation tests
+     c. Follow Arrange-Act-Assert pattern
+     d. Use descriptive test names: `test_<unit>_<scenario>_<expected>`
 
 6. Create shared fixtures if not exists
 
@@ -38,10 +38,10 @@ Read the workflow guide: `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/SKILL.md`
    - TypeScript: `npx vitest --coverage`
 
 9. Write handoff to `.ai-workspace/features/FEAT-XXX/handoffs/HANDOFF-latest.md`:
-    - Test results (passed/failed)
-    - Coverage per module
-    - Any failing tests with details
-    - Recommendation: proceed to QA or fix issues first
+   - Test results (passed/failed)
+   - Coverage per module
+   - Any failing tests with details
+   - Recommendation: proceed to QA or fix issues first
 
 10. PM updates `.ai-workspace/STATE.md` for FEAT-XXX to TEST phase
 

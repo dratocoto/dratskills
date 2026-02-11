@@ -1,0 +1,26 @@
+{
+  "SessionStart": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "if [ -f .ai-workspace/STATE.md ]; then cat .ai-workspace/STATE.md; else echo '## AI Dev Team Ready\n\nNo workspace initialized. Run /start-project to begin.\n\nCommands: /start-project, /new-feature, /design, /implement, /test, /review, /status'; fi",
+          "timeout": 5
+        }
+      ]
+    }
+  ],
+  "PreToolUse": [
+    {
+      "matcher": "Write|Edit",
+      "hooks": [
+        {
+          "type": "prompt",
+          "prompt": "CHECK THE FILE PATH FIRST:\n- If the file path contains '.ai-workspace/' → SKIP all checks, ALLOW immediately.\n- If the file is a .md, .yaml, .yml, or .json config file → SKIP, ALLOW immediately.\n- ONLY check source code files (.py, .ts, .tsx, .js, .jsx, etc.)\n\nFor source code files (.py), verify these production standards:\n1. TYPE HINTS: All function signatures must have type annotations (params + return)\n2. ASYNC: All I/O operations (DB, HTTP, file) use async def\n3. ERRORS: Domain exceptions used (not bare except/Exception)\n4. LOGGING: structlog used (not print/logging)\n5. VALIDATION: Pydantic schemas for all API input\n6. SECRETS: No hardcoded credentials, tokens, or connection strings\n7. NAMING: snake_case for functions/variables, PascalCase for classes\n\nFor source code files (.ts, .tsx, .js, .jsx), verify:\n1. TYPE SAFETY: No 'any' type; use 'unknown' and narrow with type guards\n2. COMPONENTS: Server Components by default; 'use client' only for interactivity\n3. NAMING: camelCase for functions/variables, PascalCase for components/types\n4. SECRETS: No hardcoded credentials or API keys\n\nIf any standard is violated, SUGGEST the corrected version.\nOnly BLOCK if there's a critical security issue (hardcoded secret, SQL injection, XSS).",
+          "timeout": 15
+        }
+      ]
+    }
+  ]
+}

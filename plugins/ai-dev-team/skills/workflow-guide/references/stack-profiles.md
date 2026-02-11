@@ -38,25 +38,29 @@ Used by `/start-project` to auto-generate `.ai-workspace/stack.config.yaml`.
 
 ## Profile: django-react
 
-| Category | Skill Name |
-|----------|-----------|
-| backend-patterns | django-patterns |
-| frontend-guide | react-guide |
-| language | python312 |
-| conventions | conventions |
+| Category | Skill Name | Status |
+|----------|-----------|--------|
+| backend-patterns | django-patterns | ⚠️ Not yet created |
+| frontend-guide | react-guide | ⚠️ Not yet created |
+| language | python312 | ✅ Available |
+| conventions | conventions | ✅ Available |
 
 **Detection**: `requirements.txt` or `pyproject.toml` contains `django` AND `package.json` contains `react`
 
+> ⚠️ `django-patterns` and `react-guide` skill folders do not exist yet. Create them at `${CLAUDE_PLUGIN_ROOT}/skills/{name}/SKILL.md` to enable this profile. Without them, agents will skip those skill categories.
+
 ## Profile: express-vue
 
-| Category | Skill Name |
-|----------|-----------|
-| backend-patterns | express-patterns |
-| frontend-guide | vue-guide |
-| language | _none_ |
-| conventions | conventions |
+| Category | Skill Name | Status |
+|----------|-----------|--------|
+| backend-patterns | express-patterns | ⚠️ Not yet created |
+| frontend-guide | vue-guide | ⚠️ Not yet created |
+| language | _none_ | — |
+| conventions | conventions | ✅ Available |
 
 **Detection**: `package.json` contains `express` AND `vue`
+
+> ⚠️ `express-patterns` and `vue-guide` skill folders do not exist yet. Create them at `${CLAUDE_PLUGIN_ROOT}/skills/{name}/SKILL.md` to enable this profile. Without them, agents will skip those skill categories.
 
 ## Auto-Detection Priority
 

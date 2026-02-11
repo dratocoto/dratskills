@@ -1,6 +1,6 @@
 ---
 description: Implement the next task card
-allowed-tools: Read, Write, Edit, Grep, Glob, Bash(python3:*), Bash(ruff:*), Bash(mypy:*), Bash(npm:*), Bash(npx:*), Bash(ls:*)
+allowed-tools: Read, Write, Edit, Grep, Glob, Bash(python3:*), Bash(ruff:*), Bash(mypy:*), Bash(npm:*), Bash(npx:*), Bash(uv:*), Bash(node:*), Bash(ls:*), Bash(tree:*)
 argument-hint: [task-id]
 ---
 
@@ -29,7 +29,10 @@ Read the workflow guide: `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/SKILL.md`
 
 6. PM updates `.ai-workspace/STATE.md` with progress for FEAT-XXX
 
-7. Trigger Reviewer for peer code review
+7. Trigger **Reviewer** agent for **peer code review** (Phase 4 — per-task review, not QA)
+   - Reviewer writes `features/FEAT-XXX/reviews/TASK-XXX-review.md`
+   - If CHANGES_REQUESTED → Dev fixes → Reviewer re-reviews (max 3 rounds)
 
 8. If Reviewer approves and more tasks remain → show progress and ask human if they want to continue
-   If all tasks done → suggest moving to test phase
+   If all tasks done → suggest moving to test phase (`/test`)
+   Note: Full QA acceptance review is a separate phase — use `/review` after tests pass

@@ -1,6 +1,6 @@
 ---
 description: Start a new feature (triggers BA for clarification → PM for coordination)
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash(ls:*), Bash(tree:*)
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash(ls:*), Bash(tree:*), Bash(mkdir:*)
 argument-hint: <feature-description>
 ---
 

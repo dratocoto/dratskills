@@ -62,7 +62,7 @@ Run these detection checks (in order):
    - Read `${CLAUDE_PLUGIN_ROOT}/skills/{conventions_skill}/SKILL.md`
    - Copy the relevant convention sections based on detected stack
 
-3. Create CHECKLIST.md — a compact pre-commit quality checklist
+3. Create CHECKLIST.md from template at `${CLAUDE_PLUGIN_ROOT}/skills/workflow-guide/templates/checklist-template.md`
 
 ## Step 4: Report and welcome
 
@@ -92,3 +92,11 @@ Run these detection checks (in order):
 3. Display welcome message with available commands and workflow overview.
 
 If the project doesn't exist yet, ask the human which stack to use and offer to scaffold it.
+
+## Re-detecting Stack
+
+If the project's dependencies change (e.g., migrated from React to Next.js), the human can re-run `/start-project` on an existing workspace. The command will:
+1. Re-detect the stack from current dependency files
+2. Update `.ai-workspace/stack.config.yaml` with new skill mappings
+3. Preserve existing STATE.md, features/, and all other workspace files
+4. Show a diff of what changed in the skill configuration

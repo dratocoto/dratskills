@@ -161,6 +161,22 @@ Every handoff follows this structure:
 - Present to human for final decision
 ```
 
+## Handoff File Naming
+
+The active handoff is always `HANDOFF-latest.md`. When a new handoff is written, the previous one is archived:
+
+```
+features/FEAT-XXX/handoffs/
+├── HANDOFF-latest.md              ← Current (PM reads this)
+├── HANDOFF-001-ba-to-architect.md ← Archived: Phase 0→2
+├── HANDOFF-002-arch-to-dev.md     ← Archived: Phase 2→3
+└── HANDOFF-003-dev-to-test.md     ← Archived: Phase 3→5
+```
+
+**Naming convention for archives**: `HANDOFF-{seq}-{source}-to-{target}.md`
+
+PM should rename `HANDOFF-latest.md` to the archive name BEFORE writing the new one. This preserves history while keeping the "latest" pointer stable for agents that always read `HANDOFF-latest.md`.
+
 ## Handoff Rules
 
 1. **Always update STATE.md** before writing handoff
@@ -169,3 +185,4 @@ Every handoff follows this structure:
 4. **Mark questions clearly** — prefix with `QUESTION:` for PM to escalate
 5. **Include self-check results** — did the agent validate its own output?
 6. **Never assume** — if something is unclear, flag it rather than guess
+7. **Archive before overwrite** — rename HANDOFF-latest.md before writing a new one

@@ -49,7 +49,6 @@ workflow:
 # the plugin system), but all other config (skills, context) lives here only.
 
 agents:
-
   # ── PM ─────────────────────────────────────────────────────────────────────
   pm-agent:
     role: "Project Manager"
@@ -65,7 +64,7 @@ agents:
       - "Bash(tree:*)"
       - "Bash(mkdir:*)"
       - "Bash(git:*)"
-    skills: []                    # PM doesn't load technical skills
+    skills: [] # PM doesn't load technical skills
     context:
       max_files: 4
       always_read:
@@ -86,7 +85,7 @@ agents:
       - "Bash(ls:*)"
       - "Bash(tree:*)"
     skills:
-      - conventions               # For context — helps ask better technical questions
+      - conventions # For context — helps ask better technical questions
     context:
       max_files: 5
       always_read:
@@ -129,8 +128,9 @@ agents:
       - "Bash(mypy:*)"
       - "Bash(npm:*)"
       - "Bash(npx:*)"
-      - "Bash(pip:*)"
       - "Bash(uv:*)"
+      - "Bash(ls:*)"
+      - "Bash(tree:*)"
     skills:
       - backend-patterns
       - language
@@ -248,8 +248,8 @@ agents:
       - WebSearch
       - WebFetch
     skills:
-      - backend-patterns          # For context — know what stack is in use
-      - frontend-guide            # For context
-      - language                  # For context
+      - backend-patterns # For context — know what stack is in use
+      - frontend-guide # For context
+      - language # For context
     context:
       max_files: 7

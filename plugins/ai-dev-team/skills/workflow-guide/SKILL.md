@@ -5,7 +5,7 @@ description: >
   "workflow", "agent roles", "handoff process", "task management",
   "project setup", "start working on a feature", or needs to understand
   the multi-agent development process and human-AI collaboration model.
-version: 0.5.0
+version: 0.5.1
 ---
 
 # AI Dev Team Workflow
@@ -29,17 +29,17 @@ Human (End User + Tech Lead)
   Researcher ← On-demand (any agent can request via PM)
 ```
 
-| Agent | Role | Reads | Writes |
-|-------|------|-------|--------|
-| **PM** | Coordinate, delegate, moderate discussions, manage parallel features | STATE.md, stack.config.yaml, handoffs, discussions | STATE.md, task cards, handoffs |
-| **BA** | Clarify ideas (QA questions), write requirements | STATE.md, stack.config.yaml, codebase structure | features/FEAT-XXX/requirement.md, discussions/ |
-| **Architect** | Design system, define interfaces, create specs | requirement.md, stack.config.yaml, codebase structure | features/FEAT-XXX/design.md, discussions/ |
-| **Backend Dev** | Implement backend code following specs and conventions | task card, stack.config.yaml, CONVENTIONS.md, reviews/ | src/ backend code, discussions/ |
-| **Frontend Dev** | Implement frontend code following specs and conventions | task card, stack.config.yaml, CONVENTIONS.md, reviews/ | src/ frontend code, discussions/ |
-| **Reviewer** | Peer code review (quality, patterns, bugs) | task card, stack.config.yaml, CONVENTIONS.md, src/ | features/FEAT-XXX/reviews/, discussions/ |
-| **Tester** | Write tests, verify coverage | design.md, stack.config.yaml, src/ code, CONVENTIONS.md | tests/, discussions/ |
-| **QA** | Acceptance testing, security, production readiness | requirement.md, design.md, stack.config.yaml, src/, tests/ | features/FEAT-XXX/reviews/, discussions/ |
-| **Researcher** | Technical research, best practices, comparisons | stack.config.yaml, codebase structure, web sources | features/FEAT-XXX/discussions/RESEARCH-XXX.md |
+| Agent            | Role                                                                 | Reads                                                      | Writes                                         |
+| ---------------- | -------------------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------- |
+| **PM**           | Coordinate, delegate, moderate discussions, manage parallel features | STATE.md, stack.config.yaml, handoffs, discussions         | STATE.md, task cards, handoffs                 |
+| **BA**           | Clarify ideas (QA questions), write requirements                     | STATE.md, stack.config.yaml, codebase structure            | features/FEAT-XXX/requirement.md, discussions/ |
+| **Architect**    | Design system, define interfaces, create specs                       | requirement.md, stack.config.yaml, codebase structure      | features/FEAT-XXX/design.md, discussions/      |
+| **Backend Dev**  | Implement backend code following specs and conventions               | task card, stack.config.yaml, CONVENTIONS.md, reviews/     | src/ backend code, discussions/                |
+| **Frontend Dev** | Implement frontend code following specs and conventions              | task card, stack.config.yaml, CONVENTIONS.md, reviews/     | src/ frontend code, discussions/               |
+| **Reviewer**     | Peer code review (quality, patterns, bugs)                           | task card, stack.config.yaml, CONVENTIONS.md, src/         | features/FEAT-XXX/reviews/, discussions/       |
+| **Tester**       | Write tests, verify coverage                                         | design.md, stack.config.yaml, src/ code, CONVENTIONS.md    | tests/, discussions/                           |
+| **QA**           | Acceptance testing, security, production readiness                   | requirement.md, design.md, stack.config.yaml, src/, tests/ | features/FEAT-XXX/reviews/, discussions/       |
+| **Researcher**   | Technical research, best practices, comparisons                      | stack.config.yaml, codebase structure, web sources         | features/FEAT-XXX/discussions/RESEARCH-XXX.md  |
 
 ## Dynamic Skill System
 
@@ -113,6 +113,7 @@ All agents communicate through files in `.ai-workspace/`. Each feature gets its 
 ## The 7-Phase Workflow
 
 ### Phase 0: CLARIFY → BA Agent (Idea Clarification)
+
 1. Human describes the feature in natural language (can be vague)
 2. PM delegates to **BA Agent**
 3. BA analyzes what is CLEAR vs VAGUE vs MISSING
@@ -120,12 +121,14 @@ All agents communicate through files in `.ai-workspace/`. Each feature gets its 
 5. Human answers → BA has clear understanding
 
 ### Phase 1: REQUIREMENT → BA Agent
+
 1. BA creates structured requirement doc from the clarified idea
 2. BA writes `features/FEAT-XXX/requirement.md` using the template
 3. Requirement includes a **Clarification Log** — full Q&A for traceability
 4. BA hands back to PM → PM presents to human for **approval** → CHECKPOINT
 
 ### Phase 2: DESIGN → Architect Agent
+
 1. PM triggers Architect scoped to `features/FEAT-XXX/`
 2. Architect reads `features/FEAT-XXX/requirement.md` + scans existing codebase
 3. Architect loads skills via team.config.yaml + stack.config.yaml for framework-specific patterns
@@ -137,6 +140,7 @@ All agents communicate through files in `.ai-workspace/`. Each feature gets its 
 6. PM presents design to human → **CHECKPOINT**
 
 ### Phase 3: IMPLEMENT → Backend Dev / Frontend Dev (task by task)
+
 1. PM creates task cards in `features/FEAT-XXX/tasks/`, each labeled `backend`, `frontend`, or `full-stack`
 2. PM routes each task to the appropriate dev agent:
    - `backend` → **Backend Dev**
@@ -150,6 +154,7 @@ All agents communicate through files in `.ai-workspace/`. Each feature gets its 
 5. After each task → Reviewer does peer review
 
 ### Phase 4: REVIEW → Reviewer Agent (per task)
+
 1. Reviewer reads task card + code output
 2. Loads relevant skills via config (backend or frontend depending on task label)
 3. Checks patterns, bugs, quality, conventions
@@ -158,6 +163,7 @@ All agents communicate through files in `.ai-workspace/`. Each feature gets its 
 6. If APPROVED → proceed to next task or testing
 
 ### Phase 5: TEST → Tester Agent
+
 1. PM triggers Tester scoped to `features/FEAT-XXX/`
 2. Tester reads design (expected behavior) + code (actual implementation)
 3. Loads test framework via stack.config.yaml (pytest for Python, vitest for TypeScript)
@@ -166,6 +172,7 @@ All agents communicate through files in `.ai-workspace/`. Each feature gets its 
 6. If tests fail → loop back to appropriate Dev with failure details
 
 ### Phase 6: QA → QA Agent → Human
+
 1. QA validates feature against **acceptance criteria** from requirement
 2. Loads skills via config for stack-specific checks
 3. Runs security + production readiness checks
@@ -174,6 +181,7 @@ All agents communicate through files in `.ai-workspace/`. Each feature gets its 
 6. Human approves → Done, or requests changes → loop back
 
 ### On-Demand: RESEARCH → Researcher Agent
+
 - Any agent can request research through PM at any point
 - Researcher investigates technical questions, best practices, library comparisons
 - Writes `RESEARCH-XXX.md` report in the feature's discussions directory
@@ -184,15 +192,18 @@ All agents communicate through files in `.ai-workspace/`. Each feature gets its 
 Agents communicate through **3 channels** (see `references/communication-protocol.md`):
 
 ### 1. Handoffs (pipeline flow)
+
 ```
 BA → PM → Architect → PM → Backend Dev/Frontend Dev → Reviewer → PM → Tester → PM → QA → PM → Human
 ```
 
 ### 2. Discussions (any agent ↔ any agent)
+
 Within-feature discussions → `features/FEAT-XXX/discussions/DISC-XXX.md`
 Cross-feature discussions → root `discussions/DISC-CROSS-XXX.md`
 
 Examples:
+
 - Backend Dev asks Architect about design feasibility (within-feature)
 - Frontend Dev asks Backend Dev about API contract (within-feature)
 - Tester asks BA to clarify acceptance criteria (within-feature)
@@ -204,6 +215,7 @@ Examples:
 PM moderates: routes, facilitates, escalates (max 3 rounds → human decides).
 
 ### 3. Review Comments (feedback loops)
+
 - Reviewer → Backend Dev or Frontend Dev: peer review with fix/discuss/accept cycle
 - QA → any agent: final quality findings
 
@@ -213,19 +225,20 @@ PM moderates: routes, facilitates, escalates (max 3 rounds → human decides).
 
 **Solution**: Each agent loads ONLY what it needs.
 
-| Agent | Max Files to Load | What to Load |
-|-------|-------------------|-------------|
-| PM | 4 | STATE.md, stack.config.yaml, current handoff, discussions (if OPEN) |
-| BA | 5 | STATE.md, stack.config.yaml, codebase structure (ls/tree), existing requirement (if revising) |
-| Architect | 5 | requirement doc, stack.config.yaml, existing structure (ls/tree), key interfaces |
-| Backend Dev | 5 | task card, resolved skills, CONVENTIONS.md, files to modify |
-| Frontend Dev | 5 | task card, resolved skills, CONVENTIONS.md, files to modify |
-| Reviewer | 5 | task card, resolved skills, CONVENTIONS.md, source files being reviewed |
-| Tester | 5 | spec section, resolved skills, source files to test |
-| QA | 7 | requirement doc, spec, resolved skills, CONVENTIONS.md, source files, test files |
-| Researcher | 7 | stack.config.yaml, codebase structure, relevant source files, web sources |
+| Agent        | Max Files to Load | What to Load                                                                                  |
+| ------------ | ----------------- | --------------------------------------------------------------------------------------------- |
+| PM           | 4                 | STATE.md, stack.config.yaml, current handoff, discussions (if OPEN)                           |
+| BA           | 5                 | STATE.md, stack.config.yaml, codebase structure (ls/tree), existing requirement (if revising) |
+| Architect    | 5                 | requirement doc, stack.config.yaml, existing structure (ls/tree), key interfaces              |
+| Backend Dev  | 5                 | task card, resolved skills, CONVENTIONS.md, files to modify                                   |
+| Frontend Dev | 5                 | task card, resolved skills, CONVENTIONS.md, files to modify                                   |
+| Reviewer     | 5                 | task card, resolved skills, CONVENTIONS.md, source files being reviewed                       |
+| Tester       | 5                 | spec section, resolved skills, source files to test                                           |
+| QA           | 7                 | requirement doc, spec, resolved skills, CONVENTIONS.md, source files, test files              |
+| Researcher   | 7                 | stack.config.yaml, codebase structure, relevant source files, web sources                     |
 
 **Rules for keeping context small**:
+
 1. CONVENTIONS.md uses checklist format, not prose (< 200 lines)
 2. Each task card contains exactly what the agent needs + file refs
 3. Specs use tables and bullet points, not paragraphs
@@ -255,13 +268,13 @@ See `references/handoff-protocol.md` for the full handoff schema.
 
 The human can intervene at any time, but MUST approve at these checkpoints:
 
-| Checkpoint | After Phase | Human Reviews | Can Reject? |
-|-----------|------------|---------------|-------------|
-| CLARIFY | Clarification | BA asks QA questions, human answers | N/A — conversational |
-| REQ-APPROVE | Requirement | Is this what I want? | Yes → rewrite |
-| DESIGN-APPROVE | Design | Is the architecture right? | Yes → redesign |
-| REVIEW-SPOT-CHECK | Every 3 tasks | Reviewer's comments + code | Yes → fix specific issues |
-| QA-APPROVE | QA Report | Is it production-ready? | Yes → loop back |
+| Checkpoint        | After Phase   | Human Reviews                       | Can Reject?               |
+| ----------------- | ------------- | ----------------------------------- | ------------------------- |
+| CLARIFY           | Clarification | BA asks QA questions, human answers | N/A — conversational      |
+| REQ-APPROVE       | Requirement   | Is this what I want?                | Yes → rewrite             |
+| DESIGN-APPROVE    | Design        | Is the architecture right?          | Yes → redesign            |
+| REVIEW-SPOT-CHECK | Every 3 tasks | Reviewer's comments + code          | Yes → fix specific issues |
+| QA-APPROVE        | QA Report     | Is it production-ready?             | Yes → loop back           |
 
 ## Additional Resources
 

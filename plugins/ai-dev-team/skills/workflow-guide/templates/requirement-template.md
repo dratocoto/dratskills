@@ -22,6 +22,10 @@
 - [constraint 1]
 - [constraint 2]
 
+## Assumptions
+- [Assumption 1: what we're assuming to be true without explicit confirmation]
+- [Assumption 2: e.g., "Users already have verified email accounts"]
+
 ## Out of Scope
 - [what this does NOT include]
 
