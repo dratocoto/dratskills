@@ -1,0 +1,26 @@
+{
+  "SessionStart": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "if [ -f .ai-workspace/STATE.md ]; then cat .ai-workspace/STATE.md; else echo '## AI Dev Team Ready\n\nNo workspace initialized. Run /start-project to begin.\n\nCommands: /start-project, /new-feature, /design, /implement, /test, /review, /status'; fi",
+          "timeout": 5
+        }
+      ]
+    }
+  ],
+  "PreToolUse": [
+    {
+      "matcher": "Write|Edit",
+      "hooks": [
+        {
+          "type": "prompt",
+          "prompt": "Before writing code, verify these production standards:\n\n1. TYPE HINTS: All function signatures annotated\n2. ASYNC: I/O operations use async def\n3. ERRORS: Domain exceptions used (not bare except)\n4. LOGGING: structlog used (not print)\n5. VALIDATION: Pydantic schemas for API input\n6. SECRETS: No hardcoded values\n7. NAMING: Follows conventions (snake_case for Python, camelCase for TS)\n\nIf writing to .ai-workspace/ (docs, state, tasks), skip these checks.\nIf writing source code and any standard is violated, suggest the corrected version.\nOnly BLOCK if there's a critical security issue (hardcoded secret, SQL injection).",
+          "timeout": 15
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,255 @@
+# ============================================================================
+# AI Dev Team — Central Configuration
+# ============================================================================
+# Single source of truth for all agent configurations.
+# Agent .md files reference this file instead of embedding config in prose.
+#
+# Two-level config:
+#   1. team.config.yaml (this file) → agent definitions, skill categories, workflow
+#   2. .ai-workspace/stack.config.yaml (per-project) → resolves categories to skills
+#
+# To change which skills an agent loads: edit the `skills` list below.
+# To change which actual skill is used for a category: edit stack.config.yaml.
+# ============================================================================
+
+version: "0.5.1"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Skill Categories
+# ─────────────────────────────────────────────────────────────────────────────
+# Defines the available skill categories.
+# Actual skill names are resolved per-project in .ai-workspace/stack.config.yaml
+# Special value in stack config: _none_ → agent skips that category.
+
+skill_categories:
+  backend-patterns: "Framework-specific backend patterns (FastAPI, Django, Express)"
+  frontend-guide: "Framework-specific frontend patterns (Next.js, React, Vue)"
+  language: "Language-specific features (Python 3.12, TypeScript)"
+  conventions: "Coding standards and rules for all agents"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Workflow Settings
+# ─────────────────────────────────────────────────────────────────────────────
+
+workflow:
+  workspace_dir: ".ai-workspace"
+  max_discussion_rounds: 3
+  max_review_rounds: 3
+  prefixes:
+    feature: "FEAT"
+    task: "TASK"
+    discussion: "DISC"
+    research: "RESEARCH"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Agent Definitions
+# ─────────────────────────────────────────────────────────────────────────────
+# Each agent's full configuration. Agent .md files should mirror the
+# name/description/model/color/tools in their YAML frontmatter (required by
+# the plugin system), but all other config (skills, context) lives here only.
+
+agents:
+
+  # ── PM ─────────────────────────────────────────────────────────────────────
+  pm-agent:
+    role: "Project Manager"
+    model: inherit
+    color: cyan
+    tools:
+      - Read
+      - Write
+      - Edit
+      - Glob
+      - Grep
+      - "Bash(ls:*)"
+      - "Bash(tree:*)"
+      - "Bash(mkdir:*)"
+      - "Bash(git:*)"
+    skills: []                    # PM doesn't load technical skills
+    context:
+      max_files: 4
+      always_read:
+        - ".ai-workspace/STATE.md"
+        - ".ai-workspace/stack.config.yaml"
+
+  # ── BA ─────────────────────────────────────────────────────────────────────
+  ba-agent:
+    role: "Business Analyst"
+    model: inherit
+    color: magenta
+    tools:
+      - Read
+      - Write
+      - Edit
+      - Glob
+      - Grep
+      - "Bash(ls:*)"
+      - "Bash(tree:*)"
+    skills:
+      - conventions               # For context — helps ask better technical questions
+    context:
+      max_files: 5
+      always_read:
+        - ".ai-workspace/STATE.md"
+        - ".ai-workspace/stack.config.yaml"
+
+  # ── Architect ──────────────────────────────────────────────────────────────
+  architect-agent:
+    role: "Software Architect"
+    model: inherit
+    color: blue
+    tools:
+      - Read
+      - Write
+      - Edit
+      - Glob
+      - Grep
+      - "Bash(ls:*)"
+      - "Bash(tree:*)"
+    skills:
+      - backend-patterns
+      - frontend-guide
+      - conventions
+    context:
+      max_files: 5
+
+  # ── Backend Dev ────────────────────────────────────────────────────────────
+  backend-dev-agent:
+    role: "Backend Developer"
+    model: inherit
+    color: green
+    tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - "Bash(python3:*)"
+      - "Bash(ruff:*)"
+      - "Bash(mypy:*)"
+      - "Bash(npm:*)"
+      - "Bash(npx:*)"
+      - "Bash(pip:*)"
+      - "Bash(uv:*)"
+    skills:
+      - backend-patterns
+      - language
+      - conventions
+    context:
+      max_files: 5
+
+  # ── Frontend Dev ───────────────────────────────────────────────────────────
+  frontend-dev-agent:
+    role: "Frontend Developer"
+    model: inherit
+    color: bright_cyan
+    tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - "Bash(npm:*)"
+      - "Bash(npx:*)"
+      - "Bash(node:*)"
+      - "Bash(ls:*)"
+      - "Bash(tree:*)"
+    skills:
+      - frontend-guide
+      - conventions
+    context:
+      max_files: 5
+
+  # ── Reviewer ───────────────────────────────────────────────────────────────
+  reviewer-agent:
+    role: "Senior Reviewer"
+    model: inherit
+    color: white
+    tools:
+      - Read
+      - Write
+      - Edit
+      - Glob
+      - Grep
+      - "Bash(ls:*)"
+      - "Bash(tree:*)"
+      - "Bash(ruff:*)"
+      - "Bash(mypy:*)"
+      - "Bash(npx:*)"
+    skills:
+      - backend-patterns
+      - frontend-guide
+      - language
+      - conventions
+    context:
+      max_files: 5
+      note: "Only load skills relevant to the code being reviewed"
+
+  # ── Tester ─────────────────────────────────────────────────────────────────
+  test-agent:
+    role: "Test Engineer"
+    model: inherit
+    color: yellow
+    tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - "Bash(ls:*)"
+      - "Bash(tree:*)"
+      - "Bash(pytest:*)"
+      - "Bash(python3:*)"
+      - "Bash(npm:*)"
+      - "Bash(npx:*)"
+    skills:
+      - language
+      - backend-patterns
+      - frontend-guide
+      - conventions
+    context:
+      max_files: 5
+      note: "Focus on the relevant stack only"
+
+  # ── QA ─────────────────────────────────────────────────────────────────────
+  qa-agent:
+    role: "QA Engineer"
+    model: inherit
+    color: red
+    tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - "Bash(ruff:*)"
+      - "Bash(mypy:*)"
+      - "Bash(pytest:*)"
+      - "Bash(npx:*)"
+      - "Bash(tree:*)"
+    skills:
+      - backend-patterns
+      - frontend-guide
+      - conventions
+    context:
+      max_files: 7
+
+  # ── Researcher ─────────────────────────────────────────────────────────────
+  researcher-agent:
+    role: "Researcher"
+    model: inherit
+    color: gray
+    tools:
+      - Read
+      - Grep
+      - Glob
+      - "Bash(ls:*)"
+      - "Bash(tree:*)"
+      - WebSearch
+      - WebFetch
+    skills:
+      - backend-patterns          # For context — know what stack is in use
+      - frontend-guide            # For context
+      - language                  # For context
+    context:
+      max_files: 7

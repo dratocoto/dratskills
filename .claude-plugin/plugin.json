@@ -1,0 +1,19 @@
+{
+  "name": "ai-dev-team",
+  "version": "0.5.0",
+  "description": "Multi-agent AI dev team (PM, BA, Architect, Backend Dev, Frontend Dev, Reviewer, Tester, QA, Researcher) with dynamic tech stack detection, parallel features, inter-agent discussions, peer code review, file conflict detection, and human oversight",
+  "author": {
+    "name": "Drato"
+  },
+  "keywords": [
+    "multi-agent",
+    "workflow",
+    "dynamic-stack",
+    "parallel-features",
+    "team",
+    "production",
+    "human-in-the-loop",
+    "code-review",
+    "research"
+  ]
+}
